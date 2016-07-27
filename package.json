@@ -3,7 +3,7 @@
   "title": "NG.Template",
   "description": "",
   "author": "Dmitry Sheiko",
-  "main": "./src",
+  "main": "./src/ngtemplate.ts",
   "version": "0.0.1",
   "scripts": {
     "start": "grunt",
@@ -28,6 +28,27 @@
     "type": "git",
     "url": "git@github.com:dsheiko/ngtemplate.git"
   },
+
+  "testling": {
+    "html": "testling.html",
+    "browsers": [
+      "iexplore/6.0..latest",
+      "firefox/3.0..6.0",
+      "firefox/10.0",
+      "firefox/15.0..latest",
+      "firefox/nightly",
+      "chrome/4.0..10.0",
+      "chrome/20.0..latest",
+      "chrome/canary",
+      "opera/10.0..latest",
+      "opera/next",
+      "safari/4.0..latest",
+      "ipad/6.0..latest",
+      "iphone/6.0..latest",
+      "android-browser/4.2..latest"
+    ]
+  },
+
   "devDependencies": {
     "chai": "^3.4.1",
     "cjsc": "^1.0.7",
