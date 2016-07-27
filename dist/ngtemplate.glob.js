@@ -1,0 +1,1 @@
+window.NgTemplate = require( "./ngtemplate" );

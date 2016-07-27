@@ -1,0 +1,39 @@
+{
+  "name": "ng-template",
+  "title": "NG.Template",
+  "description": "",
+  "author": "Dmitry Sheiko",
+  "main": "./src",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "grunt",
+    "browserfy": "tsc && node ./node_modules/cjsc/cjsc.js dist/ngtemplate.glob.js -o dist/ngtemplate.glob.min.js -M",
+    "build": "tsc",
+    "test": "tsc && node_modules/mocha-phantomjs/bin/mocha-phantomjs tests/index.html"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/fawek/codepainter/raw/master/LICENSE"
+    }
+  ],
+  "keywords": [
+    "Template",
+    "Engine",
+    "ES6",
+    "ES2015",
+    "TypeScript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dsheiko/ngtemplate.git"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "cjsc": "^1.0.7",
+    "es6-shim": "^0.35.1",
+    "mocha": "^2.3.4",
+    "mocha-phantomjs": "^4.1.0",
+    "systemjs": "^0.19.31"
+  }
+}
