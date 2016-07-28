@@ -1,4 +1,4 @@
-var ngTemplate = require( "../dist/ngtemplate" ).ngTemplate,
+var NgTemplate = require( "../dist/ngtemplate" ).NgTemplate;
     util = require( "./test.util.js" );
 
 describe("Cache", function(){
@@ -11,7 +11,8 @@ describe("Cache", function(){
 
     it( "modifies the DOM when the expression changes", function( done ) {
       var modified = false;
-      ngTemplate( this.el, "<span data-ng-if=\"foo < bar\">Error</span>" )
+      NgTemplate
+        .factory( this.el, "<span data-ng-if=\"foo < bar\">Error</span>" )
         .sync({ foo: 10, bar: 0 })
         .pipe(function( el ){
           util.observeDOM( el, function(){
@@ -29,7 +30,8 @@ describe("Cache", function(){
 
     it( "does not modify the DOM when the expression does not change", function( done ) {
       var modified = false;
-      ngTemplate( this.el, "<span data-ng-if=\"foo < bar\">Error</span>" )
+      NgTemplate
+        .factory( this.el, "<span data-ng-if=\"foo < bar\">Error</span>" )
         .sync({ foo: 10, bar: 0 })
         .pipe(function( el ){
           util.observeDOM( el, function(){
@@ -47,7 +49,8 @@ describe("Cache", function(){
 
     it( "does not modify the DOM when the product of expression does not change", function( done ) {
       var modified = false;
-      ngTemplate( this.el, "<span data-ng-if=\"foo < bar\">Error</span>" )
+      NgTemplate
+        .factory( this.el, "<span data-ng-if=\"foo < bar\">Error</span>" )
         .sync({ foo: 10, bar: 0 })
         .pipe(function( el ){
           util.observeDOM( el, function( ev ){
@@ -74,7 +77,8 @@ describe("Cache", function(){
 
     it( "modifies the DOM when the expression changes", function( done ) {
       var modified = false;
-      ngTemplate( this.el, "<i data-ng-text=\"foo + bar\"></i>" )
+      NgTemplate
+        .factory( this.el, "<i data-ng-text=\"foo + bar\"></i>" )
         .sync({ foo: "Foo", bar: "Bar" })
         .pipe(function( el ){
           util.observeDOM( el.querySelector( "i" ), function(){
@@ -92,7 +96,8 @@ describe("Cache", function(){
 
     it( "does not modify the DOM when the expression does not change", function( done ) {
       var modified = false;
-      ngTemplate( this.el, "<i data-ng-text=\"foo + bar\"></i>" )
+      NgTemplate
+        .factory( this.el, "<i data-ng-text=\"foo + bar\"></i>" )
         .sync({ foo: "Foo", bar: "Bar" })
         .pipe(function( el ){
           util.observeDOM( el.querySelector( "i" ), function(){
@@ -110,7 +115,8 @@ describe("Cache", function(){
 
     it( "does not modify the DOM when the product of expression does not change", function( done ) {
       var modified = false;
-      ngTemplate( this.el, "<i data-ng-text=\"foo + bar\"></i>" )
+      NgTemplate
+        .factory( this.el, "<i data-ng-text=\"foo + bar\"></i>" )
         .sync({ foo: "Foo", bar: "Bar" })
         .pipe(function( el ){
           util.observeDOM( el.querySelector( "i" ), function(){
@@ -140,7 +146,8 @@ describe("Cache", function(){
 //
 //    it( "modifies the DOM when the expression changes", function( done ) {
 //      var modified = false;
-//      ngTemplate( this.el, "<i data-ng-class-list-toggle=\"foo, bar\"></i>" )
+//      NgTemplate
+//        .factory( this.el, "<i data-ng-class-list-toggle=\"foo, bar\"></i>" )
 //        .sync({ foo: "foo", bar: true })
 //        .pipe(function( el ){
 //          util.observeDOM( el.querySelector( "i" ), function(){
@@ -156,7 +163,8 @@ describe("Cache", function(){
 //    });
 //    it( "does not modify the DOM when the expression does not change", function( done ) {
 //      var modified = false;
-//      ngTemplate( this.el, "<i data-ng-class-list-toggle=\"foo, bar\"></i>" )
+//      NgTemplate
+//        .factory( this.el, "<i data-ng-class-list-toggle=\"foo, bar\"></i>" )
 //        .sync({ foo: "foo", bar: true })
 //        .pipe(function( el ){
 //          util.observeDOM( el.querySelector( "i" ), function(){

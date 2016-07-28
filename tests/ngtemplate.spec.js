@@ -1,4 +1,4 @@
-var ngTemplate = require( "../dist/ngtemplate" ).ngTemplate;
+var NgTemplate = require( "../dist/ngtemplate" ).NgTemplate;
 
 describe("NgTemplate", function(){
 
@@ -9,7 +9,8 @@ describe("NgTemplate", function(){
     });
 
     it( "removes the target from the DOM when expression is false", function() {
-      ngTemplate( this.el, "<span data-ng-if=\"invalid\">Error</span>" )
+      NgTemplate
+        .factory( this.el, "<span data-ng-if=\"invalid\">Error</span>" )
         .sync({ invalid: false });
 
       // changed to: <ng style="display: none; "></ng>
@@ -18,7 +19,8 @@ describe("NgTemplate", function(){
     });
 
     it( "restores the target after removal when expression changes", function(){
-      ngTemplate( this.el, "<span data-ng-if=\"invalid\">Error</span>" )
+      NgTemplate
+        .factory( this.el, "<span data-ng-if=\"invalid\">Error</span>" )
         .sync({ invalid: false })
         .pipe(function(){
           expect( this.el.innerHTML.indexOf( "Error" ) === -1 ).to.be.ok;
@@ -29,13 +31,15 @@ describe("NgTemplate", function(){
     });
 
     it( "evaluates compoun expressions (foo > bar)", function() {
-      ngTemplate( this.el, "<span data-ng-if=\"foo > bar\">Error</span>" )
+      NgTemplate
+        .factory( this.el, "<span data-ng-if=\"foo > bar\">Error</span>" )
         .sync({ foo: 10, bar: 0 });
       expect( this.el.innerHTML ).to.have.string( "Error" );
     });
 
     it( "evaluates compoun expressions (foo < bar)", function() {
-      ngTemplate( this.el, "<span data-ng-if=\"foo < bar\">Error</span>" )
+      NgTemplate
+        .factory( this.el, "<span data-ng-if=\"foo < bar\">Error</span>" )
         .sync({ foo: 10, bar: 0 });
       expect( this.el.innerHTML ).to.not.have.string( "Error" );
     });
@@ -50,14 +54,16 @@ describe("NgTemplate", function(){
     });
 
     it( "evaluates expression on element (string literal)", function() {
-      ngTemplate( this.el, "<span data-ng-el=\"this.innerHTML='New value'\">Pristine</span>" )
+      NgTemplate
+        .factory( this.el, "<span data-ng-el=\"this.innerHTML='New value'\">Pristine</span>" )
         .sync({});
 
       expect( this.el.innerHTML ).to.not.have.string( "Pristine" );
       expect( this.el.innerHTML ).to.have.string( "New value" );
     });
     it( "evaluates expression on element (tpl variable)", function() {
-      ngTemplate( this.el, "<span data-ng-el=\"this.innerHTML=text\">Pristine</span>" )
+      NgTemplate
+        .factory( this.el, "<span data-ng-el=\"this.innerHTML=text\">Pristine</span>" )
         .sync({ text: "New value" })
         .pipe(function(){
           expect( this.el.innerHTML ).to.not.have.string( "Pristine" );
@@ -76,7 +82,8 @@ describe("NgTemplate", function(){
     });
 
     it( "evaluates the expression", function() {
-      ngTemplate( this.el, "<span data-ng-class-list-toggle=\"'is-hidden', isHidden\"></span>" )
+      NgTemplate
+        .factory( this.el, "<span data-ng-class-list-toggle=\"'is-hidden', isHidden\"></span>" )
         .sync({ isHidden: true });
       expect( this.el.innerHTML ).to.eql( "<span class=\"is-hidden\"></span>" );
     });
@@ -90,13 +97,15 @@ describe("NgTemplate", function(){
     });
 
     it( "evaluates the statement", function() {
-      ngTemplate( this.el, "<span data-ng-text=\"foo\">Pristine</span>" )
+      NgTemplate
+        .factory( this.el, "<span data-ng-text=\"foo\">Pristine</span>" )
         .sync({ foo: "New value" });
       expect( this.el.innerHTML ).to.not.have.string( "Pristine" );
       expect( this.el.innerHTML ).to.have.string( "New value" );
     });
     it( "escapes output", function() {
-      ngTemplate( this.el, "<span data-ng-text=\"foo\">Pristine</span>" )
+      NgTemplate
+        .factory( this.el, "<span data-ng-text=\"foo\">Pristine</span>" )
         .sync({ foo: "<button>" });
       expect( this.el.innerHTML ).to.not.have.string( "<button>" );
     });
@@ -109,13 +118,15 @@ describe("NgTemplate", function(){
     });
 
     it( "generates nodes from a plain list", function() {
-      ngTemplate( this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row\"></i>" )
+      NgTemplate
+        .factory( this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row\"></i>" )
         .sync({ rows: [ "foo", "bar", "baz" ]});
       expect( this.el.innerHTML ).to.eql( "<i>foo</i><i>bar</i><i>baz</i>" );
     });
 
     it( "generates nodes from a list of objects", function() {
-      ngTemplate( this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row.name\"></i>" )
+      NgTemplate
+        .factory( this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row.name\"></i>" )
         .sync({ rows: [
           { name: "foo" },
           { name: "bar" },
@@ -133,7 +144,8 @@ describe("NgTemplate", function(){
     });
 
     it( "evaluates the statement", function() {
-      ngTemplate( this.el,
+      NgTemplate
+        .factory( this.el,
             "<div data-ng-switch='theCase'>" +
             "<i data-ng-switch-case='1'>FOO</i>" +
             "<i data-ng-switch-case='2'>BAR</i>" +
@@ -157,7 +169,8 @@ describe("NgTemplate", function(){
     });
 
     it( "evaluates the statement", function() {
-      ngTemplate( this.el,
+      NgTemplate
+        .factory( this.el,
             "<div data-ng-switch='theCase'>" +
             "<i data-ng-switch-case='1'>FOO</i>" +
             "<i data-ng-switch-case='2'>BAR</i>" +
@@ -181,7 +194,8 @@ describe("NgTemplate", function(){
     });
 
     it( "evaluates the statement", function() {
-      ngTemplate( this.el,
+      NgTemplate
+        .factory( this.el,
             "<div data-ng-text='transform(raw)'></div>" )
         .sync({
           raw: 100,

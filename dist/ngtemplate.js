@@ -20,6 +20,9 @@ var NgTemplate = (function () {
         }
         this.factory([ngfor_1.NgFor, ngswitch_1.NgSwitch, ngswitchcase_1.NgSwitchCase, ngswitchcasedefault_1.NgSwitchCaseDefault, ngif_1.NgIf, ngclasslisttoggle_1.NgClassListToggle, ngel_1.NgEl, ngtext_1.NgText]);
     }
+    NgTemplate.factory = function (el, template) {
+        return new NgTemplate(el, template || null);
+    };
     NgTemplate.prototype.factory = function (directives) {
         var _this = this;
         directives.forEach(function (Directive) {
@@ -29,7 +32,7 @@ var NgTemplate = (function () {
     NgTemplate.prototype.sync = function (data) {
         this.directives.forEach(function (d) {
             d.sync(data, function (el) {
-                ngTemplate(el).sync(data);
+                (new NgTemplate(el)).sync(data);
             });
         });
         return this;
