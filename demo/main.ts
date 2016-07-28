@@ -26,7 +26,7 @@ let template = new NgTemplate( el, `
     </form>
 `);
 
-let context = {
+let scope = {
   powers: [ "-", "Really Smart", "Super Flexible",
             "Super Hot", "Weather Changer" ],
   power: {
@@ -40,18 +40,18 @@ let context = {
   }
 };
 
-template.sync( context );
+template.sync( scope );
 
 let elName = <HTMLInputElement>document.querySelector( "#name" ),
     elPower = <HTMLInputElement>document.querySelector( "#power" );
 
 function sync() {
   // validate
-  context.name.valid = Boolean( elName.value.trim().length );
-  context.power.valid = elPower.value.trim().length > 1;
-  context.form.valid = context.name.valid && context.power.valid;
+  scope.name.valid = Boolean( elName.value.trim().length );
+  scope.power.valid = elPower.value.trim().length > 1;
+  scope.form.valid = scope.name.valid && scope.power.valid;
   // sync template
-  template.sync( context );
+  template.sync( scope );
 }
 
 elName.addEventListener( "input", sync, false );
