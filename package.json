@@ -1,9 +1,10 @@
 {
   "name": "ng-template",
   "title": "NgTemplate",
-  "description": " light-weight DOM-based template engine, inspired by AngularJS",
+  "description": "Light-weight DOM-based template engine, inspired by AngularJS",
   "author": "Dmitry Sheiko",
   "main": "./src/ngtemplate.ts",
+  "version": "0.0.1",
   "branchVersion": "^1.0.0-beta.1",
   "branchPattern": "1.0.*",
   "scripts": {
