@@ -9,7 +9,7 @@ export class Cache {
     return false;
   }
 
-  evaluate( exVal:any, cb:Template.CacheCb ) {
+  evaluate( exVal:any, cb:NgTemplate.CacheCb ) {
     if ( this.match( exVal ) ) {
       return;
     }

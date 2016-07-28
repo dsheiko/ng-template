@@ -12,7 +12,7 @@ import { NgClassListToggle } from "./directives/ngclasslisttoggle";
 
 
 export class NgTemplate {
-  private directives: Template.Directive[] = [];
+  private directives: NgTemplate.Directive[] = [];
 
   static factory( el:HTMLElement, template?:string ):NgTemplate {
     return new NgTemplate( el, template || null );
@@ -35,7 +35,7 @@ export class NgTemplate {
     });
   }
 
-  sync( data:Template.DataMap ):NgTemplate {
+  sync( data:NgTemplate.DataMap ):NgTemplate {
     this.directives.forEach(( d ) => {
       d.sync( data, ( el: HTMLElement ) => {
         ( new NgTemplate( el ) ).sync( data );

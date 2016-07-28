@@ -2,8 +2,8 @@ import { AbstractDirective } from "./abstract-directive";
 /**
  * <span data-ng-el="this.setAttribute('ss', 11)">Error</span>
  */
-export class NgEl extends AbstractDirective implements Template.Directive {
-  nodes: Template.DirectiveNode[];
+export class NgEl extends AbstractDirective implements NgTemplate.Directive {
+  nodes: NgTemplate.DirectiveNode[];
 
   constructor( el:HTMLElement ){
     super();
@@ -15,8 +15,8 @@ export class NgEl extends AbstractDirective implements Template.Directive {
     });
   }
 
-  sync( data:Template.DataMap ){
-    this.nodes.forEach(( node:Template.DirectiveNode ) => {
+  sync( data:NgTemplate.DataMap ){
+    this.nodes.forEach(( node:NgTemplate.DirectiveNode ) => {
       node.exp.call( node.el, data );
     });
   }

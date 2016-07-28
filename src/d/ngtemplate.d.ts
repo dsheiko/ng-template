@@ -1,4 +1,4 @@
-declare namespace Template {
+declare namespace NgTemplate {
 
   interface DataMap { [s: string]: any; }
 

@@ -2,8 +2,8 @@ import { AbstractDirective } from "./abstract-directive";
 /**
  * <span data-ng-switch-default></span>
  */
-export class NgSwitchCaseDefault extends AbstractDirective implements Template.Directive {
-  nodes: Template.DirectiveNode[];
+export class NgSwitchCaseDefault extends AbstractDirective implements NgTemplate.Directive {
+  nodes: NgTemplate.DirectiveNode[];
 
   constructor( public el:HTMLElement ){
     super();
@@ -17,7 +17,7 @@ export class NgSwitchCaseDefault extends AbstractDirective implements Template.D
     });
   }
 
-  sync( data:Template.DataMap ){
+  sync( data:NgTemplate.DataMap ){
     if ( !this.nodes.length ) {
       return;
     }

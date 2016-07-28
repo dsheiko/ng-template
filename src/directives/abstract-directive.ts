@@ -5,7 +5,7 @@ export class AbstractDirective {
   constructor(){
   }
 
-  initNodes( el:HTMLElement, identifier:string, cb:Function ): Template.DirectiveNode[]{
+  initNodes( el:HTMLElement, identifier:string, cb:Function ): NgTemplate.DirectiveNode[]{
     let datakey:string = this.getDataKey( identifier ),
         selector:string = this.getSelector( identifier );
     return Array.from( el.querySelectorAll( selector ) ).map(( el:HTMLElement ) => {

@@ -23,10 +23,10 @@ var NgFor = (function (_super) {
                         eval("it = data." + parsed.iterable);
                     }
                     catch (err) {
-                        throw new EvalError("Template variable " + parsed.iterable + " undefined");
+                        throw new EvalError("NgTemplate variable " + parsed.iterable + " undefined");
                     }
                     if (!Array.isArray(it)) {
-                        throw new Error("Template variable " + parsed.iterable + " must be an array");
+                        throw new Error("NgTemplate variable " + parsed.iterable + " must be an array");
                     }
                     if (cache.match(JSON.stringify(it))) {
                         return false;

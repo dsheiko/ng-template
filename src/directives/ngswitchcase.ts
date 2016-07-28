@@ -2,8 +2,8 @@ import { AbstractDirective } from "./abstract-directive";
 /**
  * <span data-ng-switch="exp"></span>
  */
-export class NgSwitchCase extends AbstractDirective implements Template.Directive {
-  nodes: Template.DirectiveNode[];
+export class NgSwitchCase extends AbstractDirective implements NgTemplate.Directive {
+  nodes: NgTemplate.DirectiveNode[];
 
   constructor( public el:HTMLElement ){
     super();
@@ -16,11 +16,11 @@ export class NgSwitchCase extends AbstractDirective implements Template.Directiv
     });
   }
 
-  sync( data:Template.DataMap ){
+  sync( data:NgTemplate.DataMap ){
     if ( !this.nodes.length ) {
       return;
     }
-    let match = this.nodes.find(( node:Template.DirectiveNode ) => {
+    let match = this.nodes.find(( node:NgTemplate.DirectiveNode ) => {
       return data[ "$" ] === node.exp.call( node.el, data );
     });
     this.el.innerHTML = match ? match.outerHTML : "";
