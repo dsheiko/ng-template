@@ -1,11 +1,30 @@
 import { NgTemplate } from "../src/ngtemplate";
 
-let el = <HTMLElement>document.querySelector( "#heroForm" ),
-    elName = <HTMLInputElement>document.querySelector( "#name" ),
-    elPower = <HTMLInputElement>document.querySelector( "#power" );
+let el = <HTMLElement>document.querySelector( "#heroForm" );
 
 // Bind the template
-let template = new NgTemplate( el );
+let template = new NgTemplate( el, `
+    <h1>Hero</h1>
+    <form  novalidate>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" type="text" class="form-control" required >
+        <div class="alert alert-danger" data-ng-if="!name.valid">
+          Name is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="power">Hero Power</label>
+        <select id="power" class="form-control"  required>
+          <option data-ng-for="let p of powers" data-ng-text="p" >Nothing here</option>
+        </select>
+        <div class="alert alert-danger" data-ng-if="!power.valid">
+          Power is required
+        </div>
+      </div>
+       <button type="submit" class="btn btn-default" data-ng-el="this.disabled = !form.valid">Submit</button>
+    </form>
+`);
 
 let context = {
   powers: [ "-", "Really Smart", "Super Flexible",
@@ -22,6 +41,9 @@ let context = {
 };
 
 template.sync( context );
+
+let elName = <HTMLInputElement>document.querySelector( "#name" ),
+    elPower = <HTMLInputElement>document.querySelector( "#power" );
 
 function sync() {
   // validate

@@ -1,7 +1,7 @@
 {
   "name": "ng-template",
-  "title": "NG.Template",
-  "description": "",
+  "title": "NgTemplate",
+  "description": " light-weight DOM-based template engine, inspired by AngularJS",
   "author": "Dmitry Sheiko",
   "main": "./src/ngtemplate.ts",
   "branchVersion": "^1.0.0-beta.1",
@@ -31,7 +31,7 @@
     "url": "git@github.com:dsheiko/ngtemplate.git"
   },
   "testling": {
-    "html": "testling.html",
+    "html": "tests/index.html",
     "browsers": [
       "iexplore/6.0..latest",
       "firefox/3.0..6.0",
