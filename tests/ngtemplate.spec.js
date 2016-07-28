@@ -69,6 +69,21 @@ describe("NgTemplate", function(){
   });
 
 
+  describe("ng-class-list-toggle directive", function(){
+
+    beforeEach(function(){
+      this.el = document.createElement( "div" );
+    });
+
+    it( "evaluates the expression", function() {
+      ngTemplate( this.el, "<span data-ng-class-list-toggle=\"'is-hidden', isHidden\"></span>" )
+        .update({ isHidden: true });
+      expect( this.el.innerHTML ).to.eql( "<span class=\"is-hidden\"></span>" );
+    });
+
+  });
+
+
   describe("ng-text directive", function(){
     beforeEach(function(){
       this.el = document.createElement( "div" );

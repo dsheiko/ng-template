@@ -7,18 +7,22 @@ export class NgSwitch extends AbstractDirective implements Template.Directive {
 
   constructor( el:HTMLElement ){
     super();
-    this.nodes =  this.initNodes( el, "ng-switch", ( node:HTMLElement, expr:string, evaluate:Function ) => {
+    this.nodes =  this.initNodes( el, "ng-switch",
+      ( node:HTMLElement, expr:string, evaluate:Function, cache:Template.CacheCb ) => {
       return {
         el: node,
-        exp: evaluate( expr )
+        exp: evaluate( expr ),
+        cache: cache
       }
     });
   }
 
   update( data:Template.DataMap, cb:Template.UpdateCallback ){
     this.nodes.forEach(( node:Template.DirectiveNode ) => {
-      data[ "$" ] = node.exp.call( node.el, data );
-      cb && cb( node.el );
+      node.cache.evaluate( node.exp.call( node.el, data ), ( val:any ) => {
+        data[ "$" ] = val;
+        cb && cb( node.el );
+      });
     });
   }
 }

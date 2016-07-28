@@ -6,6 +6,8 @@ import { NgFor } from "./directives/ngfor";
 import { NgSwitch } from "./directives/ngswitch";
 import { NgSwitchCase } from "./directives/ngswitchcase";
 import { NgSwitchCaseDefault } from "./directives/ngswitchcasedefault";
+import { NgClassListToggle } from "./directives/ngclasslisttoggle";
+
 
 
 
@@ -20,7 +22,7 @@ export class NgTemplate {
     if ( template ) {
       this.el.innerHTML = template;
     }
-    this.factory([ NgFor, NgSwitch, NgSwitchCase, NgSwitchCaseDefault, NgIf, NgEl, NgText ]);
+    this.factory([ NgFor, NgSwitch, NgSwitchCase, NgSwitchCaseDefault, NgIf, NgClassListToggle, NgEl, NgText ]);
   }
 
   factory( directives:Function[] ){

@@ -18,7 +18,7 @@ NG.Template is a light-weight DOM-based template engine, that doesn't destroy th
 
 
 ```javascript
-import { NgTemplate } from "ngtemplate";
+import { NgTemplate } from "ng-template";
 
 let el = document.getElementById( "inviteForm" );
 // Bind the template
@@ -46,7 +46,7 @@ npm i --save ngtemplate
 
 ### TypeScript
 ```javascript
-import { NgTemplate } from "ngtemplate";
+import { NgTemplate } from "ng-template";
 const template = new NgTemplate( node );
 ```
 
@@ -69,7 +69,7 @@ var template = new NgTemplate( node );
 
 #### Syntax
 ```
-import { NgTemplate } from "ngtemplate";
+import { NgTemplate } from "ng-template";
 let template = new NgTemplate( el: HTMLElement, tpl?: string )
 template.update( context: ([s: string]: any) );
 
@@ -81,7 +81,7 @@ where:
 
 #### Example
 ```javascript
-import { NgTemplate } from "ngtemplate";
+import { NgTemplate } from "ng-template";
 
 // initialize
 let template = new NgTemplate( document.body , "<span data-ng-if='invalid'>Error</span>" )
@@ -127,31 +127,27 @@ console.log( document.body.innerHTML ); // <i>Foo</i>
 console.log( document.body.innerHTML ); // <i>&lt;button&gt;</i>
 ```
 
-### NgEl
 
-We use `NgEl` to modify element properties
+### NgClassListToggle
+
+We use `NgClassListToggle` to modify element classList
 
 #### Syntax
 
 ```
-<el data-ng-el="expression:void" />
+<el data-ng-class-list-toggle="expression:string, expression:boolean" />
 ```
 
 #### Examples
 
 ```javascript
-(new NgTemplate( document.body , `<i data-ng-el="this.className = class"></i>` ))
-  .update({ class: "is-hidden" });
+(new NgTemplate( document.body , `<i data-ng-class-list-toggle="'is-hidden', isHidden"></i>` ))
+  .update({ isHidden: true });
 
 console.log( document.body.innerHTML ); // <i class="is-hidden"></i>
 ```
 
-```HTML
-<i data-ng-el="this.textNode = mymodel.foo"></i>
-<i data-ng-el="this.setAttribute( 'name', mymodel.foo )"></i>
-<i data-ng-el="this.className = 'name'"></i>
-<i data-ng-el="this.classList.toggle('name', model.foo)"></i>
-```
+
 
 ### NgIf
 
@@ -233,6 +229,36 @@ console.log( document.body.innerHTML ); // <i>FOO</i>
 
 console.log( document.body.innerHTML ); // <i>BAZ</i>
 ```
+
+### NgEl
+
+We use `NgEl` to modify element properties
+
+> NOTE: Using `NgEl` is rather discouraging as it cannot be cached and every model sync will
+cause the DOM modification even if the expression of `NgEl` wasn't changed
+
+#### Syntax
+
+```
+<el data-ng-el="expression:void" />
+```
+
+#### Examples
+
+```javascript
+(new NgTemplate( document.body , `<i data-ng-el="this.className = class"></i>` ))
+  .update({ class: "is-hidden" });
+
+console.log( document.body.innerHTML ); // <i class="is-hidden"></i>
+```
+
+```HTML
+<i data-ng-el="this.textNode = mymodel.foo"></i>
+<i data-ng-el="this.setAttribute( 'name', mymodel.foo )"></i>
+<i data-ng-el="this.className = 'name'"></i>
+<i data-ng-el="this.classList.toggle('name', model.foo)"></i>
+```
+
 
 
 [![Analytics](https://ga-beacon.appspot.com/UA-1150677-13/dsheiko/ngtemplate)](http://githalytics.com/dsheiko/ngtemplate)

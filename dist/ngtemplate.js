@@ -6,6 +6,7 @@ var ngfor_1 = require("./directives/ngfor");
 var ngswitch_1 = require("./directives/ngswitch");
 var ngswitchcase_1 = require("./directives/ngswitchcase");
 var ngswitchcasedefault_1 = require("./directives/ngswitchcasedefault");
+var ngclasslisttoggle_1 = require("./directives/ngclasslisttoggle");
 var NgTemplate = (function () {
     /**
      * Initialize template for a given Element
@@ -17,7 +18,7 @@ var NgTemplate = (function () {
         if (template) {
             this.el.innerHTML = template;
         }
-        this.factory([ngfor_1.NgFor, ngswitch_1.NgSwitch, ngswitchcase_1.NgSwitchCase, ngswitchcasedefault_1.NgSwitchCaseDefault, ngif_1.NgIf, ngel_1.NgEl, ngtext_1.NgText]);
+        this.factory([ngfor_1.NgFor, ngswitch_1.NgSwitch, ngswitchcase_1.NgSwitchCase, ngswitchcasedefault_1.NgSwitchCaseDefault, ngif_1.NgIf, ngclasslisttoggle_1.NgClassListToggle, ngel_1.NgEl, ngtext_1.NgText]);
     }
     NgTemplate.prototype.factory = function (directives) {
         var _this = this;

@@ -11,17 +11,20 @@ var NgSwitch = (function (_super) {
     __extends(NgSwitch, _super);
     function NgSwitch(el) {
         _super.call(this);
-        this.nodes = this.initNodes(el, "ng-switch", function (node, expr, evaluate) {
+        this.nodes = this.initNodes(el, "ng-switch", function (node, expr, evaluate, cache) {
             return {
                 el: node,
-                exp: evaluate(expr)
+                exp: evaluate(expr),
+                cache: cache
             };
         });
     }
     NgSwitch.prototype.update = function (data, cb) {
         this.nodes.forEach(function (node) {
-            data["$"] = node.exp.call(node.el, data);
-            cb && cb(node.el);
+            node.cache.evaluate(node.exp.call(node.el, data), function (val) {
+                data["$"] = val;
+                cb && cb(node.el);
+            });
         });
     };
     return NgSwitch;

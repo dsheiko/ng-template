@@ -128,6 +128,50 @@ describe("Cache", function(){
 
   });
 
+// Mocha-phantomjs uses phantomjs 1.9.7-15, which doesn't support MutationObserver
+// workaround with DOM MutationEvents doesn't catch
+// DOMAttrModified - can be enabled for in browser testing
+
+//   describe("ng-class-list-toggle directive", function(){
+//
+//    beforeEach(function(){
+//      this.el = document.createElement( "div" );
+//    });
+//
+//    it( "modifies the DOM when the expression changes", function( done ) {
+//      var modified = false;
+//      ngTemplate( this.el, "<i data-ng-class-list-toggle=\"foo, bar\"></i>" )
+//        .update({ foo: "foo", bar: true })
+//        .pipe(function( el ){
+//          util.observeDOM( el.querySelector( "i" ), function(){
+//            modified = true;
+//          });
+//        })
+//        .update({ foo: "foo", bar: false });
+//
+//        setTimeout(function(){
+//          expect( modified ).to.eql( true );
+//          done();
+//        }, 200 );
+//    });
+//    it( "does not modify the DOM when the expression does not change", function( done ) {
+//      var modified = false;
+//      ngTemplate( this.el, "<i data-ng-class-list-toggle=\"foo, bar\"></i>" )
+//        .update({ foo: "foo", bar: true })
+//        .pipe(function( el ){
+//          util.observeDOM( el.querySelector( "i" ), function(){
+//            modified = true;
+//          });
+//        })
+//        .update({ foo: "foo", bar: true });
+//
+//        setTimeout(function(){
+//          expect( modified ).to.eql( false );
+//          done();
+//        }, 200 );
+//    });
+//  });
+
 
 
 });
