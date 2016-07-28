@@ -48,8 +48,8 @@ let el = document.querySelector( "#heroForm" ),
 // Bind the template
 let template = new NgTemplate( el );
 
-// Set the context
-let context = {
+// Set the scope
+let scope = {
   powers: [ "-", "Really Smart", "Super Flexible",
             "Super Hot", "Weather Changer" ],
   power: {
@@ -62,8 +62,8 @@ let context = {
     valid: false
   }
 };
-// Sync to the context
-template.sync( context );
+// Sync to the scope
+template.sync( scope );
 ```
 
 
