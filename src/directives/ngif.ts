@@ -8,7 +8,7 @@ export class NgIf extends AbstractDirective  implements Template.Directive {
   constructor( el:HTMLElement ){
     super();
     this.nodes =  this.initNodes( el, "ng-if",
-      ( node:HTMLElement, expr:string, evaluate:Function, cache:Template.CacheCb ) => {
+      ( node:HTMLElement, expr:string, evaluate:Function, cache:Template.Cache ) => {
       return {
         el: node,
         anchor: <HTMLElement>document.createElement( "ng" ),

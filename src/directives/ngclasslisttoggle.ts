@@ -8,7 +8,7 @@ export class NgClassListToggle extends AbstractDirective implements Template.Dir
   constructor( el:HTMLElement ){
     super();
     this.nodes =  this.initNodes( el, "ng-class-list-toggle",
-      ( node:HTMLElement, expr:string, evaluate:Function, cache:Template.CacheCb ) => {
+      ( node:HTMLElement, expr:string, evaluate:Function, cache:Template.Cache ) => {
       return {
         el: node,
         exp: evaluate( expr, "__toArray" ),

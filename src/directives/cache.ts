@@ -1,11 +1,18 @@
 export class Cache {
   private cache:any;
 
-  evaluate( exVal:any, cb:Template.CacheCb ) {
+  match( exVal:any ):boolean {
     if ( exVal === this.cache ) {
-      return;
+      return true;
     }
     this.cache = exVal;
+    return false;
+  }
+
+  evaluate( exVal:any, cb:Template.CacheCb ) {
+    if ( this.match( exVal ) ) {
+      return;
+    }
     cb( exVal );
   }
 };

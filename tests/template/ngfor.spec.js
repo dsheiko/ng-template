@@ -60,13 +60,15 @@ describe("NgTemplate.ngFor", function(){
         this.el.innerHTML = "<i data-ng-for='let row of rows'></i>";
         var ngfor = new NgFor( this.el );
         ngfor.sync({ rows: ["foo", "bar"] });
-        expect( this.el.innerHTML ).to.eql( "<i></i><i></i>" );
+
+        expect( this.el.querySelectorAll( "i" ).length ).to.eql( 2 );
       });
       it( "span the target element keeping directives", function() {
         this.el.innerHTML = "<i data-ng-for='let row of rows' data-ng-text=\"'text'\"></i>";
         var ngfor = new NgFor( this.el );
         ngfor.sync({ rows: ["foo", "bar"] });
-        expect( this.el.innerHTML ).to.eql( "<i data-ng-text=\"'text'\"></i><i data-ng-text=\"'text'\"></i>" );
+        var i = this.el.querySelector( "i" );
+        expect( i.dataset.ngText ).to.eql( "'text'" );
       });
     });
 

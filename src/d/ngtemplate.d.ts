@@ -5,6 +5,7 @@ declare namespace Template {
   interface DirectiveNode {
     el: HTMLElement,
     anchor?: HTMLElement,
+    parentNode?: HTMLElement,
     outerHTML?: string,
     cache?: Cache,
     exp: Function
@@ -30,6 +31,7 @@ declare namespace Template {
   }
 
   class Cache {
+    match( exVal:any ):boolean;
     evaluate( exVal:any, cb:CacheCb ):void;
   }
 

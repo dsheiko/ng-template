@@ -121,7 +121,7 @@ describe("NgTemplate", function(){
       NgTemplate
         .factory( this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row\"></i>" )
         .sync({ rows: [ "foo", "bar", "baz" ]});
-      expect( this.el.innerHTML ).to.eql( "<i>foo</i><i>bar</i><i>baz</i>" );
+      expect( this.el.querySelectorAll( "i" ).length ).to.eql( 3 );
     });
 
     it( "generates nodes from a list of objects", function() {
@@ -132,8 +132,20 @@ describe("NgTemplate", function(){
           { name: "bar" },
           { name: "baz" }
         ]});
-      expect( this.el.innerHTML ).to.eql( "<i>foo</i><i>bar</i><i>baz</i>" );
+      expect( this.el.querySelectorAll( "i" ).length ).to.eql( 3 );
+      expect( this.el.querySelector( "i" ).innerHTML ).to.eql( "foo" );
     });
+
+    it( "does not fall on multiple syncs", function() {
+      NgTemplate
+        .factory( this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row\"></i>" )
+        .sync({ rows: [ "foo", "bar", "baz" ]})
+        .sync({ rows: [ "bar", "foo", "baz" ]})
+        .sync({ rows: [ "foo", "bar", "baz" ]});
+
+      expect( this.el.querySelectorAll( "i" ).length ).to.eql( 3 );
+    });
+
 
   });
 

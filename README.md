@@ -1,18 +1,39 @@
 
-# NG.Template
+# NgTemplate 1.0 BETA
 
-NG.Template is a light-weight DOM-based template engine, that doesn't destroy the state of your DOM.
+`NgTemplate` is a light-weight DOM-based template engine, inspired by AngularJS. While `mustache.js`, `Handlebars` or
+`_.template` are fast and wide-spread, one cannot simply use them on a form. Rending template will reset the state of inputs.
+`NgTemplate` doesn't the view DOM-subtree, it modifies the target nodes according to the directives.
 
-[![Build Status][1]][2] [![dependency status][3]][4] [![dev dependency status][5]][6]
+## Motivation
+
+* Progressive enhancement friendly: server-side generated HTML can be fully ready for presentation. During `NgTemplate` synchronization it will be updated according to element directives and a provided state
+* HTML compliant: `data-*` - directives instead of foreign concepts such as `{{foo}}`, `[hidden]`, `*ngFor`, `[(ngModel)]`
+* Concern separation: presentation state logic decoupled from the view
+* Performance: Modified DOM nodes by state diff, only when it's required
+* Easy to catch up: familiar for Angular folks directives such as `data-ng-if`, `data-ng-switch`, `data-ng-for` and a few extra intuitive e.g. `data-ng-text`, `data-ng-class-list-toggle`
+
+# How does it work?
 
 ```html
-<form id="inviteForm">
-  <p data-ng-for="let err of errors" data-ng-text="err" class="error"></p>
-  <fieldset>
-    <label>Name</label>
-    <input name="fullname" data-ng-el="this.classList.toggle('has-error', !state.fullname.valid)" />
-  </fieldset>
-  <button data-ng-if="form.valid">Submit</button>
+<form id="heroForm" novalidate>
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input id="name" type="text" class="form-control" required >
+    <div class="alert alert-danger" data-ng-if="!name.valid">
+      Name is required
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="power">Hero Power</label>
+    <select id="power" class="form-control"  required>
+      <option data-ng-for="let p of powers" data-ng-text="p" >Nothing here</option>
+    </select>
+    <div class="alert alert-danger" data-ng-if="!power.valid">
+      Power is required
+    </div>
+  </div>
+   <button type="submit" class="btn btn-default" data-ng-el="this.disabled = !form.valid">Submit</button>
 </form>
 ```
 
@@ -20,29 +41,40 @@ NG.Template is a light-weight DOM-based template engine, that doesn't destroy th
 ```javascript
 import { NgTemplate } from "ng-template";
 
-let el = document.getElementById( "inviteForm" );
+let el = document.querySelector( "#heroForm" ),
+    elName = document.querySelector( "#name" ),
+    elPower = document.querySelector( "#power" );
+
 // Bind the template
 let template = new NgTemplate( el );
-// Sync element for given context
-template.sync({
-  errors: [ "Unknown error", "Require field" ],
-  state: {
-    fullname: {
-      valid: true
-    },
-    form: {
-      valid: true
-    }
+
+// Set the context
+let context = {
+  powers: [ "-", "Really Smart", "Super Flexible",
+            "Super Hot", "Weather Changer" ],
+  power: {
+    valid: true
+  },
+  name: {
+    valid: true
+  },
+  form: {
+    valid: false
   }
-});
+};
+// Sync to the context
+template.sync( context );
 ```
 
-## Install
 
-You can get NG.Template via npm.
+## Installing
+
+You can get `NgTemplate` via npm.
 ```
 npm i --save ngtemplate
 ```
+
+## Accessing module
 
 ### TypeScript
 ```javascript
@@ -55,7 +87,8 @@ const template = new NgTemplate( node );
 var NgTemplate = require( "./node_modules/ngtemplate/dist/ngtemplate" ).NgTemplate,
     template = new NgTemplate( node );
 ```
-With SystemJS
+In order to adapt your source for browser, you can either [browserfy](http://browserify.org/) or
+load your modules with [SystemJS](https://github.com/systemjs/systemjs)
 
 ### VanillaJS
 ```HTML
@@ -65,37 +98,39 @@ With SystemJS
 var template = new NgTemplate( node );
 ```
 
+
 ## API
 
-#### Syntax
 ```
 import { NgTemplate } from "ng-template";
-let template = new NgTemplate( el: HTMLElement, tpl?: string )
-template.sync( context: ([s: string]: any) );
+let template = new NgTemplate( el, tpl );
+template.sync( context );
 
 ```
 where:
-* el - bounding box DOM element
-* tpl - template code, when given injected into the el
-* context - template context
+* el - a DOM element we bind to
+* tpl - OPTIONAL: template code that will be injected into `el`
+* context - template context - an object literal whose members form the scope for template expressions
 
-#### Example
-```javascript
-import { NgTemplate } from "ng-template";
-
-// initialize
-let template = new NgTemplate( document.body , "<span data-ng-if='invalid'>Error</span>" )
-
-//.sync when state changes
-template.sync({ invalid: false });
-
-```
 
 ## Template expressions
-...
 
-### Expression context
-...
+data-ng-if="foo"
+{ foo: true }
+
+data-ng-if="foo.bar"
+{
+  foo: {
+    bar: true
+  }
+}
+
+data-ng-if="(foo && bar)"
+{ foo: true, bar: true }
+
+
+data-ng-if="(foo && this.checked)"
+{ foo: true }
 
 
 
@@ -120,6 +155,7 @@ We use `NgText` to modify element textNode
 console.log( document.body.innerHTML ); // <i>Foo</i>
 ```
 
+The directive renders escaped HTML:
 ```javascript
 (new NgTemplate( document.body , `<i data-ng-text="foo"></i>` ))
   .sync({ foo: "<button>" });
@@ -130,7 +166,7 @@ console.log( document.body.innerHTML ); // <i>&lt;button&gt;</i>
 
 ### NgClassListToggle
 
-We use `NgClassListToggle` to modify element classList
+We use `NgClassListToggle` to modify element's `classList`
 
 #### Syntax
 
@@ -143,6 +179,13 @@ We use `NgClassListToggle` to modify element classList
 ```javascript
 (new NgTemplate( document.body , `<i data-ng-class-list-toggle="'is-hidden', isHidden"></i>` ))
   .sync({ isHidden: true });
+
+console.log( document.body.innerHTML ); // <i class="is-hidden"></i>
+```
+or
+```javascript
+(new NgTemplate( document.body , `<i data-ng-class-list-toggle="className, isHidden"></i>` ))
+  .sync({ isHidden: true, className: "is-hidden" });
 
 console.log( document.body.innerHTML ); // <i class="is-hidden"></i>
 ```
@@ -255,10 +298,28 @@ console.log( document.body.innerHTML ); // <i class="is-hidden"></i>
 ```HTML
 <i data-ng-el="this.textNode = mymodel.foo"></i>
 <i data-ng-el="this.setAttribute( 'name', mymodel.foo )"></i>
-<i data-ng-el="this.className = 'name'"></i>
+<i data-ng-el="this.disabled = state.isVisible"></i>
 <i data-ng-el="this.classList.toggle('name', model.foo)"></i>
 ```
 
+
+## Contributing
+
+NgTemplate actively invites maintainers. There is plenty of work to do. No big commitment required,
+if all you do is review a single Pull Request, you are a maintainer. .
+
+
+### How to build
+
+This source code is written in TypeScript. In order to build the app simply run `tsc` in the root directory
+
+### How to test
+
+There two options. You can run unit-tests in the console:
+```
+npm run test
+```
+or you can fire up `tests/index.html` in a browser
 
 
 [![Analytics](https://ga-beacon.appspot.com/UA-1150677-13/dsheiko/ngtemplate)](http://githalytics.com/dsheiko/ngtemplate)

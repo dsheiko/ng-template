@@ -4,11 +4,13 @@
   "description": "",
   "author": "Dmitry Sheiko",
   "main": "./src/ngtemplate.ts",
-  "version": "0.0.1",
+  "branchVersion": "^1.0.0-beta.1",
+  "branchPattern": "1.0.*",
   "scripts": {
     "start": "grunt",
     "browserfy": "tsc && node ./node_modules/cjsc/cjsc.js dist/ngtemplate.glob.js -o dist/ngtemplate.glob.min.js -M",
     "build": "tsc",
+    "build:demo": "tsc -p demo",
     "test": "tsc && node_modules/mocha-phantomjs/bin/mocha-phantomjs tests/index.html"
   },
   "licenses": [

@@ -6,17 +6,15 @@ export class NgFor extends AbstractDirective implements Template.Directive {
 
   constructor( el:HTMLElement ){
     super();
-    this.nodes =  this.initNodes( el, "ng-for", ( node:HTMLElement, expr:string, evaluate:Function ) => {
-      let parsed:Template.NgForExprVo = this.parseExpr( expr ),
-          outerHTML = node.outerHTML,
-          anchor = document.createElement( "a" );
-          node.parentNode.replaceChild( anchor, node );
-
+    this.nodes =  this.initNodes( el, "ng-for",
+      ( node:HTMLElement, expr:string, evaluate:Function, cache:Template.Cache ) => {
+      let parsed:Template.NgForExprVo = this.parseExpr( expr );
+      node.dataset[ "ng" ] = "internal";
       return {
-        el: anchor,
-        anchor: anchor,
-        outerHTML: outerHTML,
-        exp: function( data:Template.DataMap, cb:Function ):void {
+        el: node,
+        parentNode: node.parentNode,
+        outerHTML: node.outerHTML,
+        exp: function( data:Template.DataMap, cb:Function ):boolean {
           let it:any[] = [];
           try {
               eval( `it = data.${parsed.iterable}` );
@@ -26,9 +24,14 @@ export class NgFor extends AbstractDirective implements Template.Directive {
           if ( !Array.isArray( it ) ) {
              throw new Error( `Template variable ${parsed.iterable} must be an array` );
           }
-          return it.forEach(( val ) => {
-            return cb( val, parsed.variable );
+
+          if ( cache.match( JSON.stringify( it ) ) ) {
+            return false;
+          }
+          it.forEach(( val ) => {
+             cb( val, parsed.variable );
           });
+          return true;
         }
       }
     });
@@ -51,14 +54,13 @@ export class NgFor extends AbstractDirective implements Template.Directive {
 
   sync( data:Template.DataMap, cb:Template.SyncCallback ){
     this.nodes.forEach(( node:Template.DirectiveNode ) => {
-      let tmp = document.createElement( "div" );
-      node.exp( data, ( val:string, variable:string ) => {
+      let tmp = document.createElement( "div" ),
+      isChanged = node.exp( data, ( val:string, variable:string ) => {
         tmp.innerHTML += node.outerHTML;
         data[ variable ] = val;
         cb && cb( tmp );
       });
-      this.buildDOM( node, this.nodesToDocFragment( tmp ) );
-
+      isChanged && this.buildDOM( node, this.nodesToDocFragment( tmp ) );
     });
   }
 
@@ -72,8 +74,15 @@ export class NgFor extends AbstractDirective implements Template.Directive {
   }
 
   private buildDOM( node:Template.DirectiveNode, doc:HTMLElement ):void{
-    let parent:HTMLElement = <HTMLElement>node.anchor.parentNode;
-    parent.replaceChild( doc, node.anchor );
-    node.anchor = doc;
+    let items = Array.from( node.parentNode.querySelectorAll( "[data-ng=internal]" ) ),
+        anchor = document.createElement( "ng" );
+
+    node.parentNode.insertBefore( anchor, items[ 0 ] );
+    anchor.dataset[ "ng" ] = "internal";
+    items.forEach(( child ) => {
+      node.parentNode.removeChild( child );
+    });
+
+    node.parentNode.replaceChild( doc, anchor );
   }
 }
