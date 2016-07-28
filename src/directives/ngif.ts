@@ -7,25 +7,27 @@ export class NgIf extends AbstractDirective  implements Template.Directive {
 
   constructor( el:HTMLElement ){
     super();
-    this.nodes =  this.initNodes( el, "ng-if", ( node:HTMLElement, expr:string, evaluate:Function ) => {
+    this.nodes =  this.initNodes( el, "ng-if",
+      ( node:HTMLElement, expr:string, evaluate:Function, cache:Template.CacheCb ) => {
       return {
         el: node,
         anchor: <HTMLElement>document.createElement( "ng" ),
-        exp: evaluate( expr, "Boolean" )
+        exp: evaluate( expr, "Boolean" ),
+        cache: cache
       }
     });
   }
 
   update( data:Template.DataMap ){
     this.nodes.forEach(( node:Template.DirectiveNode ) => {
-      if ( node.exp.call( node.el, data ) ) {
-        return this.enable( node );
-      }
-      this.disable( node );
+      node.cache.evaluate( node.exp.call( node.el, data ), ( val:boolean ) => {
+        if ( val ) {
+          return this.enable( node );
+        }
+        this.disable( node );
+      });
     });
   }
-
-
 
   private disable( node:Template.DirectiveNode ):void{
     if ( node.anchor.parentNode ) {

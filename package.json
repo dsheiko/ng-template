@@ -28,7 +28,6 @@
     "type": "git",
     "url": "git@github.com:dsheiko/ngtemplate.git"
   },
-
   "testling": {
     "html": "testling.html",
     "browsers": [
@@ -48,7 +47,6 @@
       "android-browser/4.2..latest"
     ]
   },
-
   "devDependencies": {
     "chai": "^3.4.1",
     "cjsc": "^1.0.7",

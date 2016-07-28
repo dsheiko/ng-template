@@ -8,17 +8,20 @@ export class NgText extends AbstractDirective implements Template.Directive {
   constructor( el:HTMLElement ){
     super();
     this.nodes =  this.initNodes( el, "ng-text",
-      ( node:HTMLElement, expr:string, evaluate:Function ) => {
+      ( node:HTMLElement, expr:string, evaluate:Function, cache:Template.CacheCb  ) => {
       return {
         el: node,
-        exp: evaluate( expr, "String" )
+        exp: evaluate( expr, "String" ),
+        cache: cache
       }
     });
   }
 
   update( data:Template.DataMap ){
     this.nodes.forEach(( node:Template.DirectiveNode ) => {
-      this.setText( node.el, node.exp.call( node.el, data ) );
+      node.cache.evaluate( node.exp.call( node.el, data ), ( val:string ) => {
+        this.setText( node.el, val );
+      });
     });
   }
 }

@@ -11,17 +11,20 @@ var NgText = (function (_super) {
     __extends(NgText, _super);
     function NgText(el) {
         _super.call(this);
-        this.nodes = this.initNodes(el, "ng-text", function (node, expr, evaluate) {
+        this.nodes = this.initNodes(el, "ng-text", function (node, expr, evaluate, cache) {
             return {
                 el: node,
-                exp: evaluate(expr, "String")
+                exp: evaluate(expr, "String"),
+                cache: cache
             };
         });
     }
     NgText.prototype.update = function (data) {
         var _this = this;
         this.nodes.forEach(function (node) {
-            _this.setText(node.el, node.exp.call(node.el, data));
+            node.cache.evaluate(node.exp.call(node.el, data), function (val) {
+                _this.setText(node.el, val);
+            });
         });
     };
     return NgText;

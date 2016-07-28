@@ -1,7 +1,7 @@
 
 # NG.Template
 
-NG.Template is a light-weight template engine, that doesn't destroy the state of your DOM.
+NG.Template is a light-weight DOM-based template engine, that doesn't destroy the state of your DOM.
 
 [![Build Status][1]][2] [![dependency status][3]][4] [![dev dependency status][5]][6]
 
@@ -37,8 +37,9 @@ template.update({
 });
 ```
 
-## How to use
+## Install
 
+You can get NG.Template via npm.
 ```
 npm i --save ngtemplate
 ```

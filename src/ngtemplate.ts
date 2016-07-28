@@ -1,4 +1,4 @@
-/// <reference path="./ngtemplate.d.ts" />
+/// <reference path="./d/ngtemplate.d.ts" />
 import { NgIf } from "./directives/ngif";
 import { NgEl } from "./directives/ngel";
 import { NgText } from "./directives/ngtext";

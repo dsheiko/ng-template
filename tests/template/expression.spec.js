@@ -1,6 +1,6 @@
 var evaluate = require( "../../dist/directives/expression" ).evaluate;
 
-describe("core.Template.expression", function(){
+describe("NgTemplate.expression", function(){
 
   it( "evaluates fn({ foo: true }) => true", function() {
     var fn = evaluate( "foo", "Boolean" );

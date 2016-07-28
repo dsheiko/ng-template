@@ -1,6 +1,6 @@
 var NgFor = require( "../../dist/directives/ngfor" ).NgFor;
 
-describe("core.Template.ngFor", function(){
+describe("NgTemplate.ngFor", function(){
     describe("#parseExpr", function(){
       it( "parses `let row of rows`", function() {
         var res = NgFor.prototype.parseExpr( "let row of rows" );

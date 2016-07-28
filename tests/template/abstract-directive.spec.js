@@ -1,6 +1,6 @@
 var AbstractDirective = require( "../../dist/directives/abstract-directive" ).AbstractDirective;
 
-describe("core.Template.abstract-directive", function(){
+describe("NgTemplate.abstract-directive", function(){
   describe("#getDataKey", function(){
     it( "parses `foo-bar-baz`", function() {
       var res = AbstractDirective.prototype.getDataKey( "foo-bar-baz" );

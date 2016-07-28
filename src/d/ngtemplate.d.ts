@@ -6,6 +6,7 @@ declare namespace Template {
     el: HTMLElement,
     anchor?: HTMLElement,
     outerHTML?: string,
+    cache?: Cache,
     exp: Function
   }
 
@@ -22,6 +23,14 @@ declare namespace Template {
   interface NgForExprVo {
     variable: string;
     iterable: string;
+  }
+
+  interface CacheCb {
+    (exVal: any): void
+  }
+
+  class Cache {
+    evaluate( exVal:any, cb:CacheCb ):void;
   }
 
 

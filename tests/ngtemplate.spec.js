@@ -1,6 +1,6 @@
 var ngTemplate = require( "../dist/ngtemplate" ).ngTemplate;
 
-describe("core.Template", function(){
+describe("NgTemplate", function(){
 
   describe("ng-if directive", function(){
 
@@ -39,6 +39,7 @@ describe("core.Template", function(){
         .update({ foo: 10, bar: 0 });
       expect( this.el.innerHTML ).to.not.have.string( "Error" );
     });
+
   });
 
 

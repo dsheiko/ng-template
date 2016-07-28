@@ -11,21 +11,24 @@ var NgIf = (function (_super) {
     __extends(NgIf, _super);
     function NgIf(el) {
         _super.call(this);
-        this.nodes = this.initNodes(el, "ng-if", function (node, expr, evaluate) {
+        this.nodes = this.initNodes(el, "ng-if", function (node, expr, evaluate, cache) {
             return {
                 el: node,
                 anchor: document.createElement("ng"),
-                exp: evaluate(expr, "Boolean")
+                exp: evaluate(expr, "Boolean"),
+                cache: cache
             };
         });
     }
     NgIf.prototype.update = function (data) {
         var _this = this;
         this.nodes.forEach(function (node) {
-            if (node.exp.call(node.el, data)) {
-                return _this.enable(node);
-            }
-            _this.disable(node);
+            node.cache.evaluate(node.exp.call(node.el, data), function (val) {
+                if (val) {
+                    return _this.enable(node);
+                }
+                _this.disable(node);
+            });
         });
     };
     NgIf.prototype.disable = function (node) {

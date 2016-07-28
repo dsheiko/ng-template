@@ -1,4 +1,4 @@
-/// <reference path="./ngtemplate.d.ts" />
+/// <reference path="./d/ngtemplate.d.ts" />
 var ngif_1 = require("./directives/ngif");
 var ngel_1 = require("./directives/ngel");
 var ngtext_1 = require("./directives/ngtext");

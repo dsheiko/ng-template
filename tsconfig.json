@@ -11,7 +11,7 @@
     "outDir": "dist/"
   },
   "files": [
-    "./src/es6-shim.d.ts",
+    "./src/d/es6-shim.d.ts",
     "./src/ngtemplate.ts"
   ]
 }

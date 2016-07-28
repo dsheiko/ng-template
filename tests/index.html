@@ -27,7 +27,8 @@
 				}
 			});
 
-			System.import( "./ngtemplate.spec.js" )
+			System.import( "./cache.spec.js" )
+        .then( System.import( "./ngtemplate.spec.js" ) )
         .then( System.import( "./template/abstract-directive.spec.js" ) )
         .then( System.import( "./template/ngfor.spec.js" ) )
         .then( System.import( "./template/expression.spec.js" ) )
