@@ -91,6 +91,29 @@ describe("NgTemplate", function(){
   });
 
 
+  describe("ng-prop directive", function(){
+
+    beforeEach(function(){
+      this.el = document.createElement( "div" );
+    });
+
+    it( "evaluates the expression", function() {
+      NgTemplate
+        .factory( this.el, "<button data-ng-prop=\"'disabled', isDisabled\"></button>" )
+        .sync({ isDisabled: true })
+        .pipe(function( el ){
+          expect( el.querySelector( "button" ).disabled ).to.be.ok;
+        })
+        .sync({ isDisabled: false })
+        .pipe(function( el ){
+          expect( el.querySelector( "button" ).disabled ).to.not.be.ok;
+        });
+
+    });
+
+  });
+
+
   describe("ng-text directive", function(){
     beforeEach(function(){
       this.el = document.createElement( "div" );

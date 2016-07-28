@@ -4,7 +4,7 @@
   "description": "Light-weight DOM-based template engine, inspired by AngularJS",
   "author": "Dmitry Sheiko",
   "main": "./src/ngtemplate.ts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "branchVersion": "^1.0.0-beta.1",
   "branchPattern": "1.0.*",
   "scripts": {

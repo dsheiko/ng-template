@@ -7,6 +7,7 @@ var ngswitch_1 = require("./directives/ngswitch");
 var ngswitchcase_1 = require("./directives/ngswitchcase");
 var ngswitchcasedefault_1 = require("./directives/ngswitchcasedefault");
 var ngclasslisttoggle_1 = require("./directives/ngclasslisttoggle");
+var ngprop_1 = require("./directives/ngprop");
 var NgTemplate = (function () {
     /**
      * Initialize template for a given Element
@@ -18,7 +19,8 @@ var NgTemplate = (function () {
         if (template) {
             this.el.innerHTML = template;
         }
-        this.factory([ngfor_1.NgFor, ngswitch_1.NgSwitch, ngswitchcase_1.NgSwitchCase, ngswitchcasedefault_1.NgSwitchCaseDefault, ngif_1.NgIf, ngclasslisttoggle_1.NgClassListToggle, ngel_1.NgEl, ngtext_1.NgText]);
+        this.factory([ngfor_1.NgFor, ngswitch_1.NgSwitch, ngswitchcase_1.NgSwitchCase, ngswitchcasedefault_1.NgSwitchCaseDefault, ngif_1.NgIf,
+            ngclasslisttoggle_1.NgClassListToggle, ngprop_1.NgProp, ngel_1.NgEl, ngtext_1.NgText]);
     }
     NgTemplate.factory = function (el, template) {
         return new NgTemplate(el, template || null);
@@ -45,7 +47,3 @@ var NgTemplate = (function () {
     return NgTemplate;
 })();
 exports.NgTemplate = NgTemplate;
-function ngTemplate(el, template) {
-    return new NgTemplate(el, template || null);
-}
-exports.ngTemplate = ngTemplate;

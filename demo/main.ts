@@ -22,7 +22,7 @@ let template = new NgTemplate( el, `
           Power is required
         </div>
       </div>
-       <button type="submit" class="btn btn-default" data-ng-el="this.disabled = !form.valid">Submit</button>
+       <button type="submit" class="btn btn-default" data-ng-prop="'disabled', !form.valid">Submit</button>
     </form>
 `);
 

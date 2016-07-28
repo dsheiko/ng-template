@@ -33,7 +33,7 @@
       Power is required
     </div>
   </div>
-   <button type="submit" class="btn btn-default" data-ng-el="this.disabled = !form.valid">Submit</button>
+   <button type="submit" class="btn btn-default" data-ng-prop="'disabled', !form.valid">Submit</button>
 </form>
 ```
 
@@ -104,41 +104,61 @@ var template = new NgTemplate( node );
 ```
 import { NgTemplate } from "ng-template";
 let template = new NgTemplate( el, tpl );
-template.sync( context );
+template.sync( scope );
 
 ```
 where:
 * el - a DOM element we bind to
 * tpl - OPTIONAL: template code that will be injected into `el`
-* context - template context - an object literal whose members form the scope for template expressions
+* scope -  an object literal (template scope) whose members form the scope for template expressions
 
 
 ## Template expressions
 
+Template expression are being evaluated in the given `scope`. So we can reference scope variables:
+```
 data-ng-if="foo"
 { foo: true }
+```
 
+That includes structures:
+```
 data-ng-if="foo.bar"
 {
   foo: {
     bar: true
   }
 }
+```
 
+We can refer multiple scope variables:
+```
 data-ng-if="(foo && bar)"
 { foo: true, bar: true }
+```
 
-
+Expressions are also evaluated in the context of the target element, so we can access the element with `this`:
+```
 data-ng-if="(foo && this.checked)"
 { foo: true }
+```
 
-
+We can pass rendering helpers (e.g.g transformers) with the scope:
+```
+data-ng-if="decorator(foo)"
+{
+  foo: "foo",
+  decorator: function( val ){
+    return "decorated " + val;
+  }
+}
+```
 
 ## Directives
 
 ### NgText
 
-We use `NgText` to modify element textNode
+We use `NgText` to modify element `textNode`
 
 #### Syntax
 
@@ -163,6 +183,24 @@ The directive renders escaped HTML:
 console.log( document.body.innerHTML ); // <i>&lt;button&gt;</i>
 ```
 
+### NgProp
+
+We use `NgProp` to modify element's properties
+
+#### Syntax
+
+```
+<el data-ng-prop="expression:string, expression:boolean|string" />
+```
+
+#### Examples
+
+```javascript
+(new NgTemplate( document.body , `<button data-ng-prop="'disabled', isDisabled"></button>` ))
+  .sync({ isDisabled: true });
+
+console.log( document.body.innerHTML ); // <button disabled=""></button>
+```
 
 ### NgClassListToggle
 

@@ -35,7 +35,8 @@ declare namespace NgTemplate {
     evaluate( exVal:any, cb:CacheCb ):void;
   }
 
+  interface Element {
+    [ key: string ]: any;
+  }
 
-
-  type forEach = (value: any, index: number, array: any[]) => void;
 }
