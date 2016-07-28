@@ -24,7 +24,7 @@ let el = document.getElementById( "inviteForm" );
 // Bind the template
 let template = new NgTemplate( el );
 // Sync element for given context
-template.update({
+template.sync({
   errors: [ "Unknown error", "Require field" ],
   state: {
     fullname: {
@@ -71,7 +71,7 @@ var template = new NgTemplate( node );
 ```
 import { NgTemplate } from "ng-template";
 let template = new NgTemplate( el: HTMLElement, tpl?: string )
-template.update( context: ([s: string]: any) );
+template.sync( context: ([s: string]: any) );
 
 ```
 where:
@@ -86,8 +86,8 @@ import { NgTemplate } from "ng-template";
 // initialize
 let template = new NgTemplate( document.body , "<span data-ng-if='invalid'>Error</span>" )
 
-// update when state changes
-template.update({ invalid: false });
+//.sync when state changes
+template.sync({ invalid: false });
 
 ```
 
@@ -115,14 +115,14 @@ We use `NgText` to modify element textNode
 
 ```javascript
 (new NgTemplate( document.body , `<i data-ng-text="foo"></i>` ))
-  .update({ foo: "Foo" });
+  .sync({ foo: "Foo" });
 
 console.log( document.body.innerHTML ); // <i>Foo</i>
 ```
 
 ```javascript
 (new NgTemplate( document.body , `<i data-ng-text="foo"></i>` ))
-  .update({ foo: "<button>" });
+  .sync({ foo: "<button>" });
 
 console.log( document.body.innerHTML ); // <i>&lt;button&gt;</i>
 ```
@@ -142,7 +142,7 @@ We use `NgClassListToggle` to modify element classList
 
 ```javascript
 (new NgTemplate( document.body , `<i data-ng-class-list-toggle="'is-hidden', isHidden"></i>` ))
-  .update({ isHidden: true });
+  .sync({ isHidden: true });
 
 console.log( document.body.innerHTML ); // <i class="is-hidden"></i>
 ```
@@ -164,10 +164,10 @@ We use `NgFor` to toggle visibility of an element (subtree) within the DOM
 ```javascript
 let template = new NgTemplate( document.body , `<i data-ng-if="toggle">Hello!</i>` );
 
-template.update({ toggle: false });
+template.sync({ toggle: false });
 console.log( document.body.innerHTML ); // <ng style="display: none; "></ng>
 
-template.update({ toggle: true });
+template.sync({ toggle: true });
 console.log( document.body.innerHTML ); // <i>Hello!</i>
 ```
 
@@ -186,7 +186,7 @@ We use `NgFor` when we need to generate a list of elements (subtrees)
 
 ```javascript
 (new NgTemplate( document.body , `<i data-ng-for="let row of rows" data-ng-text="row"></i>` ))
-  .update({ rows: [ "foo", "bar" ] });
+  .sync({ rows: [ "foo", "bar" ] });
 
 console.log( document.body.innerHTML ); // <i>foo</i><i>bar</i>
 ```
@@ -213,7 +213,7 @@ We use `NgSwitch` when we need to display on element (subtree) of a set of avail
     <i data-ng-switch-case="1">FOO</i>
     <i data-ng-switch-case="2">BAR</i>
   </div>` ))
-  .update({ theCase: 1 });
+  .sync({ theCase: 1 });
 
 console.log( document.body.innerHTML ); // <i>FOO</i>
 ```
@@ -225,7 +225,7 @@ console.log( document.body.innerHTML ); // <i>FOO</i>
     <i data-ng-switch-case="2">BAR</i>
     <i data-ng-switch-case-default>BAZ</i>
   </div>` ))
-  .update({ theCase: 100 });
+  .sync({ theCase: 100 });
 
 console.log( document.body.innerHTML ); // <i>BAZ</i>
 ```
@@ -247,7 +247,7 @@ cause the DOM modification even if the expression of `NgEl` wasn't changed
 
 ```javascript
 (new NgTemplate( document.body , `<i data-ng-el="this.className = class"></i>` ))
-  .update({ class: "is-hidden" });
+  .sync({ class: "is-hidden" });
 
 console.log( document.body.innerHTML ); // <i class="is-hidden"></i>
 ```

@@ -10,14 +10,14 @@ declare namespace Template {
     exp: Function
   }
 
-  interface UpdateCallback {
+  interface SyncCallback {
     (el: HTMLElement): void;
   }
 
   class Directive {
     constructor( el:HTMLElement );
     nodes: DirectiveNode[];
-    update( data:DataMap, cb?:UpdateCallback ):void;
+    sync( data:DataMap, cb?:SyncCallback ):void;
   }
 
   interface NgForExprVo {

@@ -19,7 +19,7 @@ var NgText = (function (_super) {
             };
         });
     }
-    NgText.prototype.update = function (data) {
+    NgText.prototype.sync = function (data) {
         var _this = this;
         this.nodes.forEach(function (node) {
             node.cache.evaluate(node.exp.call(node.el, data), function (val) {

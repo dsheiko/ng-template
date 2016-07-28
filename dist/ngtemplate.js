@@ -26,10 +26,10 @@ var NgTemplate = (function () {
             _this.directives.push(new Directive(_this.el));
         });
     };
-    NgTemplate.prototype.update = function (data) {
+    NgTemplate.prototype.sync = function (data) {
         this.directives.forEach(function (d) {
-            d.update(data, function (el) {
-                ngTemplate(el).update(data);
+            d.sync(data, function (el) {
+                ngTemplate(el).sync(data);
             });
         });
         return this;

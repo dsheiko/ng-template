@@ -31,10 +31,10 @@ export class NgTemplate {
     });
   }
 
-  update( data:Template.DataMap ):NgTemplate {
+  sync( data:Template.DataMap ):NgTemplate {
     this.directives.forEach(( d ) => {
-      d.update( data, ( el: HTMLElement ) => {
-        ngTemplate( el ).update( data );
+      d.sync( data, ( el: HTMLElement ) => {
+        ngTemplate( el ).sync( data );
       });
     })
     return this;

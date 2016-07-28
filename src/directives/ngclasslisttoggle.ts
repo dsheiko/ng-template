@@ -17,7 +17,7 @@ export class NgClassListToggle extends AbstractDirective implements Template.Dir
     });
   }
 
-  update( data:Template.DataMap ){
+  sync( data:Template.DataMap ){
     this.nodes.forEach(( node:Template.DirectiveNode ) => {
       node.cache.evaluate( node.exp.call( node.el, data ), ( args:any[] ) => {
         node.el.classList.toggle( args[ 0 ], args[ 1 ] );

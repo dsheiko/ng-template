@@ -12,13 +12,13 @@ describe("Cache", function(){
     it( "modifies the DOM when the expression changes", function( done ) {
       var modified = false;
       ngTemplate( this.el, "<span data-ng-if=\"foo < bar\">Error</span>" )
-        .update({ foo: 10, bar: 0 })
+        .sync({ foo: 10, bar: 0 })
         .pipe(function( el ){
           util.observeDOM( el, function(){
             modified = true;
           });
         })
-        .update({ foo: 10, bar: 20 });
+        .sync({ foo: 10, bar: 20 });
 
         setTimeout(function(){
           expect( modified ).to.eql( true );
@@ -30,13 +30,13 @@ describe("Cache", function(){
     it( "does not modify the DOM when the expression does not change", function( done ) {
       var modified = false;
       ngTemplate( this.el, "<span data-ng-if=\"foo < bar\">Error</span>" )
-        .update({ foo: 10, bar: 0 })
+        .sync({ foo: 10, bar: 0 })
         .pipe(function( el ){
           util.observeDOM( el, function(){
             modified = true;
           });
         })
-        .update({ foo: 10, bar: 0 });
+        .sync({ foo: 10, bar: 0 });
 
       setTimeout(function(){
           expect( modified ).to.eql( false );
@@ -48,13 +48,13 @@ describe("Cache", function(){
     it( "does not modify the DOM when the product of expression does not change", function( done ) {
       var modified = false;
       ngTemplate( this.el, "<span data-ng-if=\"foo < bar\">Error</span>" )
-        .update({ foo: 10, bar: 0 })
+        .sync({ foo: 10, bar: 0 })
         .pipe(function( el ){
           util.observeDOM( el, function( ev ){
             modified = true;
           });
         })
-        .update({ foo: 50, bar: 10 });
+        .sync({ foo: 50, bar: 10 });
 
         setTimeout(function(){
           expect( modified ).to.eql( false );
@@ -75,13 +75,13 @@ describe("Cache", function(){
     it( "modifies the DOM when the expression changes", function( done ) {
       var modified = false;
       ngTemplate( this.el, "<i data-ng-text=\"foo + bar\"></i>" )
-        .update({ foo: "Foo", bar: "Bar" })
+        .sync({ foo: "Foo", bar: "Bar" })
         .pipe(function( el ){
           util.observeDOM( el.querySelector( "i" ), function(){
             modified = true;
           });
         })
-        .update({ foo: "Foo", bar: "BaZ" });
+        .sync({ foo: "Foo", bar: "BaZ" });
 
         setTimeout(function(){
           expect( modified ).to.eql( true );
@@ -93,13 +93,13 @@ describe("Cache", function(){
     it( "does not modify the DOM when the expression does not change", function( done ) {
       var modified = false;
       ngTemplate( this.el, "<i data-ng-text=\"foo + bar\"></i>" )
-        .update({ foo: "Foo", bar: "Bar" })
+        .sync({ foo: "Foo", bar: "Bar" })
         .pipe(function( el ){
           util.observeDOM( el.querySelector( "i" ), function(){
             modified = true;
           });
         })
-        .update({ foo: "Foo", bar: "Bar" });
+        .sync({ foo: "Foo", bar: "Bar" });
 
       setTimeout(function(){
           expect( modified ).to.eql( false );
@@ -111,13 +111,13 @@ describe("Cache", function(){
     it( "does not modify the DOM when the product of expression does not change", function( done ) {
       var modified = false;
       ngTemplate( this.el, "<i data-ng-text=\"foo + bar\"></i>" )
-        .update({ foo: "Foo", bar: "Bar" })
+        .sync({ foo: "Foo", bar: "Bar" })
         .pipe(function( el ){
           util.observeDOM( el.querySelector( "i" ), function(){
             modified = true;
           });
         })
-        .update({ foo: "FooBa", bar: "r" });
+        .sync({ foo: "FooBa", bar: "r" });
 
       setTimeout(function(){
           expect( modified ).to.eql( false );
@@ -141,13 +141,13 @@ describe("Cache", function(){
 //    it( "modifies the DOM when the expression changes", function( done ) {
 //      var modified = false;
 //      ngTemplate( this.el, "<i data-ng-class-list-toggle=\"foo, bar\"></i>" )
-//        .update({ foo: "foo", bar: true })
+//        .sync({ foo: "foo", bar: true })
 //        .pipe(function( el ){
 //          util.observeDOM( el.querySelector( "i" ), function(){
 //            modified = true;
 //          });
 //        })
-//        .update({ foo: "foo", bar: false });
+//        .sync({ foo: "foo", bar: false });
 //
 //        setTimeout(function(){
 //          expect( modified ).to.eql( true );
@@ -157,13 +157,13 @@ describe("Cache", function(){
 //    it( "does not modify the DOM when the expression does not change", function( done ) {
 //      var modified = false;
 //      ngTemplate( this.el, "<i data-ng-class-list-toggle=\"foo, bar\"></i>" )
-//        .update({ foo: "foo", bar: true })
+//        .sync({ foo: "foo", bar: true })
 //        .pipe(function( el ){
 //          util.observeDOM( el.querySelector( "i" ), function(){
 //            modified = true;
 //          });
 //        })
-//        .update({ foo: "foo", bar: true });
+//        .sync({ foo: "foo", bar: true });
 //
 //        setTimeout(function(){
 //          expect( modified ).to.eql( false );

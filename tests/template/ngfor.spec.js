@@ -52,20 +52,20 @@ describe("NgTemplate.ngFor", function(){
       });
     });
 
-    describe("#update", function(){
+    describe("#sync", function(){
       beforeEach(function(){
         this.el = document.createElement( "div" );
       });
       it( "span the target element", function() {
         this.el.innerHTML = "<i data-ng-for='let row of rows'></i>";
         var ngfor = new NgFor( this.el );
-        ngfor.update({ rows: ["foo", "bar"] });
+        ngfor.sync({ rows: ["foo", "bar"] });
         expect( this.el.innerHTML ).to.eql( "<i></i><i></i>" );
       });
       it( "span the target element keeping directives", function() {
         this.el.innerHTML = "<i data-ng-for='let row of rows' data-ng-text=\"'text'\"></i>";
         var ngfor = new NgFor( this.el );
-        ngfor.update({ rows: ["foo", "bar"] });
+        ngfor.sync({ rows: ["foo", "bar"] });
         expect( this.el.innerHTML ).to.eql( "<i data-ng-text=\"'text'\"></i><i data-ng-text=\"'text'\"></i>" );
       });
     });

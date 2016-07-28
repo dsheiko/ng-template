@@ -20,7 +20,7 @@ var NgIf = (function (_super) {
             };
         });
     }
-    NgIf.prototype.update = function (data) {
+    NgIf.prototype.sync = function (data) {
         var _this = this;
         this.nodes.forEach(function (node) {
             node.cache.evaluate(node.exp.call(node.el, data), function (val) {

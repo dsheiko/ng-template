@@ -17,7 +17,7 @@ export class NgSwitchCaseDefault extends AbstractDirective implements Template.D
     });
   }
 
-  update( data:Template.DataMap ){
+  sync( data:Template.DataMap ){
     if ( !this.nodes.length ) {
       return;
     }

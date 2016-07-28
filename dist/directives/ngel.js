@@ -18,7 +18,7 @@ var NgEl = (function (_super) {
             };
         });
     }
-    NgEl.prototype.update = function (data) {
+    NgEl.prototype.sync = function (data) {
         this.nodes.forEach(function (node) {
             node.exp.call(node.el, data);
         });

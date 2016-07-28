@@ -20,7 +20,7 @@ var NgSwitchCase = (function (_super) {
             };
         });
     }
-    NgSwitchCase.prototype.update = function (data) {
+    NgSwitchCase.prototype.sync = function (data) {
         if (!this.nodes.length) {
             return;
         }

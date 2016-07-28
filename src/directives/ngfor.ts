@@ -49,7 +49,7 @@ export class NgFor extends AbstractDirective implements Template.Directive {
     };
   }
 
-  update( data:Template.DataMap, cb:Template.UpdateCallback ){
+  sync( data:Template.DataMap, cb:Template.SyncCallback ){
     this.nodes.forEach(( node:Template.DirectiveNode ) => {
       let tmp = document.createElement( "div" );
       node.exp( data, ( val:string, variable:string ) => {

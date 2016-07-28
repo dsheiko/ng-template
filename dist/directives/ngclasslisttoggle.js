@@ -19,7 +19,7 @@ var NgClassListToggle = (function (_super) {
             };
         });
     }
-    NgClassListToggle.prototype.update = function (data) {
+    NgClassListToggle.prototype.sync = function (data) {
         this.nodes.forEach(function (node) {
             node.cache.evaluate(node.exp.call(node.el, data), function (args) {
                 node.el.classList.toggle(args[0], args[1]);

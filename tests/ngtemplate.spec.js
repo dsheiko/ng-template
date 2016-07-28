@@ -10,7 +10,7 @@ describe("NgTemplate", function(){
 
     it( "removes the target from the DOM when expression is false", function() {
       ngTemplate( this.el, "<span data-ng-if=\"invalid\">Error</span>" )
-        .update({ invalid: false });
+        .sync({ invalid: false });
 
       // changed to: <ng style="display: none; "></ng>
       expect( this.el.innerHTML ).to.not.have.string( "Error" );
@@ -19,24 +19,24 @@ describe("NgTemplate", function(){
 
     it( "restores the target after removal when expression changes", function(){
       ngTemplate( this.el, "<span data-ng-if=\"invalid\">Error</span>" )
-        .update({ invalid: false })
+        .sync({ invalid: false })
         .pipe(function(){
           expect( this.el.innerHTML.indexOf( "Error" ) === -1 ).to.be.ok;
          }, this )
-        .update({ invalid: true });
+        .sync({ invalid: true });
 
       expect( this.el.innerHTML.indexOf( "Error" ) !== -1 ).to.be.ok;
     });
 
     it( "evaluates compoun expressions (foo > bar)", function() {
       ngTemplate( this.el, "<span data-ng-if=\"foo > bar\">Error</span>" )
-        .update({ foo: 10, bar: 0 });
+        .sync({ foo: 10, bar: 0 });
       expect( this.el.innerHTML ).to.have.string( "Error" );
     });
 
     it( "evaluates compoun expressions (foo < bar)", function() {
       ngTemplate( this.el, "<span data-ng-if=\"foo < bar\">Error</span>" )
-        .update({ foo: 10, bar: 0 });
+        .sync({ foo: 10, bar: 0 });
       expect( this.el.innerHTML ).to.not.have.string( "Error" );
     });
 
@@ -51,19 +51,19 @@ describe("NgTemplate", function(){
 
     it( "evaluates expression on element (string literal)", function() {
       ngTemplate( this.el, "<span data-ng-el=\"this.innerHTML='New value'\">Pristine</span>" )
-        .update({});
+        .sync({});
 
       expect( this.el.innerHTML ).to.not.have.string( "Pristine" );
       expect( this.el.innerHTML ).to.have.string( "New value" );
     });
     it( "evaluates expression on element (tpl variable)", function() {
       ngTemplate( this.el, "<span data-ng-el=\"this.innerHTML=text\">Pristine</span>" )
-        .update({ text: "New value" })
+        .sync({ text: "New value" })
         .pipe(function(){
           expect( this.el.innerHTML ).to.not.have.string( "Pristine" );
           expect( this.el.innerHTML ).to.have.string( "New value" );
          }, this )
-        .update({ text: "Changed value" }).outerHTML;
+        .sync({ text: "Changed value" }).outerHTML;
       expect( this.el.innerHTML ).to.have.string( "Changed value" );
     });
   });
@@ -77,7 +77,7 @@ describe("NgTemplate", function(){
 
     it( "evaluates the expression", function() {
       ngTemplate( this.el, "<span data-ng-class-list-toggle=\"'is-hidden', isHidden\"></span>" )
-        .update({ isHidden: true });
+        .sync({ isHidden: true });
       expect( this.el.innerHTML ).to.eql( "<span class=\"is-hidden\"></span>" );
     });
 
@@ -91,13 +91,13 @@ describe("NgTemplate", function(){
 
     it( "evaluates the statement", function() {
       ngTemplate( this.el, "<span data-ng-text=\"foo\">Pristine</span>" )
-        .update({ foo: "New value" });
+        .sync({ foo: "New value" });
       expect( this.el.innerHTML ).to.not.have.string( "Pristine" );
       expect( this.el.innerHTML ).to.have.string( "New value" );
     });
     it( "escapes output", function() {
       ngTemplate( this.el, "<span data-ng-text=\"foo\">Pristine</span>" )
-        .update({ foo: "<button>" });
+        .sync({ foo: "<button>" });
       expect( this.el.innerHTML ).to.not.have.string( "<button>" );
     });
   });
@@ -110,13 +110,13 @@ describe("NgTemplate", function(){
 
     it( "generates nodes from a plain list", function() {
       ngTemplate( this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row\"></i>" )
-        .update({ rows: [ "foo", "bar", "baz" ]});
+        .sync({ rows: [ "foo", "bar", "baz" ]});
       expect( this.el.innerHTML ).to.eql( "<i>foo</i><i>bar</i><i>baz</i>" );
     });
 
     it( "generates nodes from a list of objects", function() {
       ngTemplate( this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row.name\"></i>" )
-        .update({ rows: [
+        .sync({ rows: [
           { name: "foo" },
           { name: "bar" },
           { name: "baz" }
@@ -138,11 +138,11 @@ describe("NgTemplate", function(){
             "<i data-ng-switch-case='1'>FOO</i>" +
             "<i data-ng-switch-case='2'>BAR</i>" +
             "</div>" )
-        .update({ theCase: 1 })
+        .sync({ theCase: 1 })
         .pipe(function( el ){
           expect( el.innerHTML ).to.eql( "<i>FOO</i>" );
         })
-        .update({ theCase: 2 })
+        .sync({ theCase: 2 })
         .pipe(function( el ){
           expect( el.innerHTML ).to.eql( "<i>BAR</i>" );
         });
@@ -163,11 +163,11 @@ describe("NgTemplate", function(){
             "<i data-ng-switch-case='2'>BAR</i>" +
             "<i data-ng-switch-case-default>DEFAULT</i>" +
             "</div>" )
-        .update({ theCase: 1 })
+        .sync({ theCase: 1 })
         .pipe(function( el ){
           expect( el.innerHTML ).to.eql( "<i>FOO</i>" );
         })
-        .update({ theCase: 3 })
+        .sync({ theCase: 3 })
         .pipe(function( el ){
           expect( el.innerHTML ).to.eql( "<i>DEFAULT</i>" );
         });
@@ -183,7 +183,7 @@ describe("NgTemplate", function(){
     it( "evaluates the statement", function() {
       ngTemplate( this.el,
             "<div data-ng-text='transform(raw)'></div>" )
-        .update({
+        .sync({
           raw: 100,
           transform: function( num ) {
             return num + "500";

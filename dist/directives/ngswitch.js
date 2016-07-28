@@ -19,7 +19,7 @@ var NgSwitch = (function (_super) {
             };
         });
     }
-    NgSwitch.prototype.update = function (data, cb) {
+    NgSwitch.prototype.sync = function (data, cb) {
         this.nodes.forEach(function (node) {
             node.cache.evaluate(node.exp.call(node.el, data), function (val) {
                 data["$"] = val;

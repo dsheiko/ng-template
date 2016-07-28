@@ -45,7 +45,7 @@ var NgFor = (function (_super) {
             iterable: str.replace(re, "")
         };
     };
-    NgFor.prototype.update = function (data, cb) {
+    NgFor.prototype.sync = function (data, cb) {
         var _this = this;
         this.nodes.forEach(function (node) {
             var tmp = document.createElement("div");

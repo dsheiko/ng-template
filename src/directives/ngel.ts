@@ -15,7 +15,7 @@ export class NgEl extends AbstractDirective implements Template.Directive {
     });
   }
 
-  update( data:Template.DataMap ){
+  sync( data:Template.DataMap ){
     this.nodes.forEach(( node:Template.DirectiveNode ) => {
       node.exp.call( node.el, data );
     });
