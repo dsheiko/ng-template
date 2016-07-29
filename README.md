@@ -1,9 +1,14 @@
 
 # NgTemplate 1.0 BETA
 
-`NgTemplate` is a light-weight DOM-based template engine, inspired by AngularJS. While `mustache.js`, `Handlebars` or
-`_.template` are fast and wide-spread, one cannot simply use them on a form. Rending template will reset the state of inputs.
-`NgTemplate` doesn't replace the entire view DOM-subtree, but modifies just the target nodes according to the directives.
+`NgTemplate` is a light-weight DOM-based template engine, inspired by AngularJS.
+
+While `mustache.js`, `Handlebars` or `_.template` are all nice and shiny, until it comes to a form.
+With every rending these template engines replace the bound DOM subtree
+and the state of inputs gets lost.
+
+`NgTemplate` treats the DOM carefully. It modifies the exact target nodes gracefully 
+according to the directives and actual state.
 
 ## Motivation
 
