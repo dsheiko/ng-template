@@ -16,6 +16,9 @@ var NgTemplate = (function () {
     function NgTemplate(el, template) {
         this.el = el;
         this.directives = [];
+        if (!el) {
+            throw new Error("(NgTemplate) Invalid first parameter: must be an existing DOM node");
+        }
         if (template) {
             this.el.innerHTML = template;
         }

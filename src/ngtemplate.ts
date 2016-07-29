@@ -23,6 +23,9 @@ export class NgTemplate {
    */
 
   constructor( public el:HTMLElement, template?:string ){
+    if ( !el ) {
+      throw new Error( "(NgTemplate) Invalid first parameter: must be an existing DOM node" );
+    }
     if ( template ) {
       this.el.innerHTML = template;
     }
