@@ -15,7 +15,7 @@ function generateCode( expr: string, wrapper: string = "" ):string{
 var func = function( data ){
   var keys = Object.keys( data ),
       vals = keys.map(function( key ){
-        return data[ key ];
+        return data[ key ] || null;
       }),
       __toArray = function(){
         return [].slice.call( arguments );
