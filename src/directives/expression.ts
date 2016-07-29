@@ -15,12 +15,12 @@ function generateCode( expr: string, wrapper: string = "" ):string{
 var func = function( data ){
   var keys = Object.keys( data ),
       vals = keys.map(function( key ){
-        return data[ key ] || null;
+        return data[ key ];
       }),
       __toArray = function(){
         return [].slice.call( arguments );
       };
-  eval("var cb = function(" + keys.join(",") + "){ return ${wrapper}(${expr}); };");\n\
+  eval("var cb = function(" + keys.join(",") + "){ try { return ${wrapper}(${expr}); } catch( err ) {} };");
   return cb.apply( this, vals );
 };`;
 }
