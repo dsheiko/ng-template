@@ -3,15 +3,15 @@
 
 `NgTemplate` is a light-weight DOM-based template engine, inspired by AngularJS. While `mustache.js`, `Handlebars` or
 `_.template` are fast and wide-spread, one cannot simply use them on a form. Rending template will reset the state of inputs.
-`NgTemplate` doesn't the view DOM-subtree, it modifies the target nodes according to the directives.
+`NgTemplate` doesn't replace the entire view DOM-subtree, but modifies just the target nodes according to the directives.
 
 ## Motivation
 
-* Progressive enhancement friendly: server-side generated HTML can be fully ready for presentation. During `NgTemplate` synchronization it will be updated according to element directives and a provided state
+* Progressive enhancement friendly: Server-side generated HTML can be fully ready for presentation. During `NgTemplate` synchronization it will be updated according to element directives and a provided state
 * HTML compliant: `data-*` - directives instead of foreign concepts such as `{{foo}}`, `[hidden]`, `*ngFor`, `[(ngModel)]`
-* Concern separation: presentation state logic decoupled from the view
-* Performance: Modified DOM nodes by state diff, only when it's required
-* Easy to catch up: familiar for Angular folks directives such as `data-ng-if`, `data-ng-switch`, `data-ng-for` and a few extra intuitive e.g. `data-ng-text`, `data-ng-class-list-toggle`
+* Concern separation: Presentation state logic decoupled from the view
+* Performance: `NgTemplate` modifies DOM nodes by state diff; it touches the DOM only when it's necessary
+* Easy to catch up: Familiar for Angular folks directives such as `data-ng-if`, `data-ng-switch`, `data-ng-for` and a few extra intuitive e.g. `data-ng-text`, `data-ng-class-list-toggle`
 
 # How does it work?
 
@@ -48,7 +48,7 @@ let el = document.querySelector( "#heroForm" ),
 // Bind the template
 let template = new NgTemplate( el );
 
-// Set the scope
+// Set the scope (view state)
 let scope = {
   powers: [ "-", "Really Smart", "Super Flexible",
             "Super Hot", "Weather Changer" ],
@@ -158,7 +158,7 @@ data-ng-if="decorator(foo)"
 
 ### NgText
 
-We use `NgText` to modify element `textNode`
+We use `NgText` to modify element's `textNode`
 
 #### Syntax
 
@@ -175,7 +175,8 @@ We use `NgText` to modify element `textNode`
 console.log( document.body.innerHTML ); // <i>Foo</i>
 ```
 
-The directive renders escaped HTML:
+HTML gets automatically escaped:
+
 ```javascript
 (new NgTemplate( document.body , `<i data-ng-text="foo"></i>` ))
   .sync({ foo: "<button>" });
@@ -343,8 +344,8 @@ console.log( document.body.innerHTML ); // <i class="is-hidden"></i>
 
 ## Contributing
 
-NgTemplate actively invites maintainers. There is plenty of work to do. No big commitment required,
-if all you do is review a single Pull Request, you are a maintainer. .
+`NgTemplate` welcomes maintainers. There is plenty of work to do. No big commitment required,
+if all you do is review a single Pull Request, you are a maintainer.
 
 
 ### How to build
