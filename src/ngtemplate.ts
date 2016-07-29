@@ -22,24 +22,31 @@ export class NgTemplate {
    * If template passed, load it into the Element
    */
 
-  constructor( public el:HTMLElement, template?:string ){
-    if ( !el ) {
+  constructor( public el:HTMLElement, public template?:string ){
+    if ( !this.el ) {
       throw new Error( "(NgTemplate) Invalid first parameter: must be an existing DOM node" );
     }
-    if ( template ) {
-      this.el.innerHTML = template;
+    if ( this.template ) {
+      return;
     }
-    this.factory([ NgFor, NgSwitch, NgSwitchCase, NgSwitchCaseDefault, NgIf,
+    this.init([ NgFor, NgSwitch, NgSwitchCase, NgSwitchCaseDefault, NgIf,
       NgClassListToggle, NgProp, NgEl, NgText ]);
   }
 
-  factory( directives:Function[] ){
+  private init( directives:Function[] ){
     directives.forEach(( Directive:any ) => {
       this.directives.push( new Directive( this.el ) );
     });
   }
 
   sync( data:NgTemplate.DataMap ):NgTemplate {
+    // Late initialization: renders from a given template on first sync
+    if ( this.template ) {
+      this.el.innerHTML = this.template;
+      this.init([ NgFor, NgSwitch, NgSwitchCase, NgSwitchCaseDefault, NgIf,
+        NgClassListToggle, NgProp, NgEl, NgText ]);
+      this.template = null;
+    }
     this.directives.forEach(( d ) => {
       d.sync( data, ( el: HTMLElement ) => {
         ( new NgTemplate( el ) ).sync( data );
