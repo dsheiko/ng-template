@@ -89,11 +89,20 @@ const template = new NgTemplate( node );
 
 ### CommonJS
 ```javascript
-var NgTemplate = require( "./node_modules/ngtemplate/dist/ngtemplate" ).NgTemplate,
+var NgTemplate = require( "ng-template" ).NgTemplate,
     template = new NgTemplate( node );
 ```
 In order to adapt your source for browser, you can either [browserfy](http://browserify.org/) or
 load your modules with [SystemJS](https://github.com/systemjs/systemjs)
+
+```
+System.config({
+  paths: {
+     "*": "node_modules/*"
+  },
+  packageConfigPaths: [ "./node_modules/*/package.json" ]
+});
+```
 
 ### VanillaJS
 ```HTML
