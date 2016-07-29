@@ -120,7 +120,7 @@ where:
 
 ## Template expressions
 
-Template expression are being evaluated in the given `scope`. So we can reference scope variables:
+Template expressions are being evaluated in the given `scope`. So we can reference scope variables:
 ```
 data-ng-if="foo"
 { foo: true }
@@ -148,7 +148,7 @@ data-ng-if="(foo && this.checked)"
 { foo: true }
 ```
 
-We can pass rendering helpers (e.g.g transformers) with the scope:
+We can pass rendering helpers (e.g. transformers) with the scope:
 ```
 data-ng-if="decorator(foo)"
 {
