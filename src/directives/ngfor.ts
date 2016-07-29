@@ -29,7 +29,7 @@ export class NgFor extends AbstractDirective implements NgTemplate.Directive {
             return false;
           }
           it.forEach(( val ) => {
-             cb( val, parsed.variable );
+             cb( val, parsed.variable || null );
           });
           return true;
         }

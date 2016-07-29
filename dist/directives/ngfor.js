@@ -32,7 +32,7 @@ var NgFor = (function (_super) {
                         return false;
                     }
                     it.forEach(function (val) {
-                        cb(val, parsed.variable);
+                        cb(val, parsed.variable || null);
                     });
                     return true;
                 }
