@@ -76,7 +76,7 @@ template.sync( scope );
 
 You can get `NgTemplate` via npm.
 ```
-npm i --save ngtemplate
+npm i --save ng-template
 ```
 
 ## Accessing module
