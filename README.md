@@ -106,7 +106,7 @@ System.config({
 
 ### VanillaJS
 ```HTML
-<script src=""./node_modules/ngtemplate/dist/ngtemplate.glob.min.js"></script>
+<script src=""./node_modules/ng-template/dist/ngtemplate.glob.min.js"></script>
 ```
 ```javascript
 var template = new NgTemplate( node );
@@ -375,4 +375,4 @@ npm run test
 or you can fire up `tests/index.html` in a browser
 
 
-[![Analytics](https://ga-beacon.appspot.com/UA-1150677-13/dsheiko/ngtemplate)](http://githalytics.com/dsheiko/ngtemplate)
+[![Analytics](https://ga-beacon.appspot.com/UA-1150677-13/dsheiko/ng-template)](http://githalytics.com/dsheiko/ng-template)
