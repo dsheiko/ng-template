@@ -2,6 +2,7 @@
 .sass-cache
 .nfs*
 node_modules
+dist/jspm_packages
 
 # Compiled source #
 ###################

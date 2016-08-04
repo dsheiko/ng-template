@@ -5,7 +5,7 @@
   "author": "Dmitry Sheiko",
   "main": "./dist/ngtemplate.js",
   "typings": "./index.d.ts",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "branchVersion": "^1.0.0-beta.1",
   "branchPattern": "1.0.*",
   "scripts": {
@@ -58,5 +58,11 @@
     "mocha": "^2.3.4",
     "mocha-phantomjs": "^4.1.0",
     "systemjs": "^0.19.31"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "dist"
+    },
+    "devDependencies": {}
   }
 }
