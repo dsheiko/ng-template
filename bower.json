@@ -1,0 +1,24 @@
+{
+  "name": "ng-template",
+  "description": "Light-weight DOM-based template engine, inspired by AngularJS",
+  "main": "./dist/ngtemplate.js",
+  "authors": [
+    "Dmitry Sheiko"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "Template",
+    "Engine",
+    "ES6",
+    "ES2015",
+    "TypeScript"
+  ],
+  "homepage": "https://github.com/dsheiko/ng-template",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
