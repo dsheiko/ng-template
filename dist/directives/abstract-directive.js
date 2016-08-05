@@ -1,3 +1,4 @@
+"use strict";
 var expression_1 = require("./expression");
 var cache_1 = require("./cache");
 var AbstractDirective = (function () {
@@ -40,5 +41,5 @@ var AbstractDirective = (function () {
         return div.innerHTML;
     };
     return AbstractDirective;
-})();
+}());
 exports.AbstractDirective = AbstractDirective;

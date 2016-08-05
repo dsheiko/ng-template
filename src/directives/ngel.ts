@@ -5,18 +5,18 @@ import { AbstractDirective } from "./abstract-directive";
 export class NgEl extends AbstractDirective implements NgTemplate.Directive {
   nodes: NgTemplate.DirectiveNode[];
 
-  constructor( el:HTMLElement ){
+  constructor( el: HTMLElement ){
     super();
-    this.nodes =  this.initNodes( el, "ng-el", ( node:HTMLElement, expr:string, evaluate:Function ) => {
+    this.nodes =  this.initNodes( el, "ng-el", ( node: HTMLElement, expr: string, evaluate: Function ) => {
       return {
         el: node,
         exp: evaluate( expr )
-      }
+      };
     });
   }
 
-  sync( data:NgTemplate.DataMap ){
-    this.nodes.forEach(( node:NgTemplate.DirectiveNode ) => {
+  sync( data: NgTemplate.DataMap ){
+    this.nodes.forEach(( node: NgTemplate.DirectiveNode ) => {
       node.exp.call( node.el, data );
     });
   }

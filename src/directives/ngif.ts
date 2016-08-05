@@ -5,22 +5,22 @@ import { AbstractDirective } from "./abstract-directive";
 export class NgIf extends AbstractDirective  implements NgTemplate.Directive {
   nodes: NgTemplate.DirectiveNode[];
 
-  constructor( el:HTMLElement ){
+  constructor( el: HTMLElement ){
     super();
     this.nodes =  this.initNodes( el, "ng-if",
-      ( node:HTMLElement, expr:string, evaluate:Function, cache:NgTemplate.Cache ) => {
+      ( node: HTMLElement, expr: string, evaluate: Function, cache: NgTemplate.Cache ) => {
       return {
         el: node,
         anchor: <HTMLElement>document.createElement( "ng" ),
         exp: evaluate( expr, "Boolean" ),
         cache: cache
-      }
+      };
     });
   }
 
-  sync( data:NgTemplate.DataMap ){
-    this.nodes.forEach(( node:NgTemplate.DirectiveNode ) => {
-      node.cache.evaluate( node.exp.call( node.el, data ), ( val:boolean ) => {
+  sync( data: NgTemplate.DataMap ){
+    this.nodes.forEach(( node: NgTemplate.DirectiveNode ) => {
+      node.cache.evaluate( node.exp.call( node.el, data ), ( val: boolean ) => {
         if ( val ) {
           return this.enable( node );
         }
@@ -29,7 +29,7 @@ export class NgIf extends AbstractDirective  implements NgTemplate.Directive {
     });
   }
 
-  private disable( node:NgTemplate.DirectiveNode ):void{
+  private disable( node: NgTemplate.DirectiveNode ): void{
     if ( node.anchor.parentNode ) {
       return;
     }
@@ -38,7 +38,7 @@ export class NgIf extends AbstractDirective  implements NgTemplate.Directive {
     node.el.parentNode.removeChild( node.el );
   }
 
-  private enable( node:NgTemplate.DirectiveNode ):void{
+  private enable( node: NgTemplate.DirectiveNode ): void{
     if ( !node.anchor.parentNode ) {
       return;
     }

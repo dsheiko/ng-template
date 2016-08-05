@@ -1,16 +1,15 @@
 export function evaluate( expr: string, wrapper: string = "" ){
-    let func:Function,
-        code:string = generateCode( expr, wrapper );
+    let func: Function,
+        code: string = generateCode( expr, wrapper );
     try {
       eval( code );
-    } catch( e ) {
-    console.log(e);
+    } catch ( e ) {
       throw new EvalError( `Invalid ng* expression ${expr}` );
     }
     return func;
 };
 
-function generateCode( expr: string, wrapper: string = "" ):string{
+function generateCode( expr: string, wrapper: string = "" ): string{
   return `
 var func = function( data ){
   var keys = Object.keys( data ),

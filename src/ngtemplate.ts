@@ -14,7 +14,7 @@ import { NgProp } from "./directives/ngprop";
 export class NgTemplate {
   private directives: NgTemplate.Directive[] = [];
 
-  static factory( el:HTMLElement, template?:string ):NgTemplate {
+  static factory( el: HTMLElement, template?: string ): NgTemplate {
     return new NgTemplate( el, template || null );
   }
   /**
@@ -22,7 +22,7 @@ export class NgTemplate {
    * If template passed, load it into the Element
    */
 
-  constructor( public el:HTMLElement, public template?:string ){
+  constructor( public el: HTMLElement, public template?: string ){
     if ( !this.el ) {
       throw new Error( "(NgTemplate) Invalid first parameter: must be an existing DOM node" );
     }
@@ -33,13 +33,13 @@ export class NgTemplate {
       NgClassListToggle, NgProp, NgEl, NgText ]);
   }
 
-  private init( directives:Function[] ){
-    directives.forEach(( Directive:any ) => {
+  private init( directives: Function[] ){
+    directives.forEach(( Directive: any ) => {
       this.directives.push( new Directive( this.el ) );
     });
   }
 
-  sync( data:NgTemplate.DataMap ):NgTemplate {
+  sync( data: NgTemplate.DataMap ): NgTemplate {
     // Late initialization: renders from a given template on first sync
     if ( this.template ) {
       this.el.innerHTML = this.template;
@@ -51,11 +51,11 @@ export class NgTemplate {
       d.sync( data, ( el: HTMLElement ) => {
         ( new NgTemplate( el ) ).sync( data );
       });
-    })
+    });
     return this;
   }
 
-  pipe( cb:Function, context:Object = this ):NgTemplate {
+  pipe( cb: Function, context: Object = this ): NgTemplate {
     cb.call( context, this.el );
     return this;
   }

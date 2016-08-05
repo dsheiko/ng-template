@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -27,5 +28,5 @@ var NgClassListToggle = (function (_super) {
         });
     };
     return NgClassListToggle;
-})(abstract_directive_1.AbstractDirective);
+}(abstract_directive_1.AbstractDirective));
 exports.NgClassListToggle = NgClassListToggle;

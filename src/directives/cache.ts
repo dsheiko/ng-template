@@ -1,7 +1,7 @@
 export class Cache {
-  private cache:any;
+  private cache: any;
 
-  match( exVal:any ):boolean {
+  match( exVal: any ): boolean {
     if ( exVal === this.cache ) {
       return true;
     }
@@ -9,7 +9,7 @@ export class Cache {
     return false;
   }
 
-  evaluate( exVal:any, cb:NgTemplate.CacheCb ) {
+  evaluate( exVal: any, cb: NgTemplate.CacheCb ) {
     if ( this.match( exVal ) ) {
       return;
     }

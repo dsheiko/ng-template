@@ -1,3 +1,4 @@
+"use strict";
 /// <reference path="./d/ngtemplate.d.ts" />
 var ngif_1 = require("./directives/ngif");
 var ngel_1 = require("./directives/ngel");
@@ -56,5 +57,5 @@ var NgTemplate = (function () {
         return this;
     };
     return NgTemplate;
-})();
+}());
 exports.NgTemplate = NgTemplate;

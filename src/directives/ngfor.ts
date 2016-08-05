@@ -4,18 +4,18 @@ import { AbstractDirective } from "./abstract-directive";
 export class NgFor extends AbstractDirective implements NgTemplate.Directive {
   nodes: NgTemplate.DirectiveNode[];
 
-  constructor( el:HTMLElement ){
+  constructor( el: HTMLElement ){
     super();
     this.nodes =  this.initNodes( el, "ng-for",
-      ( node:HTMLElement, expr:string, evaluate:Function, cache:NgTemplate.Cache ) => {
-      let parsed:NgTemplate.NgForExprVo = this.parseExpr( expr );
+      ( node: HTMLElement, expr: string, evaluate: Function, cache: NgTemplate.Cache ) => {
+      let parsed: NgTemplate.NgForExprVo = this.parseExpr( expr );
       node.dataset[ "ng" ] = "internal";
       return {
         el: node,
         parentNode: node.parentNode,
         outerHTML: node.outerHTML,
-        exp: function( data:NgTemplate.DataMap, cb:Function ):boolean {
-          let it:any[] = [];
+        exp: function( data: NgTemplate.DataMap, cb: Function ): boolean {
+          let it: any[] = [];
           try {
               eval( `it = data.${parsed.iterable}` );
           } catch ( err ) {
@@ -33,11 +33,11 @@ export class NgFor extends AbstractDirective implements NgTemplate.Directive {
           });
           return true;
         }
-      }
+      };
     });
   }
 
-  parseExpr( strRaw:string ):NgTemplate.NgForExprVo{
+  parseExpr( strRaw: string ): NgTemplate.NgForExprVo{
     let re = /(let|var)\s+([a-zA-Z0-9\_]+)\s+of\s+/,
         str = strRaw.trim(),
         varMatches = str.match( re );
@@ -52,10 +52,10 @@ export class NgFor extends AbstractDirective implements NgTemplate.Directive {
     };
   }
 
-  sync( data:NgTemplate.DataMap, cb:NgTemplate.SyncCallback ){
-    this.nodes.forEach(( node:NgTemplate.DirectiveNode ) => {
+  sync( data: NgTemplate.DataMap, cb: NgTemplate.SyncCallback ){
+    this.nodes.forEach(( node: NgTemplate.DirectiveNode ) => {
       let tmp = document.createElement( "div" ),
-      isChanged = node.exp( data, ( val:string, variable:string ) => {
+      isChanged = node.exp( data, ( val: string, variable: string ) => {
         tmp.innerHTML += node.outerHTML;
         data[ variable ] = val;
         cb && cb( tmp );
@@ -67,13 +67,13 @@ export class NgFor extends AbstractDirective implements NgTemplate.Directive {
   /**
    * Create headless DOM subtree
    */
-  private nodesToDocFragment( div:HTMLElement ):HTMLElement {
+  private nodesToDocFragment( div: HTMLElement ): HTMLElement {
     let doc = document.createDocumentFragment();
     Array.from( div.children ).forEach( child => doc.appendChild( child ) );
     return <HTMLElement>doc;
   }
 
-  private buildDOM( node:NgTemplate.DirectiveNode, doc:HTMLElement ):void{
+  private buildDOM( node: NgTemplate.DirectiveNode, doc: HTMLElement ): void{
     let items = Array.from( node.parentNode.querySelectorAll( "[data-ng=internal]" ) ),
         anchor = document.createElement( "ng" );
 

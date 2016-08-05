@@ -1,3 +1,4 @@
+"use strict";
 function evaluate(expr, wrapper) {
     if (wrapper === void 0) { wrapper = ""; }
     var func, code = generateCode(expr, wrapper);
@@ -5,7 +6,6 @@ function evaluate(expr, wrapper) {
         eval(code);
     }
     catch (e) {
-        console.log(e);
         throw new EvalError("Invalid ng* expression " + expr);
     }
     return func;

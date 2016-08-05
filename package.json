@@ -5,7 +5,7 @@
   "author": "Dmitry Sheiko",
   "main": "./dist/ngtemplate.js",
   "typings": "./index.d.ts",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "branchVersion": "^1.0.0-beta.1",
   "branchPattern": "1.0.*",
   "scripts": {
@@ -13,7 +13,8 @@
     "browserfy": "tsc && node ./node_modules/cjsc/cjsc.js dist/ngtemplate.glob.js -o dist/ngtemplate.glob.min.js -M",
     "build": "tsc",
     "build:demo": "tsc -p demo",
-    "test": "tsc && mocha-phantomjs tests/index.html"
+    "test": "tslint --project tsconfig.json && tsc && mocha-phantomjs tests/index.html",
+    "test:ts": "tsc && mocha-phantomjs tests/index.html"
   },
   "licenses": [
     {
@@ -56,7 +57,10 @@
     "cjsc": "^1.0.7",
     "es6-shim": "^0.35.1",
     "mocha": "^2.3.4",
-    "systemjs": "^0.19.31"
+    "mocha-phantomjs": "^4.1.0",
+    "systemjs": "^0.19.31",
+    "tslint": "^3.14.0",
+    "typescript": "^1.8.10"
   },
   "jspm": {
     "directories": {

@@ -5,10 +5,10 @@ export class AbstractDirective {
   constructor(){
   }
 
-  initNodes( el:HTMLElement, identifier:string, cb:Function ): NgTemplate.DirectiveNode[]{
-    let datakey:string = this.getDataKey( identifier ),
-        selector:string = this.getSelector( identifier );
-    return Array.from( el.querySelectorAll( selector ) ).map(( el:HTMLElement ) => {
+  initNodes( el: HTMLElement, identifier: string, cb: Function ): NgTemplate.DirectiveNode[]{
+    let datakey: string = this.getDataKey( identifier ),
+        selector: string = this.getSelector( identifier );
+    return Array.from( el.querySelectorAll( selector ) ).map(( el: HTMLElement ) => {
       let expr = el.dataset[ datakey ];
       delete el.dataset[ datakey ];
       return cb( el, expr, evaluate, new Cache() );
@@ -18,15 +18,15 @@ export class AbstractDirective {
   /**
    * Converts foo-bar-baz to `[data-foo-bar-baz]`
    */
-  private getSelector( raw:string ) {
+  private getSelector( raw: string ) {
     return `[data-${raw}]`;
   }
   /**
    * Converts foo-bar-baz to fooBarBaz
    */
-  private getDataKey( raw:string ) {
+  private getDataKey( raw: string ) {
     return raw
-      .split( "-" ).map( ( part:string, inx:number ) => {
+      .split( "-" ).map( ( part: string, inx: number ) => {
         if ( !inx ) {
           return part;
         }

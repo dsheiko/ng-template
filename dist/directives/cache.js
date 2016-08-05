@@ -1,3 +1,4 @@
+"use strict";
 var Cache = (function () {
     function Cache() {
     }
@@ -15,6 +16,6 @@ var Cache = (function () {
         cb(exVal);
     };
     return Cache;
-})();
+}());
 exports.Cache = Cache;
 ;
