@@ -1,6 +1,10 @@
 
 # NgTemplate 1.0 BETA
 
+[![NPM](https://nodei.co/npm/ng-template.png)](https://nodei.co/npm/ng-template/)
+
+[![Build Status](https://travis-ci.org/dsheiko/ng-template.png)](https://travis-ci.org/dsheiko/ng-template)
+
 `NgTemplate` is a light-weight DOM-based template engine, inspired by AngularJS.
 
 `mustache.js`, `Handlebars` or `_.template` are all nice and shiny, until it comes to a form.
