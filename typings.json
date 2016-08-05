@@ -3,7 +3,8 @@
   "description": "Light-weight DOM-based template engine, inspired by AngularJS",
   "main": "index.d.ts",
   "homepage": "https://github.com/dsheiko/ng-template",
-  "dependencies": {
+  "globalDependencies": {
+    "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504"
   },
   "version": "0.0.1"
 }
