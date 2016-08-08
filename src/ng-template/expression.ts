@@ -30,7 +30,7 @@ func = function( data ){
     eval( code );
     return cb.apply( this, vals );
   } catch( err ) {
-    console.info( "Could not evaluate " + code + ": ", err );
+    console.warn( "Could not evaluate " + code + " ", err );
     return false;
   }
 };`;
