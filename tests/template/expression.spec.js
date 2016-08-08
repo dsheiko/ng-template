@@ -1,4 +1,4 @@
-var evaluate = require( "../../dist/directives/expression" ).evaluate;
+var evaluate = require( "../../dist/ng-template/expression" ).evaluate;
 
 describe("NgTemplate.expression", function(){
 
@@ -20,6 +20,5 @@ describe("NgTemplate.expression", function(){
     var fn = evaluate( "foo", "String" );
     expect( fn({ foo: "'foo'" }) ).to.eql( "'foo'" );
   });
-
 
 });

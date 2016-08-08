@@ -1,4 +1,5 @@
 import { AbstractDirective } from "./abstract-directive";
+import { Exception } from "./exception";
 // <div data-ng:for="let hero of data.heroes" data-ng:text="hero" ></div>
 
 export class NgFor extends AbstractDirective implements NgTemplate.Directive {
@@ -19,10 +20,10 @@ export class NgFor extends AbstractDirective implements NgTemplate.Directive {
           try {
               eval( `it = data.${parsed.iterable}` );
           } catch ( err ) {
-              throw new EvalError( `NgTemplate variable ${parsed.iterable} undefined` );
+              throw new Exception( `NgTemplate variable ${parsed.iterable} undefined` );
           }
           if ( !Array.isArray( it ) ) {
-             throw new Error( `NgTemplate variable ${parsed.iterable} must be an array` );
+             throw new Exception( `NgTemplate variable ${parsed.iterable} must be an array` );
           }
 
           if ( cache.match( JSON.stringify( it ) ) ) {
@@ -43,7 +44,7 @@ export class NgFor extends AbstractDirective implements NgTemplate.Directive {
         varMatches = str.match( re );
 
     if ( !varMatches || varMatches.length !== 3 ) {
-      throw new Error( "Cannot parse ng-for expression: " + strRaw );
+      throw new Exception( "Cannot parse ng-for expression: " + strRaw );
     }
 
     return {

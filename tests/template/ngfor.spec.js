@@ -1,4 +1,4 @@
-var NgFor = require( "../../dist/directives/ngfor" ).NgFor;
+var NgFor = require( "../../dist/ng-template/ngfor" ).NgFor;
 
 describe("NgTemplate.ngFor", function(){
     describe("#parseExpr", function(){

@@ -1,14 +1,15 @@
 "use strict";
 /// <reference path="./ngtemplate.d.ts" />
-var ngif_1 = require("./directives/ngif");
-var ngel_1 = require("./directives/ngel");
-var ngtext_1 = require("./directives/ngtext");
-var ngfor_1 = require("./directives/ngfor");
-var ngswitch_1 = require("./directives/ngswitch");
-var ngswitchcase_1 = require("./directives/ngswitchcase");
-var ngswitchcasedefault_1 = require("./directives/ngswitchcasedefault");
-var ngclasslisttoggle_1 = require("./directives/ngclasslisttoggle");
-var ngprop_1 = require("./directives/ngprop");
+var ngif_1 = require("./ng-template/ngif");
+var ngel_1 = require("./ng-template/ngel");
+var ngtext_1 = require("./ng-template/ngtext");
+var ngfor_1 = require("./ng-template/ngfor");
+var ngswitch_1 = require("./ng-template/ngswitch");
+var ngswitchcase_1 = require("./ng-template/ngswitchcase");
+var ngswitchcasedefault_1 = require("./ng-template/ngswitchcasedefault");
+var ngclasslisttoggle_1 = require("./ng-template/ngclasslisttoggle");
+var ngprop_1 = require("./ng-template/ngprop");
+var exception_1 = require("./ng-template/exception");
 var NgTemplate = (function () {
     /**
      * Initialize template for a given Element
@@ -19,7 +20,7 @@ var NgTemplate = (function () {
         this.template = template;
         this.directives = [];
         if (!this.el) {
-            throw new Error("(NgTemplate) Invalid first parameter: must be an existing DOM node");
+            throw new exception_1.Exception("(NgTemplate) Invalid first parameter: must be an existing DOM node");
         }
         if (this.template) {
             return;

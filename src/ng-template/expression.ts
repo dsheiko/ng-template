@@ -1,10 +1,12 @@
+import { Exception } from "./exception";
+
 export function evaluate( expr: string, wrapper: string = "" ){
     let func: Function,
         code: string = generateCode( expr, wrapper );
     try {
       eval( code );
     } catch ( e ) {
-      throw new EvalError( `Invalid ng* expression ${expr}` );
+      throw new Exception( `Invalid ng* expression ${expr}` );
     }
     return func;
 };
@@ -21,12 +23,14 @@ func = function( data ){
       __toArray = function(){
         return [].slice.call( arguments );
       };
+
+
   try {
     code = "cb = function(" + keys.join(",") + "){ return ${wrapper}(${expr}); };";
     eval( code );
     return cb.apply( this, vals );
   } catch( err ) {
-    console.info( "Could not evaluate " + code );
+    console.info( "Could not evaluate " + code + ": ", err );
     return false;
   }
 };`;

@@ -1,4 +1,4 @@
-var AbstractDirective = require( "../../dist/directives/abstract-directive" ).AbstractDirective;
+var AbstractDirective = require( "../../dist/ng-template/abstract-directive" ).AbstractDirective;
 
 describe("NgTemplate.abstract-directive", function(){
   describe("#getDataKey", function(){
