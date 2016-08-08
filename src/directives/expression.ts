@@ -9,18 +9,26 @@ export function evaluate( expr: string, wrapper: string = "" ){
     return func;
 };
 
-function generateCode( expr: string, wrapper: string = "" ): string{
+export function generateCode( expr: string, wrapper: string = "" ): string{
   return `
-var func = function( data ){
-  var keys = Object.keys( data ),
+func = function( data ){
+  var cb,
+      code,
+      keys = Object.keys( data ),
       vals = keys.map(function( key ){
         return data[ key ];
       }),
       __toArray = function(){
         return [].slice.call( arguments );
       };
-  eval("var cb = function(" + keys.join(",") + "){ try { return ${wrapper}(${expr}); } catch( err ) {} };");
-  return cb.apply( this, vals );
+  try {
+    code = "cb = function(" + keys.join(",") + "){ return ${wrapper}(${expr}); };";
+    eval( code );
+    return cb.apply( this, vals );
+  } catch( err ) {
+    console.info( "Could not evaluate " + code );
+    return false;
+  }
 };`;
 }
 
