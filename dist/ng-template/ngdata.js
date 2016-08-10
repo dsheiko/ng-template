@@ -6,13 +6,13 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var abstract_directive_1 = require("./abstract-directive");
 /**
- * <i data-ng-prop="'disabled', isDisabled"></i>
+ * <i data-ng-data="'someKey', value"></i>
  */
-var NgProp = (function (_super) {
-    __extends(NgProp, _super);
-    function NgProp(el) {
+var NgData = (function (_super) {
+    __extends(NgData, _super);
+    function NgData(el) {
         _super.call(this);
-        this.nodes = this.initNodes(el, "ng-prop", function (node, expr, evaluate, cache) {
+        this.nodes = this.initNodes(el, "ng-data", function (node, expr, evaluate, cache) {
             return {
                 el: node,
                 exp: evaluate(expr, "__toArray"),
@@ -20,14 +20,14 @@ var NgProp = (function (_super) {
             };
         });
     }
-    NgProp.prototype.sync = function (data) {
+    NgData.prototype.sync = function (data) {
         this.nodes.forEach(function (node) {
             node.cache.evaluate(node.exp.call(node.el, data), function (args) {
                 var el = node.el;
-                el[args[0]] = args[1];
+                el.dataset[args[0]] = args[1];
             });
         });
     };
-    return NgProp;
+    return NgData;
 }(abstract_directive_1.AbstractDirective));
-exports.NgProp = NgProp;
+exports.NgData = NgData;

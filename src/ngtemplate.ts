@@ -8,6 +8,7 @@ import { NgSwitchCase } from "./ng-template/ngswitchcase";
 import { NgSwitchCaseDefault } from "./ng-template/ngswitchcasedefault";
 import { NgClassListToggle } from "./ng-template/ngclasslisttoggle";
 import { NgProp } from "./ng-template/ngprop";
+import { NgData } from "./ng-template/ngdata";
 import { Exception } from "./ng-template/exception";
 
 
@@ -30,7 +31,7 @@ export class NgTemplate {
       return;
     }
     this.init([ NgFor, NgSwitch, NgSwitchCase, NgSwitchCaseDefault, NgIf,
-      NgClassListToggle, NgProp, NgEl, NgText ]);
+      NgClassListToggle, NgData, NgProp, NgEl, NgText ]);
   }
 
   private init( directives: Function[] ){
@@ -44,7 +45,7 @@ export class NgTemplate {
     if ( this.template ) {
       this.el.innerHTML = this.template;
       this.init([ NgFor, NgSwitch, NgSwitchCase, NgSwitchCaseDefault, NgIf,
-        NgClassListToggle, NgProp, NgEl, NgText ]);
+        NgClassListToggle, NgData, NgProp, NgEl, NgText ]);
       this.template = null;
     }
     this.directives.forEach(( d ) => {

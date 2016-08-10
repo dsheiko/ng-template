@@ -1,13 +1,13 @@
 import { AbstractDirective } from "./abstract-directive";
 /**
- * <i data-ng-prop="'disabled', isDisabled"></i>
+ * <i data-ng-data="'someKey', value"></i>
  */
-export class NgProp extends AbstractDirective implements NgTemplate.Directive {
+export class NgData extends AbstractDirective implements NgTemplate.Directive {
   nodes: NgTemplate.DirectiveNode[];
 
   constructor( el: HTMLElement ){
     super();
-    this.nodes =  this.initNodes( el, "ng-prop",
+    this.nodes =  this.initNodes( el, "ng-data",
       ( node: HTMLElement, expr: string, evaluate: Function, cache: NgTemplate.Cache ) => {
       return {
         el: node,
@@ -20,8 +20,8 @@ export class NgProp extends AbstractDirective implements NgTemplate.Directive {
   sync( data: NgTemplate.DataMap ){
     this.nodes.forEach(( node: NgTemplate.DirectiveNode ) => {
       node.cache.evaluate( node.exp.call( node.el, data ), ( args: any[] ) => {
-        let el = <NgTemplate.Element>node.el;
-        el[ args[ 0 ] ] = args[ 1 ];
+        let el = <HTMLElement>node.el;
+        el.dataset[ args[ 0 ] ] = args[ 1 ];
       });
     });
   }

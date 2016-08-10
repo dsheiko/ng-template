@@ -181,7 +181,7 @@ We use `NgText` to modify element's `textNode`
 #### Syntax
 
 ```
-<el data-ng-text="expression:string|number" />
+<el data-ng-text="expression => text:string|number" />
 ```
 
 #### Examples
@@ -209,7 +209,7 @@ We use `NgProp` to modify element's properties
 #### Syntax
 
 ```
-<el data-ng-prop="expression:string, expression:boolean|string" />
+<el data-ng-prop="expression => propertyName:string, expression => value:boolean|string" />
 ```
 
 #### Examples
@@ -221,6 +221,27 @@ We use `NgProp` to modify element's properties
 console.log( document.body.innerHTML ); // <button disabled=""></button>
 ```
 
+
+### NgData
+
+We use `NgData` to modify element's dataset
+
+#### Syntax
+
+```
+<el data-ng-data="expression => datasetKey:string, expression => datasetValue:string" />
+```
+
+#### Examples
+
+```javascript
+(new NgTemplate( document.body , `<div data-ng-data="'dateOfBirth', value"></div>` ))
+  .sync({ value: "1960-10-03" });
+
+console.log( document.body.innerHTML ); // <div data-date-of-birth="1960-10-03"></div>
+```
+
+
 ### NgClassListToggle
 
 We use `NgClassListToggle` to modify element's `classList`
@@ -228,7 +249,7 @@ We use `NgClassListToggle` to modify element's `classList`
 #### Syntax
 
 ```
-<el data-ng-class-list-toggle="expression:string, expression:boolean" />
+<el data-ng-class-list-toggle="expression => className:string, expression => toggle:boolean" />
 ```
 
 #### Examples
@@ -256,7 +277,7 @@ We use `NgFor` to toggle visibility of an element (subtree) within the DOM
 #### Syntax
 
 ```
-<el data-ng-if="expression:boolean" />
+<el data-ng-if="expression => condition:boolean" />
 ```
 
 #### Examples
@@ -279,7 +300,7 @@ We use `NgFor` when we need to generate a list of elements (subtrees)
 #### Syntax
 
 ```
-<el data-ng-for="let variable of expression:any[]" />
+<el data-ng-for="let variable of expression => list:any[]" />
 ```
 
 #### Examples
@@ -299,8 +320,8 @@ We use `NgSwitch` when we need to display on element (subtree) of a set of avail
 #### Syntax
 
 ```
-<el data-ng-switch="expression:string|number">
-  <el data-ng-switch-case="expression:string|number" />
+<el data-ng-switch="expression => variable:string|number">
+  <el data-ng-switch-case="expression => value:string|number" />
   <el data-ng-switch-default />
 </el>
 ```
@@ -340,7 +361,7 @@ cause the DOM modification even if the expression of `NgEl` wasn't changed
 #### Syntax
 
 ```
-<el data-ng-el="expression:void" />
+<el data-ng-el="expression => eval:void" />
 ```
 
 #### Examples

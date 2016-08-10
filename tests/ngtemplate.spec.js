@@ -113,6 +113,28 @@ describe("NgTemplate", function(){
 
   });
 
+  describe("ng-data directive", function(){
+
+    beforeEach(function(){
+      this.el = document.createElement( "div" );
+    });
+
+    it( "evaluates the expression", function() {
+      NgTemplate
+        .factory( this.el, "<button data-ng-data=\"'someKey', value\"></button>" )
+        .sync({ value: "foo" })
+        .pipe(function( el ){
+          expect( el.querySelector( "button" ).dataset[ "someKey" ] ).to.eql( "foo" );
+        })
+        .sync({ value: "bar" })
+        .pipe(function( el ){
+          expect( el.querySelector( "button" ).dataset[ "someKey" ] ).to.eql( "bar" );
+        });
+
+    });
+
+  });
+
 
   describe("ng-text directive", function(){
     beforeEach(function(){
