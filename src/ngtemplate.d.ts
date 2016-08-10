@@ -3,12 +3,13 @@ declare namespace NgTemplate {
   interface DataMap { [s: string]: any; }
 
   interface DirectiveNode {
-    el: HTMLElement,
-    anchor?: HTMLElement,
-    parentNode?: HTMLElement,
-    outerHTML?: string,
-    cache?: Cache,
-    exp: Function
+    el: HTMLElement;
+    anchor?: HTMLElement;
+    parentNode?: HTMLElement;
+    outerHTML?: string;
+    cache?: Cache;
+    exp: Function;
+    id?: string;
   }
 
   interface SyncCallback {
