@@ -59,10 +59,33 @@ var NgFor = (function (_super) {
             iterable: str.replace(re, "")
         };
     };
+    /**
+     * Create for generated list elements a permitted parent elements
+     */
+    NgFor.createParentEl = function (el) {
+        var map = {
+            "TR": "tbody",
+            "THEAD": "table",
+            "TFOOT": "table",
+            "TBODY": "table",
+            "COLGROUP": "table",
+            "CAPTION": "table",
+            "TD": "tr",
+            "TH": "tr",
+            "COL": "colgroup",
+            "FIGCAPTION": "figure",
+            "LEGEND": "fieldset",
+            "LI": "ul",
+            "DT": "dl",
+            "DD": "dl",
+        };
+        var child = el.tagName.toUpperCase(), parent = child in map ? map[child] : "div";
+        return document.createElement(parent);
+    };
     NgFor.prototype.sync = function (data, cb) {
         var _this = this;
         this.nodes.forEach(function (node) {
-            var tmp = document.createElement("div"), isChanged = node.exp(data, function (val, variable) {
+            var tmp = NgFor.createParentEl(node.el), isChanged = node.exp(data, function (val, variable) {
                 tmp.innerHTML += node.outerHTML;
                 data[variable] = val;
                 cb && cb(tmp);

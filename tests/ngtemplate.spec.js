@@ -135,6 +135,8 @@ describe("NgTemplate", function(){
   });
 
 
+
+
   describe("ng-for directive", function(){
     beforeEach(function(){
       this.el = document.createElement( "div" );
@@ -167,6 +169,15 @@ describe("NgTemplate", function(){
         .sync({ rows: [ "foo", "bar", "baz" ]});
 
       expect( this.el.querySelectorAll( "i" ).length ).to.eql( 3 );
+    });
+
+
+    it( "generates nodes in a table", function() {
+      NgTemplate
+        .factory( this.el, "<table><tr data-ng-for=\"let row of rows\">" +
+          "<td data-ng-text=\"row\"></td></tr></table>" )
+        .sync({ rows: [ "foo", "bar", "baz" ]});
+      expect( this.el.querySelectorAll( "td" ).length ).to.eql( 3 );
     });
 
 

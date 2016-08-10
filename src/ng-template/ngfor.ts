@@ -66,9 +66,34 @@ export class NgFor extends AbstractDirective implements NgTemplate.Directive {
     };
   }
 
+  /**
+   * Create for generated list elements a permitted parent elements
+   */
+  private static createParentEl( el: HTMLElement ): HTMLElement {
+      const map: NgTemplate.DataMap = {
+        "TR": "tbody",
+        "THEAD": "table",
+        "TFOOT": "table",
+        "TBODY": "table",
+        "COLGROUP": "table",
+        "CAPTION": "table",
+        "TD": "tr",
+        "TH": "tr",
+        "COL": "colgroup",
+        "FIGCAPTION": "figure",
+        "LEGEND": "fieldset",
+        "LI": "ul",
+        "DT": "dl",
+        "DD": "dl",
+      };
+      let child: string = el.tagName.toUpperCase(),
+          parent = child in map ? map[ child ] : "div";
+      return document.createElement( parent );
+  }
+
   sync( data: NgTemplate.DataMap, cb: NgTemplate.SyncCallback ){
     this.nodes.forEach(( node: NgTemplate.DirectiveNode ) => {
-      let tmp = document.createElement( "div" ),
+      let tmp = NgFor.createParentEl( node.el ),
       isChanged = node.exp( data, ( val: string, variable: string ) => {
         tmp.innerHTML += node.outerHTML;
         data[ variable ] = val;
