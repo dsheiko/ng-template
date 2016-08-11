@@ -11,6 +11,8 @@ import { NgProp } from "./ng-template/ngprop";
 import { NgData } from "./ng-template/ngdata";
 import { Exception } from "./ng-template/exception";
 
+let DIRECTIVES = [ NgFor, NgSwitch, NgSwitchCase, NgSwitchCaseDefault, NgIf,
+      NgClassListToggle, NgData, NgProp, NgEl, NgText ];
 
 export class NgTemplate {
   private directives: NgTemplate.Directive[] = [];
@@ -30,8 +32,7 @@ export class NgTemplate {
     if ( this.template ) {
       return;
     }
-    this.init([ NgFor, NgSwitch, NgSwitchCase, NgSwitchCaseDefault, NgIf,
-      NgClassListToggle, NgData, NgProp, NgEl, NgText ]);
+    this.init( DIRECTIVES );
   }
 
   private init( directives: Function[] ){
@@ -44,8 +45,7 @@ export class NgTemplate {
     // Late initialization: renders from a given template on first sync
     if ( this.template ) {
       this.el.innerHTML = this.template;
-      this.init([ NgFor, NgSwitch, NgSwitchCase, NgSwitchCaseDefault, NgIf,
-        NgClassListToggle, NgData, NgProp, NgEl, NgText ]);
+      this.init( DIRECTIVES );
       this.template = null;
     }
     this.directives.forEach(( d ) => {

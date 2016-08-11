@@ -11,6 +11,8 @@ var ngclasslisttoggle_1 = require("./ng-template/ngclasslisttoggle");
 var ngprop_1 = require("./ng-template/ngprop");
 var ngdata_1 = require("./ng-template/ngdata");
 var exception_1 = require("./ng-template/exception");
+var DIRECTIVES = [ngfor_1.NgFor, ngswitch_1.NgSwitch, ngswitchcase_1.NgSwitchCase, ngswitchcasedefault_1.NgSwitchCaseDefault, ngif_1.NgIf,
+    ngclasslisttoggle_1.NgClassListToggle, ngdata_1.NgData, ngprop_1.NgProp, ngel_1.NgEl, ngtext_1.NgText];
 var NgTemplate = (function () {
     /**
      * Initialize template for a given Element
@@ -26,8 +28,7 @@ var NgTemplate = (function () {
         if (this.template) {
             return;
         }
-        this.init([ngfor_1.NgFor, ngswitch_1.NgSwitch, ngswitchcase_1.NgSwitchCase, ngswitchcasedefault_1.NgSwitchCaseDefault, ngif_1.NgIf,
-            ngclasslisttoggle_1.NgClassListToggle, ngdata_1.NgData, ngprop_1.NgProp, ngel_1.NgEl, ngtext_1.NgText]);
+        this.init(DIRECTIVES);
     }
     NgTemplate.factory = function (el, template) {
         return new NgTemplate(el, template || null);
@@ -42,8 +43,7 @@ var NgTemplate = (function () {
         // Late initialization: renders from a given template on first sync
         if (this.template) {
             this.el.innerHTML = this.template;
-            this.init([ngfor_1.NgFor, ngswitch_1.NgSwitch, ngswitchcase_1.NgSwitchCase, ngswitchcasedefault_1.NgSwitchCaseDefault, ngif_1.NgIf,
-                ngclasslisttoggle_1.NgClassListToggle, ngdata_1.NgData, ngprop_1.NgProp, ngel_1.NgEl, ngtext_1.NgText]);
+            this.init(DIRECTIVES);
             this.template = null;
         }
         this.directives.forEach(function (d) {
