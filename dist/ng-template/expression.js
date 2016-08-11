@@ -32,7 +32,7 @@ exports.removeNegotiation = removeNegotiation;
  */
 function isParsableExpr(expr) {
     var re = /^[a-zA-Z_\$][a-zA-Z0-9\._\$]+$/;
-    return re.test(expr);
+    return expr.substr(0, 5) !== "this." && re.test(expr);
 }
 exports.isParsableExpr = isParsableExpr;
 /**
@@ -50,12 +50,12 @@ function findValue(path, data) {
 }
 exports.findValue = findValue;
 function getWrapperFunction(fnName) {
-    return fnName === "__toArray" ? toArray : window[fnName];
+    return window[fnName];
 }
 exports.getWrapperFunction = getWrapperFunction;
 function strategyReference(expr, wrapper) {
     if (wrapper === void 0) { wrapper = ""; }
-    var func, positiveExpr = removeNegotiation(expr);
+    var positiveExpr = removeNegotiation(expr);
     return function (data) {
         var exprVal = findValue(positiveExpr, data), val = positiveExpr === expr ? exprVal : !exprVal;
         if (!wrapper) {
@@ -86,11 +86,32 @@ function strategyNull() {
         return "";
     };
 }
+function propValueReference(propRaw, expr) {
+    var prop = propRaw.substr(1, propRaw.length - 2), positiveExpr = removeNegotiation(expr);
+    return function (data) {
+        var exprVal = findValue(positiveExpr, data), val = positiveExpr === expr ? exprVal : !exprVal;
+        return [prop, val];
+    };
+}
+exports.propValueReference = propValueReference;
 function evaluate(exprRaw, wrapper) {
     if (wrapper === void 0) { wrapper = ""; }
     var func, expr = exprRaw.trim(), positiveExpr = removeNegotiation(expr), 
     // make available in the closure
-    __toArray = toArray;
+    __toArray = toArray, 
+    // when e.g. ('propName', value)
+    exprArgs;
+    if (wrapper === "__toArray") {
+        exprArgs = expr.split(",");
+        if (exprArgs.length !== 2) {
+            throw new exception_1.Exception("Invalid group expression " + expr + " - must be \"expr, expr\"");
+        }
+        exprArgs = exprArgs.map(function (i) { return i.trim(); });
+        // case: 'propName', some.value
+        if (isString(exprArgs[0]) && isParsableExpr(exprArgs[1])) {
+            return propValueReference(exprArgs[0], exprArgs[1]);
+        }
+    }
     if (!expr.length) {
         return strategyNull();
     }

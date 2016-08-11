@@ -172,6 +172,11 @@ data-ng-if="decorator(foo)"
 }
 ```
 
+> NOTE: In order to gain better performance keep to primitive expressions especially in cyclic directives e.g. `data-ng-text="foo.bar.baz"`,
+> `data-ng-text="!foo.bar.baz"`, `data-ng-text="'string here'"`, `data-ng-text="foo.bar.baz"`, `data-ng-text="1000"`
+> `data-ng-if="true"`, `data-ng-prop="'disabled', false"`, `data-ng-data="'someCustomKey', bar.baz"`
+> Such expressions are being evaluated without use of `eval()` and therefore the process takes much less time and resources
+
 ## Directives
 
 ### NgText

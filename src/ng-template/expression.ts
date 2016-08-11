@@ -31,7 +31,7 @@ export function removeNegotiation( expr: string ){
  */
 export function isParsableExpr( expr: string ){
   let re: RegExp = /^[a-zA-Z_\$][a-zA-Z0-9\._\$]+$/;
-  return re.test( expr );
+  return expr.substr( 0, 5 ) !== "this." && re.test( expr );
 }
 /**
  * Find value in nested object by a specified path e.g. foo.bar.baz.quiz
@@ -48,15 +48,13 @@ export function findValue( path: string, data: NgTemplate.DataMap ): string | nu
 }
 
 export function getWrapperFunction( fnName: string ){
-  return fnName === "__toArray" ? toArray : (<any>window)[ fnName ];
+  return (<any>window)[ fnName ];
 }
 
 
 
 function strategyReference( expr: string, wrapper: string = "" ) {
-  let func: Function,
-      positiveExpr = removeNegotiation( expr );
-
+  let positiveExpr = removeNegotiation( expr );
     return function( data: any ){
       let exprVal = findValue( positiveExpr, data ),
           val = positiveExpr === expr ? exprVal : !exprVal;
@@ -94,12 +92,38 @@ function strategyNull() {
   };
 }
 
+export function propValueReference( propRaw: string, expr: string ) {
+  let prop = propRaw.substr( 1, propRaw.length - 2 ),
+      positiveExpr = removeNegotiation( expr );
+    return function( data: any ): any[]{
+      let exprVal = findValue( positiveExpr, data ),
+          val = positiveExpr === expr ? exprVal : !exprVal;
+      return [ prop, val ];
+    };
+
+}
+
 export function evaluate( exprRaw: string, wrapper: string = "" ){
     let func: Function,
         expr = exprRaw.trim(),
         positiveExpr = removeNegotiation( expr ),
         // make available in the closure
-        __toArray = toArray;
+        __toArray = toArray,
+        // when e.g. ('propName', value)
+        exprArgs: any[];
+
+    if ( wrapper === "__toArray" ) {
+      exprArgs = expr.split( "," );
+      if ( exprArgs.length !== 2 ) {
+        throw new Exception( `Invalid group expression ${expr} - must be "expr, expr"` );
+      }
+      exprArgs = exprArgs.map( ( i: string ) => i.trim() );
+
+      // case: 'propName', some.value
+      if ( isString( exprArgs[ 0 ] ) && isParsableExpr( exprArgs[ 1 ] ) ) {
+        return propValueReference( exprArgs[ 0 ], exprArgs[ 1 ] );
+      }
+    }
 
     if ( !expr.length ) {
       return strategyNull();

@@ -6,7 +6,8 @@ var expression = require( "../../dist/ng-template/expression" ),
     getWrapperFunction = expression.getWrapperFunction,
     isNumber = expression.isNumber,
     isBool = expression.isBool,
-    isString = expression.isString;
+    isString = expression.isString,
+    propValueReference = expression.propValueReference;
 
 describe("NgTemplate.expression", function(){
 
@@ -78,14 +79,28 @@ describe("NgTemplate.removeNegotiation", function(){
   });
 });
 
+describe("NgTemplate.propValueReference", function(){
+  it( "tests 'prop',variable", function() {
+    var fn = propValueReference( "'prop'", "variable" ),
+        ret = fn({ variable: "foo" });
+    expect( ret.join(",") ).to.eql( "prop,foo" );
+  });
+  it( "tests 'prop',variable", function() {
+    var fn = propValueReference( "'prop'", "foo.bar.baz" ),
+        ret = fn({ foo: {
+            bar: {
+              baz: "baz"
+            }
+        }});
+    expect( ret.join(",") ).to.eql( "prop,baz" );
+  });
+});
+
+
 describe("NgTemplate.getWrapperFunction", function(){
   it( "tests Boolean", function() {
     var ret = getWrapperFunction( "Boolean" );
     expect( ret ).to.eql( Boolean );
-  });
-  it( "tests __toArray", function() {
-    var ret = getWrapperFunction( "__toArray" );
-    expect( ret( 1, 2 ).join( "," ) ).to.eql( "1,2" );
   });
 });
 

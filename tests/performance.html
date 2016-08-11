@@ -26,7 +26,7 @@ var now = function(){
 
       var el = document.getElementById( "mocha" ),
           tpl = new NgTemplate( el, "<table>" +
-        "<tr data-ng-for=\"let person of persons\">" +
+        "<tr data-ng-for=\"let person of persons\" data-ng-data=\"'me', person.id\">" +
         "<td data-ng-text=\"person.id\"></td>" +
         "<td data-ng-text=\"person.first_name\"></td>" +
         "<td data-ng-text=\"person.last_name\"></td>" +
