@@ -25,10 +25,7 @@ var NgTemplate = (function () {
         if (!this.el) {
             throw new exception_1.Exception("(NgTemplate) Invalid first parameter: must be an existing DOM node");
         }
-        if (this.template) {
-            return;
-        }
-        this.init(DIRECTIVES);
+        this.template || this.init(DIRECTIVES);
     }
     NgTemplate.factory = function (el, template) {
         return new NgTemplate(el, template || null);
@@ -47,9 +44,7 @@ var NgTemplate = (function () {
             this.template = null;
         }
         this.directives.forEach(function (d) {
-            d.sync(data, function (el) {
-                (new NgTemplate(el)).sync(data);
-            });
+            d.sync(data, NgTemplate);
         });
         return this;
     };

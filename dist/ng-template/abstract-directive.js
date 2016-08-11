@@ -31,9 +31,14 @@ var AbstractDirective = (function () {
         })
             .join("");
     };
+    /**
+     * researched strategies
+     * el.innerText = str; - no standard
+     * el.textContent = str; - fast
+     * el.appendChild( document.createTextNode( str ) ) - slower
+     */
     AbstractDirective.prototype.setText = function (el, str) {
-        el.innerHTML = "";
-        el.appendChild(document.createTextNode(str));
+        el.textContent = str;
     };
     AbstractDirective.prototype.escape = function (str) {
         var div = document.createElement("div");

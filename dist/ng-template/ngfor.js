@@ -82,15 +82,16 @@ var NgFor = (function (_super) {
         var child = el.tagName.toUpperCase(), parent = child in map ? map[child] : "div";
         return document.createElement(parent);
     };
-    NgFor.prototype.sync = function (data, cb) {
+    NgFor.prototype.sync = function (data, Ctor) {
         var _this = this;
         this.nodes.forEach(function (node) {
-            var tmp = NgFor.createParentEl(node.el), isChanged = node.exp(data, function (val, variable) {
-                tmp.innerHTML += node.outerHTML;
+            var el = NgFor.createParentEl(node.el), container = NgFor.createParentEl(node.el), tpl = new Ctor(el, node.outerHTML);
+            var isChanged = node.exp(data, function (val, variable) {
                 data[variable] = val;
-                cb && cb(tmp);
+                tpl.sync(data);
+                container.innerHTML += el.innerHTML;
             });
-            isChanged && _this.buildDOM(node, _this.nodesToDocFragment(tmp));
+            isChanged && _this.buildDOM(node, _this.nodesToDocFragment(container));
         });
     };
     /**

@@ -19,7 +19,7 @@ declare namespace NgTemplate {
   class Directive {
     constructor( el:HTMLElement );
     nodes: DirectiveNode[];
-    sync( data:DataMap, cb?:SyncCallback ):void;
+    sync( data:DataMap, Ctor?: NgTemplateCtor ):void;
   }
 
   interface NgForExprVo {
@@ -39,5 +39,15 @@ declare namespace NgTemplate {
   interface Element {
     [ key: string ]: any;
   }
+
+  interface NgTemplateCtor {
+    new( el:Element, template?:string ): NgTemplate;
+  }
+
+  interface NgTemplate {
+    sync( data:Object ):NgTemplate;
+    pipe( cb:Function, context:Object ):NgTemplate;
+  }
+
 
 }

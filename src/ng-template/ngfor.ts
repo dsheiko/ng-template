@@ -1,5 +1,7 @@
 import { AbstractDirective } from "./abstract-directive";
 import { Exception } from "./exception";
+
+
 let counter: number = 0;
 // <div data-ng:for="let hero of data.heroes" data-ng:text="hero" ></div>
 
@@ -91,15 +93,18 @@ export class NgFor extends AbstractDirective implements NgTemplate.Directive {
       return document.createElement( parent );
   }
 
-  sync( data: NgTemplate.DataMap, cb: NgTemplate.SyncCallback ){
+  sync( data: NgTemplate.DataMap, Ctor: NgTemplate.NgTemplateCtor ){
     this.nodes.forEach(( node: NgTemplate.DirectiveNode ) => {
-      let tmp = NgFor.createParentEl( node.el ),
-      isChanged = node.exp( data, ( val: string, variable: string ) => {
-        tmp.innerHTML += node.outerHTML;
+      let el = NgFor.createParentEl( node.el ),
+          container = NgFor.createParentEl( node.el ),
+          tpl = new Ctor( el, node.outerHTML );
+
+      let isChanged = node.exp( data, ( val: string, variable: string ) => {
         data[ variable ] = val;
-        cb && cb( tmp );
+        tpl.sync( data );
+        container.innerHTML += el.innerHTML;
       });
-      isChanged && this.buildDOM( node, this.nodesToDocFragment( tmp ) );
+      isChanged && this.buildDOM( node, this.nodesToDocFragment( container ) );
     });
   }
 

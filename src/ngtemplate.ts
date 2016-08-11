@@ -29,10 +29,7 @@ export class NgTemplate {
     if ( !this.el ) {
       throw new Exception( "(NgTemplate) Invalid first parameter: must be an existing DOM node" );
     }
-    if ( this.template ) {
-      return;
-    }
-    this.init( DIRECTIVES );
+    this.template || this.init( DIRECTIVES );
   }
 
   private init( directives: Function[] ){
@@ -49,9 +46,7 @@ export class NgTemplate {
       this.template = null;
     }
     this.directives.forEach(( d ) => {
-      d.sync( data, ( el: HTMLElement ) => {
-        ( new NgTemplate( el ) ).sync( data );
-      });
+      d.sync( data, NgTemplate );
     });
     return this;
   }

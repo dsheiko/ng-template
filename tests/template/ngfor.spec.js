@@ -1,4 +1,5 @@
-var NgFor = require( "../../dist/ng-template/ngfor" ).NgFor;
+var NgTemplate = require( "../../dist/ngtemplate" ).NgTemplate,
+    NgFor = require( "../../dist/ng-template/ngfor" ).NgFor;
 
 describe("NgTemplate.ngFor", function(){
     describe("#parseExpr", function(){
@@ -59,8 +60,7 @@ describe("NgTemplate.ngFor", function(){
       it( "span the target element", function() {
         this.el.innerHTML = "<i data-ng-for='let row of rows'></i>";
         var ngfor = new NgFor( this.el );
-        ngfor.sync({ rows: ["foo", "bar"] });
-
+        ngfor.sync({ rows: ["foo", "bar"] }, NgTemplate );
         expect( this.el.querySelectorAll( "i" ).length ).to.eql( 2 );
       });
     });

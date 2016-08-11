@@ -34,10 +34,14 @@ export class AbstractDirective {
     })
     .join( "" );
   }
-
+  /**
+   * researched strategies
+   * el.innerText = str; - no standard
+   * el.textContent = str; - fast
+   * el.appendChild( document.createTextNode( str ) ) - slower
+   */
   setText( el: HTMLElement, str: string ) {
-    el.innerHTML = "";
-    el.appendChild( document.createTextNode( str ) );
+    el.textContent = str;
   }
 
   escape( str: string ){
