@@ -2,9 +2,26 @@
 var exception_1 = require("./exception");
 function evaluate(expr, wrapper) {
     if (wrapper === void 0) { wrapper = ""; }
-    var func, code = generateCode(expr, wrapper);
+    var func, 
+    // make available in the closure
+    __toArray = function () {
+        return [].slice.call(arguments);
+    };
     try {
-        eval(code);
+        func = function (data) {
+            var cb, code, keys = Object.keys(data), vals = keys.map(function (key) {
+                return data[key];
+            });
+            try {
+                code = "cb = function(" + keys.join(",") + ("){ return " + wrapper + "(" + expr + "); };");
+                eval(code);
+                return cb.apply(this, vals);
+            }
+            catch (err) {
+                console.warn("Could not evaluate " + code + " ", err);
+                return false;
+            }
+        };
     }
     catch (e) {
         throw new exception_1.Exception("Invalid ng* expression " + expr);
@@ -13,8 +30,3 @@ function evaluate(expr, wrapper) {
 }
 exports.evaluate = evaluate;
 ;
-function generateCode(expr, wrapper) {
-    if (wrapper === void 0) { wrapper = ""; }
-    return "\nfunc = function( data ){\n  var cb,\n      code,\n      keys = Object.keys( data ),\n      vals = keys.map(function( key ){\n        return data[ key ];\n      }),\n      __toArray = function(){\n        return [].slice.call( arguments );\n      };\n\n\n  try {\n    code = \"cb = function(\" + keys.join(\",\") + \"){ return " + wrapper + "(" + expr + "); };\";\n    eval( code );\n    return cb.apply( this, vals );\n  } catch( err ) {\n    console.warn( \"Could not evaluate \" + code + \" \", err );\n    return false;\n  }\n};";
-}
-exports.generateCode = generateCode;
