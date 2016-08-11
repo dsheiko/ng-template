@@ -13,7 +13,7 @@ function evaluate(expr, wrapper) {
                 return data[key];
             });
             try {
-                code = "function cb(" + keys.join(",") + ("){ return " + wrapper + "(" + expr + "); };");
+                code = "cb = function(" + keys.join(",") + ("){ return " + wrapper + "(" + expr + "); };");
                 eval(code);
                 return cb.apply(this, vals);
             }
