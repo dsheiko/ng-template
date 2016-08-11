@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div id="mocha"></div>
+
+     <!-- ES6 shim -->
+    <script type="text/javascript" src="../node_modules/es6-shim/es6-shim.min.js"></script>
+
+    <script type="text/javascript" src="../dist/ngtemplate.glob.min.js"></script>
+
+
+    <script>
+
+var now = function(){
+        return typeof performance !== "undefined" ? performance.now() : 0;
+    },
+    data = [],
+
+    getData = function(){
+      return fetch("./fixtures/persons.json").then(function( rsp ){
+        return rsp.json();
+      });
+    };
+
+      var el = document.getElementById( "mocha" ),
+          tpl = new NgTemplate( el, "<table>" +
+        "<tr data-ng-for=\"let person of persons\">" +
+        "<td data-ng-text=\"person.id\"></td>" +
+        "<td data-ng-text=\"person.first_name\"></td>" +
+        "<td data-ng-text=\"person.last_name\"></td>" +
+        "</tr>" +
+        "</table>");
+
+      getData().then(function( data ){
+        var c = now();
+        tpl.sync({ persons: data });
+        console.info( "template sync finished in ", now() - c, "ms" );
+      });
+
+
+    </script>
+
+  </body>
+</html>

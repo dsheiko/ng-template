@@ -1,1 +1,1 @@
-window.NgTemplate = require( "./ngtemplate" );
+window.NgTemplate = require( "./ngtemplate" ).NgTemplate;
