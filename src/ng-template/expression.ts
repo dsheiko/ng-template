@@ -1,5 +1,24 @@
 import { Exception } from "./exception";
 
+function toArray(){
+  return [].slice.call( arguments );
+};
+
+export function isNumber( expr: string ){
+  let re: RegExp = /^\d+$/;
+  return re.test( expr );
+}
+export function isBool( expr: string ){
+  let re: RegExp = /^(true|false)$/i;
+  return re.test( expr );
+}
+export function isString( expr: string ){
+  let single: RegExp = /^\'[^\']+\'$/i,
+      double: RegExp = /^\"[^\"]+\"$/i;
+  return single.test( expr ) || double.test( expr );
+}
+
+
 /**
  * Removes leading negotiation
  */
@@ -28,9 +47,51 @@ export function findValue( path: string, data: NgTemplate.DataMap ): string | nu
   return value;
 }
 
-
-export function getWrapperFunction( fnName: string, toArray: Function ){
+export function getWrapperFunction( fnName: string ){
   return fnName === "__toArray" ? toArray : (<any>window)[ fnName ];
+}
+
+
+
+function strategyReference( expr: string, wrapper: string = "" ) {
+  let func: Function,
+      positiveExpr = removeNegotiation( expr );
+
+    return function( data: any ){
+      let exprVal = findValue( positiveExpr, data ),
+          val = positiveExpr === expr ? exprVal : !exprVal;
+      if ( !wrapper ) {
+        return val;
+      }
+      let wrapFn = getWrapperFunction( wrapper );
+      return wrapFn( val );
+    };
+
+}
+
+function strategyString( expr: string ) {
+  return function(){
+    // strip quotes
+    return expr.substr( 1, expr.length - 2 );
+  };
+}
+
+function strategyBool( expr: string ) {
+  return function(){
+     return expr.toUpperCase() === "TRUE";
+  };
+}
+
+function strategyNumber( expr: string ) {
+  return function(){
+    return Number( expr );
+  };
+}
+
+function strategyNull() {
+  return function(){
+    return "";
+  };
 }
 
 export function evaluate( exprRaw: string, wrapper: string = "" ){
@@ -38,25 +99,26 @@ export function evaluate( exprRaw: string, wrapper: string = "" ){
         expr = exprRaw.trim(),
         positiveExpr = removeNegotiation( expr ),
         // make available in the closure
-        __toArray = function(){
-          return [].slice.call( arguments );
-        };
+        __toArray = toArray;
 
     if ( !expr.length ) {
-      return function(){
-        return "";
-      };
+      return strategyNull();
     }
+
+    if ( isNumber( expr ) ) {
+      return strategyNumber( expr );
+    }
+
+    if ( isBool( expr ) ) {
+      return strategyBool( expr );
+    }
+
+    if ( isString( expr ) ) {
+      return strategyString( expr );
+    }
+
     if ( isParsableExpr( positiveExpr ) ) {
-      return function( data: any ){
-        let exprVal = findValue( positiveExpr, data ),
-            val = positiveExpr === expr ? exprVal : !exprVal;
-        if ( !wrapper ) {
-          return val;
-        }
-        let wrapFn = getWrapperFunction( wrapper, __toArray );
-        return wrapFn( val );
-      };
+      return strategyReference( expr, wrapper );
     }
 
     try {

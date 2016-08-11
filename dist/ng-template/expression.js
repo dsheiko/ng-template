@@ -1,5 +1,24 @@
 "use strict";
 var exception_1 = require("./exception");
+function toArray() {
+    return [].slice.call(arguments);
+}
+;
+function isNumber(expr) {
+    var re = /^\d+$/;
+    return re.test(expr);
+}
+exports.isNumber = isNumber;
+function isBool(expr) {
+    var re = /^(true|false)$/i;
+    return re.test(expr);
+}
+exports.isBool = isBool;
+function isString(expr) {
+    var single = /^\'[^\']+\'$/i, double = /^\"[^\"]+\"$/i;
+    return single.test(expr) || double.test(expr);
+}
+exports.isString = isString;
 /**
  * Removes leading negotiation
  */
@@ -30,31 +49,62 @@ function findValue(path, data) {
     return value;
 }
 exports.findValue = findValue;
-function getWrapperFunction(fnName, toArray) {
+function getWrapperFunction(fnName) {
     return fnName === "__toArray" ? toArray : window[fnName];
 }
 exports.getWrapperFunction = getWrapperFunction;
+function strategyReference(expr, wrapper) {
+    if (wrapper === void 0) { wrapper = ""; }
+    var func, positiveExpr = removeNegotiation(expr);
+    return function (data) {
+        var exprVal = findValue(positiveExpr, data), val = positiveExpr === expr ? exprVal : !exprVal;
+        if (!wrapper) {
+            return val;
+        }
+        var wrapFn = getWrapperFunction(wrapper);
+        return wrapFn(val);
+    };
+}
+function strategyString(expr) {
+    return function () {
+        // strip quotes
+        return expr.substr(1, expr.length - 2);
+    };
+}
+function strategyBool(expr) {
+    return function () {
+        return expr.toUpperCase() === "TRUE";
+    };
+}
+function strategyNumber(expr) {
+    return function () {
+        return Number(expr);
+    };
+}
+function strategyNull() {
+    return function () {
+        return "";
+    };
+}
 function evaluate(exprRaw, wrapper) {
     if (wrapper === void 0) { wrapper = ""; }
     var func, expr = exprRaw.trim(), positiveExpr = removeNegotiation(expr), 
     // make available in the closure
-    __toArray = function () {
-        return [].slice.call(arguments);
-    };
+    __toArray = toArray;
     if (!expr.length) {
-        return function () {
-            return "";
-        };
+        return strategyNull();
+    }
+    if (isNumber(expr)) {
+        return strategyNumber(expr);
+    }
+    if (isBool(expr)) {
+        return strategyBool(expr);
+    }
+    if (isString(expr)) {
+        return strategyString(expr);
     }
     if (isParsableExpr(positiveExpr)) {
-        return function (data) {
-            var exprVal = findValue(positiveExpr, data), val = positiveExpr === expr ? exprVal : !exprVal;
-            if (!wrapper) {
-                return val;
-            }
-            var wrapFn = getWrapperFunction(wrapper, __toArray);
-            return wrapFn(val);
-        };
+        return strategyReference(expr, wrapper);
     }
     try {
         func = function (data) {

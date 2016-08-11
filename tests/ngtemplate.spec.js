@@ -278,4 +278,48 @@ describe("NgTemplate", function(){
   });
 
 
+  describe("smart evaluation", function(){
+    beforeEach(function(){
+      this.el = document.createElement( "div" );
+    });
+
+    it( "evaluates a number", function() {
+      NgTemplate
+        .factory( this.el,
+            "<i data-ng-text='100'></i>" )
+        .sync({})
+        .pipe(function( el ){
+          expect( el.firstChild.innerHTML ).to.eql( "100" );
+        });
+    });
+    it( "evaluates a string", function() {
+      NgTemplate
+        .factory( this.el,
+            "<i data-ng-text='\"string\"'></i>" )
+        .sync({})
+        .pipe(function( el ){
+          expect( el.firstChild.innerHTML ).to.eql( "string" );
+        });
+    });
+    it( "evaluates a boolean", function() {
+      NgTemplate
+        .factory( this.el,
+            "<i data-ng-if='true'></i>" )
+        .sync({})
+        .pipe(function( el ){
+          expect( el.querySelector("i") ).to.be.ok;
+        });
+
+      NgTemplate
+        .factory( this.el,
+            "<i data-ng-if='false'></i>" )
+        .sync({})
+        .pipe(function( el ){
+          expect( el.querySelector("i") ).to.be.not.ok;
+        });
+    });
+
+  });
+
+
 });

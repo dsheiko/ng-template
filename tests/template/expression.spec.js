@@ -3,7 +3,10 @@ var expression = require( "../../dist/ng-template/expression" ),
     findValue = expression.findValue,
     isParsableExpr = expression.isParsableExpr,
     removeNegotiation = expression.removeNegotiation,
-    getWrapperFunction = expression.getWrapperFunction;
+    getWrapperFunction = expression.getWrapperFunction,
+    isNumber = expression.isNumber,
+    isBool = expression.isBool,
+    isString = expression.isString;
 
 describe("NgTemplate.expression", function(){
 
@@ -77,13 +80,64 @@ describe("NgTemplate.removeNegotiation", function(){
 
 describe("NgTemplate.getWrapperFunction", function(){
   it( "tests Boolean", function() {
-    var fn = function(){},
-        ret = getWrapperFunction( "Boolean", fn );
+    var ret = getWrapperFunction( "Boolean" );
     expect( ret ).to.eql( Boolean );
   });
   it( "tests __toArray", function() {
-    var fn = function(){},
-        ret = getWrapperFunction( "__toArray", fn );
-    expect( ret ).to.eql( fn );
+    var ret = getWrapperFunction( "__toArray" );
+    expect( ret( 1, 2 ).join( "," ) ).to.eql( "1,2" );
+  });
+});
+
+describe("NgTemplate.isNumber", function(){
+  it( "tests 12345", function() {
+    var ret = isNumber( "12345" );
+    expect( ret ).to.be.ok;
+  });
+  it( "tests var12345", function() {
+    var ret = isNumber( "var12345" );
+    expect( ret ).to.be.not.ok;
+  });
+  it( "tests 122 + 12345", function() {
+    var ret = isNumber( "122 + 12345" );
+    expect( ret ).to.be.not.ok;
+  });
+});
+
+describe("NgTemplate.isBool", function(){
+  it( "tests true", function() {
+    var ret = isBool( "true" );
+    expect( ret ).to.be.ok;
+  });
+  it( "tests false", function() {
+    var ret = isBool( "false" );
+    expect( ret ).to.be.ok;
+  });
+  it( "tests 12345", function() {
+    var ret = isBool( "12345" );
+    expect( ret ).to.be.not.ok;
+  });
+});
+
+describe("NgTemplate.isString", function(){
+  it( "tests 'string'", function() {
+    var ret = isString( "'string'" );
+    expect( ret ).to.be.ok;
+  });
+  it( "tests \"string\"", function() {
+    var ret = isString( "\"string\"" );
+    expect( ret ).to.be.ok;
+  });
+  it( "tests 'string' + 'string'", function() {
+    var ret = isString( "'string' + 'string'" );
+    expect( ret ).to.be.not.ok;
+  });
+  it( "tests 123", function() {
+    var ret = isString( "123" );
+    expect( ret ).to.be.not.ok;
+  });
+  it( "tests var", function() {
+    var ret = isString( "var" );
+    expect( ret ).to.be.not.ok;
   });
 });
