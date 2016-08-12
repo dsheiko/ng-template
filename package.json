@@ -35,7 +35,7 @@
     "url": "git@github.com:dsheiko/ngtemplate.git"
   },
 
-  "devDependencies": {
+  "dependencies": {
     "es6-shim": "^0.35.1",
     "systemjs": "^0.19.31"
   }
