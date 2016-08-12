@@ -1,0 +1,42 @@
+{
+  "name": "ng-template",
+  "title": "NgTemplate",
+  "description": "Light-weight DOM-based template engine, inspired by AngularJS",
+  "author": "Dmitry Sheiko",
+  "main": "./dist/ngtemplate.js",
+  "typings": "./index.d.ts",
+  "version": "0.0.22",
+  "branchVersion": "^1.0.0-beta.1",
+  "branchPattern": "1.0.*",
+  "scripts": {
+    "start": "grunt",
+    "browserfy": "tsc && cjsc dist/ngtemplate.glob.js -o dist/ngtemplate.glob.min.js -M",
+    "build": "tsc",
+    "build:demo": "tsc -p demo",
+    "browserfy:demo": "tsc -p demo && cjsc demo/build/demo/main.js -o demo/build/demo/main-vanilla.min.js -M",
+    "test": "tslint --project tsconfig.json && tsc && mocha-phantomjs tests/index.html",
+    "test:ts": "tsc && mocha-phantomjs tests/index.html"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/fawek/codepainter/raw/master/LICENSE"
+    }
+  ],
+  "keywords": [
+    "Template",
+    "Engine",
+    "ES6",
+    "ES2015",
+    "TypeScript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dsheiko/ngtemplate.git"
+  },
+
+  "devDependencies": {
+    "es6-shim": "^0.35.1",
+    "systemjs": "^0.19.31"
+  }
+}
