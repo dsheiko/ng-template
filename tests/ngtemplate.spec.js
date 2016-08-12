@@ -321,5 +321,23 @@ describe("NgTemplate", function(){
 
   });
 
+  describe( "#on (handling NgTemplate events)", function(){
+
+    beforeEach(function(){
+      this.el = document.createElement( "div" );
+    });
+
+    it( "fires error event on undefined ref", function( done ) {
+      var tpl = new NgTemplate( this.el, "<span data-ng-text=\"foo.bar.baz\"></span>" );
+      tpl
+        .on( "error", function( err ){
+          expect( err.length ).to.be.ok;
+          done();
+        })
+        .sync({ foo: 10 });
+    });
+
+  });
+
 
 });

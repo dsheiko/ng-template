@@ -1,3 +1,4 @@
+"use strict";
 var ngtemplate_1 = require("../src/ngtemplate");
 var el = document.querySelector("#heroForm");
 // Bind the template

@@ -1,4 +1,5 @@
 import { Exception } from "./exception";
+import { mediator } from "./mediator";
 
 function toArray(){
   return [].slice.call( arguments );
@@ -39,8 +40,11 @@ export function isParsableExpr( expr: string ){
 export function findValue( path: string, data: NgTemplate.DataMap ): string | number | boolean {
   let value: any = data;
   path.split( "\." ).forEach(( key: string ) => {
+    if ( typeof value !== "object" ) {
+      throw new Exception( `'${path}' is undefined` );
+    }
     if ( !( key in value ) ) {
-      throw new Exception( `Cannot resolve path ${path}` );
+      throw new Exception( `'${path}' is undefined` );
     }
     value = value[ key ];
   });
@@ -56,13 +60,24 @@ export function getWrapperFunction( fnName: string ){
 function strategyReference( expr: string, wrapper: string = "" ) {
   let positiveExpr = removeNegotiation( expr );
     return function( data: any ){
-      let exprVal = findValue( positiveExpr, data ),
-          val = positiveExpr === expr ? exprVal : !exprVal;
-      if ( !wrapper ) {
-        return val;
+      try {
+
+        let exprVal = findValue( positiveExpr, data ),
+            val = positiveExpr === expr ? exprVal : !exprVal;
+        if ( !wrapper ) {
+          return val;
+        }
+        let wrapFn = getWrapperFunction( wrapper );
+        return wrapFn( val );
+
+      } catch ( err ) {
+        if ( err instanceof Exception ) {
+          mediator.trigger( "error", ( <Exception> err ).message );
+          return "";
+        }
+        throw new SyntaxError( `Invalid ng* expression ${expr}` );
       }
-      let wrapFn = getWrapperFunction( wrapper );
-      return wrapFn( val );
+
     };
 
 }
@@ -96,14 +111,22 @@ export function propValueReference( propRaw: string, expr: string ) {
   let prop = propRaw.substr( 1, propRaw.length - 2 ),
       positiveExpr = removeNegotiation( expr );
     return function( data: any ): any[]{
-      let exprVal = findValue( positiveExpr, data ),
-          val = positiveExpr === expr ? exprVal : !exprVal;
-      return [ prop, val ];
+      try {
+        let exprVal = findValue( positiveExpr, data ),
+            val = positiveExpr === expr ? exprVal : !exprVal;
+        return [ prop, val ];
+      } catch ( err ) {
+        if ( err instanceof Exception ) {
+          mediator.trigger( "error", ( <Exception> err ).message );
+          return [ prop, "" ];
+        }
+        throw new SyntaxError( `Invalid ng* expression ${expr}` );
+      }
     };
 
 }
 
-export function evaluate( exprRaw: string, wrapper: string = "" ){
+export function evaluate( exprRaw: string, wrapper: string = "" ): Function{
     let func: Function,
         expr = exprRaw.trim(),
         positiveExpr = removeNegotiation( expr ),
@@ -112,40 +135,46 @@ export function evaluate( exprRaw: string, wrapper: string = "" ){
         // when e.g. ('propName', value)
         exprArgs: any[];
 
-    if ( wrapper === "__toArray" ) {
-      exprArgs = expr.split( "," );
-      if ( exprArgs.length !== 2 ) {
-        throw new Exception( `Invalid group expression ${expr} - must be "expr, expr"` );
-      }
-      exprArgs = exprArgs.map( ( i: string ) => i.trim() );
-
-      // case: 'propName', some.value
-      if ( isString( exprArgs[ 0 ] ) && isParsableExpr( exprArgs[ 1 ] ) ) {
-        return propValueReference( exprArgs[ 0 ], exprArgs[ 1 ] );
-      }
-    }
-
-    if ( !expr.length ) {
-      return strategyNull();
-    }
-
-    if ( isNumber( expr ) ) {
-      return strategyNumber( expr );
-    }
-
-    if ( isBool( expr ) ) {
-      return strategyBool( expr );
-    }
-
-    if ( isString( expr ) ) {
-      return strategyString( expr );
-    }
-
-    if ( isParsableExpr( positiveExpr ) ) {
-      return strategyReference( expr, wrapper );
-    }
-
     try {
+
+      if ( wrapper === "__toArray" ) {
+        exprArgs = expr.split( "," );
+        if ( exprArgs.length !== 2 ) {
+          throw new Exception( `Invalid group expression ${expr} - must be "expr, expr"` );
+        }
+        exprArgs = exprArgs.map( ( i: string ) => i.trim() );
+
+        // case: 'propName', some.value
+        if ( isString( exprArgs[ 0 ] )
+          && !isNumber( exprArgs[ 1 ] )
+          && !isBool( exprArgs[ 1 ] )
+          && !isString( exprArgs[ 1 ] )
+          && isParsableExpr( exprArgs[ 1 ] ) ) {
+          return propValueReference( exprArgs[ 0 ], exprArgs[ 1 ] );
+        }
+      }
+
+      if ( !expr.length ) {
+        return strategyNull();
+      }
+
+      if ( isNumber( expr ) ) {
+        return strategyNumber( expr );
+      }
+
+      if ( isBool( expr ) ) {
+        return strategyBool( expr );
+      }
+
+      if ( isString( expr ) ) {
+        return strategyString( expr );
+      }
+
+      if ( isParsableExpr( positiveExpr ) ) {
+        return strategyReference( expr, wrapper );
+      }
+
+      // Standard strategy
       func = function( data: any ){
         var cb: Function,
             code: string,
@@ -163,8 +192,12 @@ export function evaluate( exprRaw: string, wrapper: string = "" ){
           return false;
         }
       };
-    } catch ( e ) {
-      throw new Exception( `Invalid ng* expression ${expr}` );
+    } catch ( err ) {
+      if ( err instanceof Exception ) {
+        mediator.trigger( "error", ( <Exception> err ).message );
+        return strategyNull();
+      }
+      throw new SyntaxError( `Invalid ng* expression ${expr}` );
     }
     return func;
 };

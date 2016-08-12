@@ -136,12 +136,18 @@ where:
 Template expressions are being evaluated in the given `scope`. So we can reference scope variables:
 ```
 data-ng-if="foo"
+```
+it can bind to the following scope
+```
 { foo: true }
 ```
 
 That includes structures:
 ```
 data-ng-if="foo.bar"
+```
+it can bind to the following scope
+```
 {
   foo: {
     bar: true
@@ -152,18 +158,27 @@ data-ng-if="foo.bar"
 We can refer multiple scope variables:
 ```
 data-ng-if="(foo && bar)"
+```
+it can bind to the following scope
+```
 { foo: true, bar: true }
 ```
 
 Expressions are also evaluated in the context of the target element, so we can access the element with `this`:
 ```
 data-ng-if="(foo && this.checked)"
+```
+it can bind to the following scope
+```
 { foo: true }
 ```
 
 We can pass rendering helpers (e.g. transformers) with the scope:
 ```
 data-ng-if="decorator(foo)"
+```
+it can bind to the following scope
+```
 {
   foo: "foo",
   decorator: function( val ){
@@ -172,10 +187,22 @@ data-ng-if="decorator(foo)"
 }
 ```
 
-> NOTE: In order to gain better performance keep to primitive expressions especially in cyclic directives e.g. `data-ng-text="foo.bar.baz"`,
+> :exclamation: NOTE: In order to gain better performance keep to primitive expressions especially in cyclic directives e.g. `data-ng-text="foo.bar.baz"`,
 > `data-ng-text="!foo.bar.baz"`, `data-ng-text="'string here'"`, `data-ng-text="foo.bar.baz"`, `data-ng-text="1000"`
 > `data-ng-if="true"`, `data-ng-prop="'disabled', false"`, `data-ng-data="'someCustomKey', bar.baz"`
 > Such expressions are being evaluated without use of `eval()` and therefore the process takes much less time and resources
+
+## NgTemplate Events
+
+You can subscribe for NgTemplate events by using `on` method:
+
+```javascript
+NgTemplate.factory( document.createElement( "div" ), "<span data-ng-text=\"foo.bar.baz\"></span>" )
+  .on( "error", function( err ){
+    console.log( err ); // "'foo.bar.baz' is undefined"
+  })
+  .sync({});
+```
 
 ## Directives
 

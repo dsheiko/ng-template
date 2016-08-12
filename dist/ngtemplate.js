@@ -11,6 +11,7 @@ var ngclasslisttoggle_1 = require("./ng-template/ngclasslisttoggle");
 var ngprop_1 = require("./ng-template/ngprop");
 var ngdata_1 = require("./ng-template/ngdata");
 var exception_1 = require("./ng-template/exception");
+var mediator_1 = require("./ng-template/mediator");
 var DIRECTIVES = [ngfor_1.NgFor, ngswitch_1.NgSwitch, ngswitchcase_1.NgSwitchCase, ngswitchcasedefault_1.NgSwitchCaseDefault, ngif_1.NgIf,
     ngclasslisttoggle_1.NgClassListToggle, ngdata_1.NgData, ngprop_1.NgProp, ngel_1.NgEl, ngtext_1.NgText];
 var NgTemplate = (function () {
@@ -29,6 +30,13 @@ var NgTemplate = (function () {
     }
     NgTemplate.factory = function (el, template) {
         return new NgTemplate(el, template || null);
+    };
+    /**
+     * Subscribe for NgTemplate events
+     */
+    NgTemplate.prototype.on = function (ev, cb, context) {
+        mediator_1.mediator.on(ev, cb, context);
+        return this;
     };
     NgTemplate.prototype.init = function (directives) {
         var _this = this;

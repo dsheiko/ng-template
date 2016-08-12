@@ -10,6 +10,7 @@ import { NgClassListToggle } from "./ng-template/ngclasslisttoggle";
 import { NgProp } from "./ng-template/ngprop";
 import { NgData } from "./ng-template/ngdata";
 import { Exception } from "./ng-template/exception";
+import { mediator  } from "./ng-template/mediator";
 
 let DIRECTIVES = [ NgFor, NgSwitch, NgSwitchCase, NgSwitchCaseDefault, NgIf,
       NgClassListToggle, NgData, NgProp, NgEl, NgText ];
@@ -20,6 +21,15 @@ export class NgTemplate {
   static factory( el: HTMLElement, template?: string ): NgTemplate {
     return new NgTemplate( el, template || null );
   }
+
+  /**
+   * Subscribe for NgTemplate events
+   */
+  on( ev: string, cb: Function, context?: Object ): NgTemplate {
+    mediator.on( ev, cb, context );
+    return this;
+  }
+
   /**
    * Initialize template for a given Element
    * If template passed, load it into the Element

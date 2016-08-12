@@ -1,4 +1,4 @@
-var NgTemplate = require( "../dist/ngtemplate" ).NgTemplate;
+var NgTemplate = require( "../dist/ngtemplate" ).NgTemplate,
     util = require( "./test.util.js" );
 
 describe("Cache", function(){
