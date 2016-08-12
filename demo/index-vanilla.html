@@ -49,12 +49,12 @@
           <div class="row">
             <div class="col-xs-4">
               <h4>Example: NgTemplate + SystemJS</h4>
-              <a href="https://github.com/dsheiko/ng-template/blob/master/demo/main.ts">Source</a>
+              <a href="index.html">Demo</a>, <a href="https://github.com/dsheiko/ng-template/blob/master/demo/main.ts">Source</a>
             </div>
             <div class="col-xs-3">
 
             <h4>Example: NgTemplate </h4>
-            <a href="index-vanilla.html">Demo</a>, <a href="hhttps://github.com/dsheiko/ng-template/blob/master/demo/main.ts">Source</a>
+             <a href="hhttps://github.com/dsheiko/ng-template/blob/master/demo/main.ts">Source</a>
             </div>
           </div>
 
@@ -63,7 +63,7 @@
 
       <div class="container">
         <div class="row">
-          <hero-form class="container"><h3>Loading ...</h3></hero-form>
+           <hero-form class="container"><h3>Loading ...</h3></hero-form>
         </div>
 
         <hr>
@@ -82,19 +82,7 @@
 
      <!-- ES6 shim -->
     <script type="text/javascript" src="../node_modules/es6-shim/es6-shim.min.js"></script>
-    <script  src="../node_modules/systemjs/dist/system.js"></script>
-
-    <script>
-      System.config({
-				packages: {
-					"./build": {
-						format: "cjs",
-						defaultExtension: "js"
-					}
-				}
-			});
-			System.import( "./build/demo/main" );
-    </script>
+    <script  src="../demo/build/demo/main-vanilla.min.js"></script>
 
   </body>
 </html>

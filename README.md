@@ -119,17 +119,22 @@ var template = new NgTemplate( node );
 
 ## API
 
-```
+```javascript
 import { NgTemplate } from "ng-template";
 let template = new NgTemplate( el, tpl );
 template.sync( scope );
-
 ```
+
 where:
 * el - a DOM element we bind to
 * tpl - OPTIONAL: template code that will be injected into `el`
 * scope -  an object literal (template scope) whose members form the scope for template expressions
 
+Also can be instantiated via the factory:
+```javascript
+NgTemplate.factory( el, tpl )
+  .sync( scope );
+```
 
 ## Template expressions
 
