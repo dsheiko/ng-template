@@ -188,8 +188,7 @@ export function evaluate( exprRaw: string, wrapper: string = "" ): Function{
           eval( code );
           return cb.apply( this, vals );
         } catch ( err ) {
-          console.warn( "Could not evaluate " + code + " ", err );
-          return false;
+          mediator.trigger( `Could not evaluate ${code}` );
         }
       };
     } catch ( err ) {
