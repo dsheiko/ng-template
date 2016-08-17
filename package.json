@@ -14,8 +14,8 @@
     "build": "tsc",
     "build:demo": "tsc -p demo",
     "browserfy:demo": "tsc -p demo && cjsc demo/build/demo/main.js -o demo/build/demo/main-vanilla.min.js -M",
-    "test": "tslint --project tsconfig.json && tsc && mocha-phantomjs tests/index.html",
-    "test:ts": "tsc && mocha-phantomjs tests/index.html"
+    "test": "tslint --project tsconfig.json && npm run test:ts",
+    "test:ts": "tsc -p tests/ && cjsc tests/build/tests/index.spec.js -o tests/build/index.bundled.js && karma start"
   },
   "licenses": [
     {
@@ -54,14 +54,19 @@
     ]
   },
   "devDependencies": {
-    "chai": "^3.4.1",
     "cjsc": "^1.0.7",
     "es6-shim": "^0.35.1",
-    "mocha": "^2.3.4",
-    "mocha-phantomjs": "^4.1.0",
     "systemjs": "^0.19.31",
     "tslint": "^3.14.0",
-    "typescript": "^1.8.10"
+    "typescript": "^1.8.10",
+    "phantomjs-prebuilt": "^2.1.12",
+    "jasmine-core": "^2.4.1",
+    "karma": "^1.2.0",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-firefox-launcher": "^0.1.3",
+    "karma-jasmine": "^1.0.2",
+    "karma-phantomjs-launcher": "^1.0.1",
+    "whatwg-fetch": "github:github/fetch"
   },
   "jspm": {
     "directories": {

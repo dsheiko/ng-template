@@ -1,11 +1,11 @@
-var observeDOM = (function(){
-    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+export var observeDOM = (function(){
+    var MutationObserver = (<any>window).MutationObserver || (<any>window).WebKitMutationObserver;
 
-    return function( el, callback ){
+    return function( el: Element, callback: Function ){
         if( MutationObserver ){
             // define a new observer
-            var observer = new MutationObserver(function( mutations ){
-                var matches = mutations.filter(function( mutation ){
+            var observer = new MutationObserver(function( mutations: any[] ){
+                var matches = mutations.filter(function( mutation: any ){
                   return mutation.addedNodes.length ||
                     mutation.removedNodes.length || mutation.type === "attributes";
                 });
@@ -24,10 +24,8 @@ var observeDOM = (function(){
           "DOMAttrModified",
           "DOMAttributeNameChanged",
           "DOMCharacterDataModified"
-        ].forEach(function( ev ){
-          el.addEventListener( ev, callback, false );
+        ].forEach(function( ev: string ){
+          el.addEventListener( ev, <EventListener>callback, false );
         });
     };
 })();
-
-exports.observeDOM = observeDOM;

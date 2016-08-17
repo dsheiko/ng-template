@@ -4,7 +4,10 @@
   "main": "index.d.ts",
   "homepage": "https://github.com/dsheiko/ng-template",
   "globalDependencies": {
-    "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504"
+    "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504",
+    "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
+    "karma-jasmine": "registry:dt/karma-jasmine#0.0.0+20160316155526",
+    "node": "registry:dt/node#6.0.0+20160802155038"
   },
   "version": "0.0.1"
 }
