@@ -1,4 +1,4 @@
-import { evaluate } from "./expression";
+import { compile } from "./expression";
 import { Cache } from "./cache";
 
 export class AbstractDirective {
@@ -12,7 +12,7 @@ export class AbstractDirective {
     return Array.from( el.querySelectorAll( selector ) ).map(( el: HTMLElement ) => {
       let expr = el.dataset[ datakey ];
       delete el.dataset[ datakey ];
-      return cb( el, expr, evaluate, new Cache() );
+      return cb( el, expr, compile, new Cache() );
     });
   }
 

@@ -13,11 +13,11 @@ var NgSwitchCaseDefault = (function (_super) {
     function NgSwitchCaseDefault(el, reporter) {
         _super.call(this, el, reporter);
         this.el = el;
-        this.nodes = this.initNodes(el, "ng-switch-case-default", function (node, expr, evaluate) {
+        this.nodes = this.initNodes(el, "ng-switch-case-default", function (node, expr, compile) {
             return {
                 el: node,
                 outerHTML: node.outerHTML,
-                exp: evaluate(expr, "", reporter)
+                exp: compile(expr, "", reporter)
             };
         });
     }

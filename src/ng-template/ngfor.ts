@@ -11,7 +11,7 @@ export class NgFor extends AbstractDirective implements NgTemplate.Directive {
   constructor( el: HTMLElement, reporter: NgTemplate.Reporter ){
     super( el, reporter );
     this.nodes =  this.initNodes( el, "ng-for",
-      ( node: HTMLElement, expr: string, evaluate: Function, cache: NgTemplate.Cache ) => {
+      ( node: HTMLElement, expr: string, compile: Function, cache: NgTemplate.Cache ) => {
       let parsed: NgTemplate.NgForExprVo = this.parseExpr( expr ),
           outerHTML: string,
           id: string = "id" + ( ++counter );

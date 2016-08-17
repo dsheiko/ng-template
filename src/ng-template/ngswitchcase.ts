@@ -9,11 +9,11 @@ export class NgSwitchCase extends AbstractDirective implements NgTemplate.Direct
   constructor( el: HTMLElement, reporter: NgTemplate.Reporter ){
     super( el, reporter );
     this.el = el;
-    this.nodes =  this.initNodes( el, "ng-switch-case", ( node: HTMLElement, expr: string, evaluate: Function ) => {
+    this.nodes =  this.initNodes( el, "ng-switch-case", ( node: HTMLElement, expr: string, compile: Function ) => {
       return {
         el: node,
         outerHTML: node.outerHTML,
-        exp: evaluate( expr, "", reporter )
+        exp: compile( expr, "", reporter )
       };
     });
   }

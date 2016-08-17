@@ -127,7 +127,7 @@ export function propValueReference( propRaw: string, expr: string ) {
 
 }
 
-export function evaluate( exprRaw: string, wrapper: string = "", reporterRef: NgTemplate.Reporter ): Function {
+export function compile( exprRaw: string, wrapper: string = "", reporterRef: NgTemplate.Reporter ): Function {
     let func: Function,
         expr = exprRaw.trim(),
         positiveExpr = removeNegotiation( expr ),

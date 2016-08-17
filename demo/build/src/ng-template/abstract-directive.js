@@ -9,7 +9,7 @@ var AbstractDirective = (function () {
         return Array.from(el.querySelectorAll(selector)).map(function (el) {
             var expr = el.dataset[datakey];
             delete el.dataset[datakey];
-            return cb(el, expr, expression_1.evaluate, new cache_1.Cache());
+            return cb(el, expr, expression_1.compile, new cache_1.Cache());
         });
     };
     /**

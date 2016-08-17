@@ -12,10 +12,10 @@ var NgEl = (function (_super) {
     __extends(NgEl, _super);
     function NgEl(el, reporter) {
         _super.call(this, el, reporter);
-        this.nodes = this.initNodes(el, "ng-el", function (node, expr, evaluate) {
+        this.nodes = this.initNodes(el, "ng-el", function (node, expr, compile) {
             return {
                 el: node,
-                exp: evaluate(expr, "", reporter)
+                exp: compile(expr, "", reporter)
             };
         });
     }

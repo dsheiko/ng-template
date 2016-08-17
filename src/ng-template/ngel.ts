@@ -7,10 +7,10 @@ export class NgEl extends AbstractDirective implements NgTemplate.Directive {
 
   constructor( el: HTMLElement, reporter: NgTemplate.Reporter ){
     super( el, reporter );
-    this.nodes =  this.initNodes( el, "ng-el", ( node: HTMLElement, expr: string, evaluate: Function ) => {
+    this.nodes =  this.initNodes( el, "ng-el", ( node: HTMLElement, expr: string, compile: Function ) => {
       return {
         el: node,
-        exp: evaluate( expr, "", reporter )
+        exp: compile( expr, "", reporter )
       };
     });
   }

@@ -116,7 +116,7 @@ function propValueReference(propRaw, expr) {
     };
 }
 exports.propValueReference = propValueReference;
-function evaluate(exprRaw, wrapper, reporterRef) {
+function compile(exprRaw, wrapper, reporterRef) {
     if (wrapper === void 0) { wrapper = ""; }
     var func, expr = exprRaw.trim(), positiveExpr = removeNegotiation(expr), 
     // make available in the closure
@@ -179,5 +179,5 @@ function evaluate(exprRaw, wrapper, reporterRef) {
     }
     return func;
 }
-exports.evaluate = evaluate;
+exports.compile = compile;
 ;

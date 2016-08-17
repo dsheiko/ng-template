@@ -13,7 +13,7 @@ var NgFor = (function (_super) {
     function NgFor(el, reporter) {
         var _this = this;
         _super.call(this, el, reporter);
-        this.nodes = this.initNodes(el, "ng-for", function (node, expr, evaluate, cache) {
+        this.nodes = this.initNodes(el, "ng-for", function (node, expr, compile, cache) {
             var parsed = _this.parseExpr(expr), outerHTML, id = "id" + (++counter);
             node.dataset["ngNodeId"] = id;
             outerHTML = node.outerHTML;

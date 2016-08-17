@@ -1,4 +1,4 @@
-import { evaluate, findValue, isParsableExpr, removeNegotiation, getWrapperFunction,
+import { compile, findValue, isParsableExpr, removeNegotiation, getWrapperFunction,
     isNumber, isBool, isString, propValueReference } from "../../src/ng-template/expression";
 import { Reporter } from "../../src/ng-template/reporter";
 
@@ -8,21 +8,21 @@ export default function ExpressionSpec(){
   describe("NgTemplate.expression", function(){
 
     it( "evaluates fn({ foo: true }) => true", function() {
-      var fn = evaluate( "foo", "Boolean", reporter );
+      var fn = compile( "foo", "Boolean", reporter );
       expect( fn({ foo: true }) ).toBe( true );
     });
     it( "evaluates fn({ foo: false }) => false", function() {
-      var fn = evaluate( "foo", "Boolean", reporter );
+      var fn = compile( "foo", "Boolean", reporter );
       expect( fn({ foo: false }) ).toBe( false );
     });
 
     it( "evaluates fn({ foo: 'foo' }) => foo", function() {
-      var fn = evaluate( "foo", "String", reporter );
+      var fn = compile( "foo", "String", reporter );
       expect( fn({ foo: "foo" }) ).toBe(  "foo" );
     });
 
     it( "evaluates fn({ foo: 'foo' }) => 'foo'", function() {
-      var fn = evaluate( "foo", "String", reporter );
+      var fn = compile( "foo", "String", reporter );
       expect( fn({ foo: "'foo'" }) ).toBe(  "'foo'" );
     });
 

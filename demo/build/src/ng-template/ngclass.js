@@ -12,10 +12,10 @@ var NgClass = (function (_super) {
     __extends(NgClass, _super);
     function NgClass(el, reporter) {
         _super.call(this, el, reporter);
-        this.nodes = this.initNodes(el, "ng-class", function (node, expr, evaluate, cache) {
+        this.nodes = this.initNodes(el, "ng-class", function (node, expr, compile, cache) {
             return {
                 el: node,
-                exp: evaluate(expr, "__toArray", reporter),
+                exp: compile(expr, "__toArray", reporter),
                 cache: cache
             };
         });

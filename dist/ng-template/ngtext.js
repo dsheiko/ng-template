@@ -12,10 +12,10 @@ var NgText = (function (_super) {
     __extends(NgText, _super);
     function NgText(el, reporter) {
         _super.call(this, el, reporter);
-        this.nodes = this.initNodes(el, "ng-text", function (node, expr, evaluate, cache) {
+        this.nodes = this.initNodes(el, "ng-text", function (node, expr, compile, cache) {
             return {
                 el: node,
-                exp: evaluate(expr, "String", reporter),
+                exp: compile(expr, "String", reporter),
                 cache: cache
             };
         });

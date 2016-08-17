@@ -8,10 +8,10 @@ export class NgProp extends AbstractDirective implements NgTemplate.Directive {
   constructor( el: HTMLElement, reporter: NgTemplate.Reporter ){
     super( el, reporter );
     this.nodes =  this.initNodes( el, "ng-prop",
-      ( node: HTMLElement, expr: string, evaluate: Function, cache: NgTemplate.Cache ) => {
+      ( node: HTMLElement, expr: string, compile: Function, cache: NgTemplate.Cache ) => {
       return {
         el: node,
-        exp: evaluate( expr, "__toArray", reporter ),
+        exp: compile( expr, "__toArray", reporter ),
         cache: cache
       };
     });

@@ -12,10 +12,10 @@ var NgSwitch = (function (_super) {
     __extends(NgSwitch, _super);
     function NgSwitch(el, reporter) {
         _super.call(this, el, reporter);
-        this.nodes = this.initNodes(el, "ng-switch", function (node, expr, evaluate, cache) {
+        this.nodes = this.initNodes(el, "ng-switch", function (node, expr, compile, cache) {
             return {
                 el: node,
-                exp: evaluate(expr, "", reporter),
+                exp: compile(expr, "", reporter),
                 cache: cache
             };
         });

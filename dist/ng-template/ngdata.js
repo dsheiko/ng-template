@@ -12,10 +12,10 @@ var NgData = (function (_super) {
     __extends(NgData, _super);
     function NgData(el, reporter) {
         _super.call(this, el, reporter);
-        this.nodes = this.initNodes(el, "ng-data", function (node, expr, evaluate, cache) {
+        this.nodes = this.initNodes(el, "ng-data", function (node, expr, compile, cache) {
             return {
                 el: node,
-                exp: evaluate(expr, "__toArray", reporter),
+                exp: compile(expr, "__toArray", reporter),
                 cache: cache
             };
         });

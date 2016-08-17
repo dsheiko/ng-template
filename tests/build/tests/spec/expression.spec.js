@@ -5,19 +5,19 @@ var reporter = new reporter_1.Reporter();
 function ExpressionSpec() {
     describe("NgTemplate.expression", function () {
         it("evaluates fn({ foo: true }) => true", function () {
-            var fn = expression_1.evaluate("foo", "Boolean", reporter);
+            var fn = expression_1.compile("foo", "Boolean", reporter);
             expect(fn({ foo: true })).toBe(true);
         });
         it("evaluates fn({ foo: false }) => false", function () {
-            var fn = expression_1.evaluate("foo", "Boolean", reporter);
+            var fn = expression_1.compile("foo", "Boolean", reporter);
             expect(fn({ foo: false })).toBe(false);
         });
         it("evaluates fn({ foo: 'foo' }) => foo", function () {
-            var fn = expression_1.evaluate("foo", "String", reporter);
+            var fn = expression_1.compile("foo", "String", reporter);
             expect(fn({ foo: "foo" })).toBe("foo");
         });
         it("evaluates fn({ foo: 'foo' }) => 'foo'", function () {
-            var fn = expression_1.evaluate("foo", "String", reporter);
+            var fn = expression_1.compile("foo", "String", reporter);
             expect(fn({ foo: "'foo'" })).toBe("'foo'");
         });
     });
