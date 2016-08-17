@@ -2,7 +2,19 @@ declare namespace NgTemplate {
 
   interface Report {
     errors: string[];
-    tokens: any[];
+    tokens: DataMap[];
+  }
+
+  interface Reporter {
+    addError( msg: string ): void;
+    get(): NgTemplate.Report;
+    addTokens( tokens: NgTemplate.Token[] ): void;
+  }
+
+  interface Token {
+    name: string;
+    resolveValue( data: any ): any;
+    toJSON(): NgTemplate.DataMap;
   }
 
   interface DataMap { [s: string]: any; }
@@ -47,11 +59,6 @@ declare namespace NgTemplate {
 
   interface NgTemplateCtor {
     new( el:Element, template?:string ): NgTemplate;
-  }
-
-  interface Reporter {
-    addError( msg: string ): void;
-    get(): NgTemplate.Report;
   }
 
 
