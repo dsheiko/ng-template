@@ -24,7 +24,9 @@ module.exports = function(config) {
             'karma-chrome-launcher',
             'karma-firefox-launcher',
             'karma-phantomjs-launcher',
-            'karma-jasmine']
+            'karma-jasmine',
+            'karma-jasmine-html-reporter'
+          ]
     ,
 
     // list of files to exclude
