@@ -1,7 +1,7 @@
 "use strict";
 var ngif_1 = require("./ng-template/ngif");
 var ngel_1 = require("./ng-template/ngel");
-var ngclasslisttoggle_1 = require("./ng-template/ngclasslisttoggle");
+var ngclass_1 = require("./ng-template/ngclass");
 var ngprop_1 = require("./ng-template/ngprop");
 var ngdata_1 = require("./ng-template/ngdata");
 var ngtext_1 = require("./ng-template/ngtext");
@@ -14,7 +14,7 @@ function NgTemplateSpec() {
     describe("NgTemplate", function () {
         ngif_1.default.call(this);
         ngel_1.default.call(this);
-        ngclasslisttoggle_1.default.call(this);
+        ngclass_1.default.call(this);
         ngprop_1.default.call(this);
         ngdata_1.default.call(this);
         ngtext_1.default.call(this);

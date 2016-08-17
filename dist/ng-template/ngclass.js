@@ -6,13 +6,13 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var abstract_directive_1 = require("./abstract-directive");
 /**
- * <i data-ng-class-list-toggle="'is-hidden', isHidden"></i>
+ * <i data-ng-class="'is-hidden', isHidden"></i>
  */
-var NgClassListToggle = (function (_super) {
-    __extends(NgClassListToggle, _super);
-    function NgClassListToggle(el, reporter) {
+var NgClass = (function (_super) {
+    __extends(NgClass, _super);
+    function NgClass(el, reporter) {
         _super.call(this, el, reporter);
-        this.nodes = this.initNodes(el, "ng-class-list-toggle", function (node, expr, evaluate, cache) {
+        this.nodes = this.initNodes(el, "ng-class", function (node, expr, evaluate, cache) {
             return {
                 el: node,
                 exp: evaluate(expr, "__toArray", reporter),
@@ -20,13 +20,13 @@ var NgClassListToggle = (function (_super) {
             };
         });
     }
-    NgClassListToggle.prototype.sync = function (data) {
+    NgClass.prototype.sync = function (data) {
         this.nodes.forEach(function (node) {
             node.cache.evaluate(node.exp.call(node.el, data), function (args) {
                 node.el.classList.toggle(args[0], args[1]);
             });
         });
     };
-    return NgClassListToggle;
+    return NgClass;
 }(abstract_directive_1.AbstractDirective));
-exports.NgClassListToggle = NgClassListToggle;
+exports.NgClass = NgClass;

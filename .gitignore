@@ -3,6 +3,7 @@
 .nfs*
 node_modules
 dist/jspm_packages
+test/build
 
 # Compiled source #
 ###################

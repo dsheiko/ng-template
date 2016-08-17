@@ -1,7 +1,7 @@
 import { NgTemplate } from "../../src/ngtemplate";
 import NgIfSpec from "./ng-template/ngif";
 import NgElSpec from "./ng-template/ngel";
-import NgClassListToggleSpec from "./ng-template/ngclasslisttoggle";
+import NgClassSpec from "./ng-template/ngclass";
 import NgPropSpec from "./ng-template/ngprop";
 import NgDataSpec from "./ng-template/ngdata";
 import NgTextSpec from "./ng-template/ngtext";
@@ -19,7 +19,7 @@ export default function NgTemplateSpec(){
 
     NgElSpec.call( this );
 
-    NgClassListToggleSpec.call( this );
+    NgClassSpec.call( this );
 
     NgPropSpec.call( this );
 

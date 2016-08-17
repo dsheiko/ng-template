@@ -20,7 +20,7 @@ according to the directives and actual state.
 * HTML compliant: `data-*` - directives instead of foreign concepts such as `{{foo}}`, `[hidden]`, `*ngFor`, `[(ngModel)]`
 * Concern separation: Presentation state logic decoupled from the view
 * Performance: `NgTemplate` modifies DOM nodes by state diff; it touches the DOM only when it's necessary
-* Easy to catch up: Familiar for Angular folks directives such as `data-ng-if`, `data-ng-switch`, `data-ng-for` and a few extra intuitive e.g. `data-ng-text`, `data-ng-class-list-toggle`
+* Easy to catch up: Familiar for Angular folks directives such as `data-ng-if`, `data-ng-switch`, `data-ng-for` and a few extra intuitive e.g. `data-ng-text`, `data-ng-class`
 
 # How does it work?
 
@@ -285,27 +285,27 @@ console.log( document.body.innerHTML ); // <div data-date-of-birth="1960-10-03">
 ```
 
 
-### NgClassListToggle
+### NgClass
 
-We use `NgClassListToggle` to modify element's `classList`
+We use `NgClass` to modify element's `classList`
 
 #### Syntax
 
 ```
-<el data-ng-class-list-toggle="expression => className:string, expression => toggle:boolean" />
+<el data-ng-class="expression => className:string, expression => toggle:boolean" />
 ```
 
 #### Examples
 
 ```javascript
-(new NgTemplate( document.body , `<i data-ng-class-list-toggle="'is-hidden', isHidden"></i>` ))
+(new NgTemplate( document.body , `<i data-ng-class="'is-hidden', isHidden"></i>` ))
   .sync({ isHidden: true });
 
 console.log( document.body.innerHTML ); // <i class="is-hidden"></i>
 ```
 or
 ```javascript
-(new NgTemplate( document.body , `<i data-ng-class-list-toggle="className, isHidden"></i>` ))
+(new NgTemplate( document.body , `<i data-ng-class="className, isHidden"></i>` ))
   .sync({ isHidden: true, className: "is-hidden" });
 
 console.log( document.body.innerHTML ); // <i class="is-hidden"></i>

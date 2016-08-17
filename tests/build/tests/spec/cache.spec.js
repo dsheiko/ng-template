@@ -109,14 +109,14 @@ function CacheSpec() {
                 }, 200);
             });
         });
-        describe("ng-class-list-toggle directive", function () {
+        describe("ng-class directive", function () {
             beforeEach(function () {
                 this.el = document.createElement("div");
             });
             it("modifies the DOM when the expression changes", function (done) {
                 var modified = false;
                 ngtemplate_1.NgTemplate
-                    .factory(this.el, "<i data-ng-class-list-toggle=\"foo, bar\"></i>")
+                    .factory(this.el, "<i data-ng-class=\"foo, bar\"></i>")
                     .sync({ foo: "foo", bar: true })
                     .pipe(function (el) {
                     test_util_1.observeDOM(el.querySelector("i"), function () {
@@ -132,7 +132,7 @@ function CacheSpec() {
             it("does not modify the DOM when the expression does not change", function (done) {
                 var modified = false;
                 ngtemplate_1.NgTemplate
-                    .factory(this.el, "<i data-ng-class-list-toggle=\"foo, bar\"></i>")
+                    .factory(this.el, "<i data-ng-class=\"foo, bar\"></i>")
                     .sync({ foo: "foo", bar: true })
                     .pipe(function (el) {
                     test_util_1.observeDOM(el.querySelector("i"), function () {

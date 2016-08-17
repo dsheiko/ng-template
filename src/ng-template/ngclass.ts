@@ -1,13 +1,13 @@
 import { AbstractDirective } from "./abstract-directive";
 /**
- * <i data-ng-class-list-toggle="'is-hidden', isHidden"></i>
+ * <i data-ng-class="'is-hidden', isHidden"></i>
  */
-export class NgClassListToggle extends AbstractDirective implements NgTemplate.Directive {
+export class NgClass extends AbstractDirective implements NgTemplate.Directive {
   nodes: NgTemplate.DirectiveNode[];
 
   constructor( el: HTMLElement, reporter: NgTemplate.Reporter ){
     super( el, reporter );
-    this.nodes =  this.initNodes( el, "ng-class-list-toggle",
+    this.nodes =  this.initNodes( el, "ng-class",
       ( node: HTMLElement, expr: string, evaluate: Function, cache: NgTemplate.Cache ) => {
       return {
         el: node,

@@ -6,14 +6,14 @@ import { NgFor } from "./ng-template/ngfor";
 import { NgSwitch } from "./ng-template/ngswitch";
 import { NgSwitchCase } from "./ng-template/ngswitchcase";
 import { NgSwitchCaseDefault } from "./ng-template/ngswitchcasedefault";
-import { NgClassListToggle } from "./ng-template/ngclasslisttoggle";
+import { NgClass } from "./ng-template/ngclass";
 import { NgProp } from "./ng-template/ngprop";
 import { NgData } from "./ng-template/ngdata";
 import { Exception } from "./ng-template/exception";
 import { Reporter } from "./ng-template/reporter";
 
 let DIRECTIVES = [ NgFor, NgSwitch, NgSwitchCase, NgSwitchCaseDefault, NgIf,
-      NgClassListToggle, NgData, NgProp, NgEl, NgText ];
+      NgClass, NgData, NgProp, NgEl, NgText ];
 
 export class NgTemplate {
   private directives: NgTemplate.Directive[] = [];
