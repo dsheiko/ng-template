@@ -10,12 +10,12 @@ var abstract_directive_1 = require("./abstract-directive");
  */
 var NgEl = (function (_super) {
     __extends(NgEl, _super);
-    function NgEl(el) {
-        _super.call(this);
+    function NgEl(el, reporter) {
+        _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-el", function (node, expr, evaluate) {
             return {
                 el: node,
-                exp: evaluate(expr)
+                exp: evaluate(expr, "", reporter)
             };
         });
     }

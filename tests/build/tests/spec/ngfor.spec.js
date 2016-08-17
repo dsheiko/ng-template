@@ -1,6 +1,8 @@
 "use strict";
 var ngtemplate_1 = require("../../src/ngtemplate");
 var ngfor_1 = require("../../src/ng-template/ngfor");
+var reporter_1 = require("../../src/ng-template/reporter");
+var reporter = new reporter_1.Reporter();
 function NgForDirectiveSpec() {
     describe("NgTemplate.ngFor", function () {
         describe("#parseExpr", function () {
@@ -30,11 +32,11 @@ function NgForDirectiveSpec() {
                 this.el.innerHTML = "<i data-ng-for='let row of rows'></i>";
             });
             it("populatea node DTOs", function () {
-                var ngfor = new ngfor_1.NgFor(this.el);
+                var ngfor = new ngfor_1.NgFor(this.el, reporter);
                 expect(ngfor.nodes.length).toBe(1);
             });
             it("creates node.exp", function () {
-                var ngfor = new ngfor_1.NgFor(this.el), node = ngfor.nodes.shift(), res = "";
+                var ngfor = new ngfor_1.NgFor(this.el, reporter), node = ngfor.nodes.shift(), res = "";
                 node.exp({ rows: [1, 2, 3] }, function (val) {
                     res += "_" + val;
                 });
@@ -47,7 +49,7 @@ function NgForDirectiveSpec() {
             });
             it("span the target element", function () {
                 this.el.innerHTML = "<i data-ng-for='let row of rows'></i>";
-                var ngfor = new ngfor_1.NgFor(this.el);
+                var ngfor = new ngfor_1.NgFor(this.el, reporter);
                 ngfor.sync({ rows: ["foo", "bar"] }, ngtemplate_1.NgTemplate);
                 expect(this.el.querySelectorAll("i").length).toBe(2);
             });

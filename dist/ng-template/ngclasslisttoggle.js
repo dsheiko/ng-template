@@ -10,12 +10,12 @@ var abstract_directive_1 = require("./abstract-directive");
  */
 var NgClassListToggle = (function (_super) {
     __extends(NgClassListToggle, _super);
-    function NgClassListToggle(el) {
-        _super.call(this);
+    function NgClassListToggle(el, reporter) {
+        _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-class-list-toggle", function (node, expr, evaluate, cache) {
             return {
                 el: node,
-                exp: evaluate(expr, "__toArray"),
+                exp: evaluate(expr, "__toArray", reporter),
                 cache: cache
             };
         });

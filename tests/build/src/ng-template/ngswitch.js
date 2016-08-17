@@ -10,12 +10,12 @@ var abstract_directive_1 = require("./abstract-directive");
  */
 var NgSwitch = (function (_super) {
     __extends(NgSwitch, _super);
-    function NgSwitch(el) {
-        _super.call(this);
+    function NgSwitch(el, reporter) {
+        _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-switch", function (node, expr, evaluate, cache) {
             return {
                 el: node,
-                exp: evaluate(expr),
+                exp: evaluate(expr, "", reporter),
                 cache: cache
             };
         });

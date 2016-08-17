@@ -9,6 +9,7 @@ import NgForSpec from "./ng-template/ngfor";
 import NgSwitchSpec from "./ng-template/ngswitch";
 import TransformSpec from "./ng-template/transform";
 import SmartEvalSpec from "./ng-template/smarteval";
+import ReportSpec from "./ng-template/report";
 
 export default function NgTemplateSpec(){
 
@@ -34,26 +35,6 @@ export default function NgTemplateSpec(){
 
     SmartEvalSpec.call( this );
 
-//
-//    Depricated
-//    describe( "#on (handling NgTemplate events)", function(){
-//
-//      beforeEach(function(){
-//        this.el = document.createElement( "div" );
-//      });
-//
-//      it( "fires error event on undefined ref", function( done ) {
-//        var tpl = new NgTemplate( this.el, "<span data-ng-text=\"foo.bar.baz\"></span>" );
-//        tpl
-//          .on( "error", function( err: string ){
-//            expect( err.length ).toBe( true );
-//            done();
-//          })
-//          .sync({ foo: 10 });
-//      });
-//
-//    });
-
-
+    ReportSpec.call( this );
   });
 }

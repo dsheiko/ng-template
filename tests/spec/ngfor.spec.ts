@@ -1,5 +1,8 @@
 import { NgTemplate } from "../../src/ngtemplate";
 import { NgFor } from "../../src/ng-template/ngfor";
+import { Reporter } from "../../src/ng-template/reporter";
+
+let reporter = new Reporter();
 
 export default function NgForDirectiveSpec(){
   describe("NgTemplate.ngFor", function(){
@@ -37,12 +40,12 @@ export default function NgForDirectiveSpec(){
           this.el.innerHTML = "<i data-ng-for='let row of rows'></i>";
         });
         it( "populatea node DTOs", function() {
-          var ngfor = new NgFor( this.el );
+          var ngfor = new NgFor( this.el, reporter );
           expect( ngfor.nodes.length ).toBe( 1 );
         });
 
         it( "creates node.exp", function() {
-          var ngfor = new NgFor( this.el ),
+          var ngfor = new NgFor( this.el, reporter ),
               node = ngfor.nodes.shift(),
               res = "";
 
@@ -60,7 +63,7 @@ export default function NgForDirectiveSpec(){
         });
         it( "span the target element", function() {
           this.el.innerHTML = "<i data-ng-for='let row of rows'></i>";
-          var ngfor = new NgFor( this.el );
+          var ngfor = new NgFor( this.el, reporter );
           ngfor.sync({ rows: ["foo", "bar"] }, NgTemplate );
           expect( this.el.querySelectorAll( "i" ).length ).toBe( 2 );
         });

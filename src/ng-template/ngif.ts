@@ -5,14 +5,14 @@ import { AbstractDirective } from "./abstract-directive";
 export class NgIf extends AbstractDirective  implements NgTemplate.Directive {
   nodes: NgTemplate.DirectiveNode[];
 
-  constructor( el: HTMLElement ){
-    super();
+  constructor( el: HTMLElement, reporter: NgTemplate.Reporter ){
+    super( el, reporter );
     this.nodes =  this.initNodes( el, "ng-if",
       ( node: HTMLElement, expr: string, evaluate: Function, cache: NgTemplate.Cache ) => {
       return {
         el: node,
         anchor: <HTMLElement>document.createElement( "ng" ),
-        exp: evaluate( expr, "Boolean" ),
+        exp: evaluate( expr, "Boolean", reporter ),
         cache: cache
       };
     });

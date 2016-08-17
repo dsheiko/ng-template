@@ -9,6 +9,7 @@ var ngfor_1 = require("./ng-template/ngfor");
 var ngswitch_1 = require("./ng-template/ngswitch");
 var transform_1 = require("./ng-template/transform");
 var smarteval_1 = require("./ng-template/smarteval");
+var report_1 = require("./ng-template/report");
 function NgTemplateSpec() {
     describe("NgTemplate", function () {
         ngif_1.default.call(this);
@@ -21,25 +22,7 @@ function NgTemplateSpec() {
         ngswitch_1.default.call(this);
         transform_1.default.call(this);
         smarteval_1.default.call(this);
-        //
-        //    Depricated
-        //    describe( "#on (handling NgTemplate events)", function(){
-        //
-        //      beforeEach(function(){
-        //        this.el = document.createElement( "div" );
-        //      });
-        //
-        //      it( "fires error event on undefined ref", function( done ) {
-        //        var tpl = new NgTemplate( this.el, "<span data-ng-text=\"foo.bar.baz\"></span>" );
-        //        tpl
-        //          .on( "error", function( err: string ){
-        //            expect( err.length ).toBe( true );
-        //            done();
-        //          })
-        //          .sync({ foo: 10 });
-        //      });
-        //
-        //    });
+        report_1.default.call(this);
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });

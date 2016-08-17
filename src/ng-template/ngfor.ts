@@ -8,8 +8,8 @@ let counter: number = 0;
 export class NgFor extends AbstractDirective implements NgTemplate.Directive {
   nodes: NgTemplate.DirectiveNode[];
 
-  constructor( el: HTMLElement ){
-    super();
+  constructor( el: HTMLElement, reporter: NgTemplate.Reporter ){
+    super( el, reporter );
     this.nodes =  this.initNodes( el, "ng-for",
       ( node: HTMLElement, expr: string, evaluate: Function, cache: NgTemplate.Cache ) => {
       let parsed: NgTemplate.NgForExprVo = this.parseExpr( expr ),

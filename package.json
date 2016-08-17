@@ -9,12 +9,10 @@
   "branchVersion": "^1.0.0-beta.1",
   "branchPattern": "1.0.*",
   "scripts": {
-    "start": "grunt",
+    "build": "tsc && npm run build:demo && npm run browserfy",
     "browserfy": "tsc && cjsc dist/ngtemplate.glob.js -o dist/ngtemplate.glob.min.js -M",
-    "build": "tsc",
     "build:demo": "tsc -p demo",
     "browserfy:demo": "tsc -p demo && cjsc demo/build/demo/main.js -o demo/build/demo/main-vanilla.min.js -M",
-    
     "test": "tslint --project tsconfig.json && npm run test:ts",
     "test:browserfy": "tsc -p tests/ && cjsc tests/build/tests/index.spec.js -o tests/build/index.bundled.js",
     "test:ts": "npm run test:browserfy && karma start",

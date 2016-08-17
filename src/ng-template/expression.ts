@@ -1,5 +1,6 @@
 import { Exception } from "./exception";
-import { mediator } from "./mediator";
+
+let reporter: NgTemplate.Reporter;
 
 function toArray(){
   return [].slice.call( arguments );
@@ -72,7 +73,7 @@ function strategyReference( expr: string, wrapper: string = "" ) {
 
       } catch ( err ) {
         if ( err instanceof Exception ) {
-          mediator.trigger( "error", ( <Exception> err ).message );
+          reporter.addError( ( <Exception> err ).message );
           return "";
         }
         throw new SyntaxError( `Invalid ng* expression ${expr}` );
@@ -117,7 +118,7 @@ export function propValueReference( propRaw: string, expr: string ) {
         return [ prop, val ];
       } catch ( err ) {
         if ( err instanceof Exception ) {
-          mediator.trigger( "error", ( <Exception> err ).message );
+          reporter.addError( ( <Exception> err ).message );
           return [ prop, "" ];
         }
         throw new SyntaxError( `Invalid ng* expression ${expr}` );
@@ -126,7 +127,7 @@ export function propValueReference( propRaw: string, expr: string ) {
 
 }
 
-export function evaluate( exprRaw: string, wrapper: string = "" ): Function{
+export function evaluate( exprRaw: string, wrapper: string = "", reporterRef: NgTemplate.Reporter ): Function {
     let func: Function,
         expr = exprRaw.trim(),
         positiveExpr = removeNegotiation( expr ),
@@ -134,6 +135,8 @@ export function evaluate( exprRaw: string, wrapper: string = "" ): Function{
         __toArray = toArray,
         // when e.g. ('propName', value)
         exprArgs: any[];
+
+    reporter = reporterRef;
 
     try {
 
@@ -188,12 +191,12 @@ export function evaluate( exprRaw: string, wrapper: string = "" ): Function{
           eval( code );
           return cb.apply( this, vals );
         } catch ( err ) {
-          mediator.trigger( `Could not evaluate ${code}` );
+          reporter.addError( `Could not evaluate ${code}` );
         }
       };
     } catch ( err ) {
       if ( err instanceof Exception ) {
-        mediator.trigger( "error", ( <Exception> err ).message );
+        reporter.addError( ( <Exception> err ).message );
         return strategyNull();
       }
       throw new SyntaxError( `Invalid ng* expression ${expr}` );

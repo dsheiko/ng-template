@@ -283,6 +283,8 @@ _require.def( "tests/build/tests/spec/ngfor.spec.js", function( _require, export
 "use strict";
 var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
 var ngfor_1 = _require( "tests/build/src/ng-template/ngfor.js" );
+var reporter_1 = _require( "tests/build/src/ng-template/reporter.js" );
+var reporter = new reporter_1.Reporter();
 function NgForDirectiveSpec() {
     describe("NgTemplate.ngFor", function () {
         describe("#parseExpr", function () {
@@ -312,11 +314,11 @@ function NgForDirectiveSpec() {
                 this.el.innerHTML = "<i data-ng-for='let row of rows'></i>";
             });
             it("populatea node DTOs", function () {
-                var ngfor = new ngfor_1.NgFor(this.el);
+                var ngfor = new ngfor_1.NgFor(this.el, reporter);
                 expect(ngfor.nodes.length).toBe(1);
             });
             it("creates node.exp", function () {
-                var ngfor = new ngfor_1.NgFor(this.el), node = ngfor.nodes.shift(), res = "";
+                var ngfor = new ngfor_1.NgFor(this.el, reporter), node = ngfor.nodes.shift(), res = "";
                 node.exp({ rows: [1, 2, 3] }, function (val) {
                     res += "_" + val;
                 });
@@ -329,7 +331,7 @@ function NgForDirectiveSpec() {
             });
             it("span the target element", function () {
                 this.el.innerHTML = "<i data-ng-for='let row of rows'></i>";
-                var ngfor = new ngfor_1.NgFor(this.el);
+                var ngfor = new ngfor_1.NgFor(this.el, reporter);
                 ngfor.sync({ rows: ["foo", "bar"] }, ngtemplate_1.NgTemplate);
                 expect(this.el.querySelectorAll("i").length).toBe(2);
             });
@@ -348,22 +350,24 @@ exports.default = NgForDirectiveSpec;
 _require.def( "tests/build/tests/spec/expression.spec.js", function( _require, exports, module, global ){
 "use strict";
 var expression_1 = _require( "tests/build/src/ng-template/expression.js" );
+var reporter_1 = _require( "tests/build/src/ng-template/reporter.js" );
+var reporter = new reporter_1.Reporter();
 function ExpressionSpec() {
     describe("NgTemplate.expression", function () {
         it("evaluates fn({ foo: true }) => true", function () {
-            var fn = expression_1.evaluate("foo", "Boolean");
+            var fn = expression_1.evaluate("foo", "Boolean", reporter);
             expect(fn({ foo: true })).toBe(true);
         });
         it("evaluates fn({ foo: false }) => false", function () {
-            var fn = expression_1.evaluate("foo", "Boolean");
+            var fn = expression_1.evaluate("foo", "Boolean", reporter);
             expect(fn({ foo: false })).toBe(false);
         });
         it("evaluates fn({ foo: 'foo' }) => foo", function () {
-            var fn = expression_1.evaluate("foo", "String");
+            var fn = expression_1.evaluate("foo", "String", reporter);
             expect(fn({ foo: "foo" })).toBe("foo");
         });
         it("evaluates fn({ foo: 'foo' }) => 'foo'", function () {
-            var fn = expression_1.evaluate("foo", "String");
+            var fn = expression_1.evaluate("foo", "String", reporter);
             expect(fn({ foo: "'foo'" })).toBe("'foo'");
         });
     });
@@ -501,6 +505,7 @@ var ngfor_1 = _require( "tests/build/tests/spec/ng-template/ngfor.js" );
 var ngswitch_1 = _require( "tests/build/tests/spec/ng-template/ngswitch.js" );
 var transform_1 = _require( "tests/build/tests/spec/ng-template/transform.js" );
 var smarteval_1 = _require( "tests/build/tests/spec/ng-template/smarteval.js" );
+var report_1 = _require( "tests/build/tests/spec/ng-template/report.js" );
 function NgTemplateSpec() {
     describe("NgTemplate", function () {
         ngif_1.default.call(this);
@@ -513,103 +518,11 @@ function NgTemplateSpec() {
         ngswitch_1.default.call(this);
         transform_1.default.call(this);
         smarteval_1.default.call(this);
-        //
-        //    Depricated
-        //    describe( "#on (handling NgTemplate events)", function(){
-        //
-        //      beforeEach(function(){
-        //        this.el = document.createElement( "div" );
-        //      });
-        //
-        //      it( "fires error event on undefined ref", function( done ) {
-        //        var tpl = new NgTemplate( this.el, "<span data-ng-text=\"foo.bar.baz\"></span>" );
-        //        tpl
-        //          .on( "error", function( err: string ){
-        //            expect( err.length ).toBe( true );
-        //            done();
-        //          })
-        //          .sync({ foo: 10 });
-        //      });
-        //
-        //    });
+        report_1.default.call(this);
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = NgTemplateSpec;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ngtemplate.js", function( _require, exports, module, global ){
-"use strict";
-/// <reference path="./ngtemplate.d.ts" />
-var ngif_1 = _require( "tests/build/src/ng-template/ngif.js" );
-var ngel_1 = _require( "tests/build/src/ng-template/ngel.js" );
-var ngtext_1 = _require( "tests/build/src/ng-template/ngtext.js" );
-var ngfor_1 = _require( "tests/build/src/ng-template/ngfor.js" );
-var ngswitch_1 = _require( "tests/build/src/ng-template/ngswitch.js" );
-var ngswitchcase_1 = _require( "tests/build/src/ng-template/ngswitchcase.js" );
-var ngswitchcasedefault_1 = _require( "tests/build/src/ng-template/ngswitchcasedefault.js" );
-var ngclasslisttoggle_1 = _require( "tests/build/src/ng-template/ngclasslisttoggle.js" );
-var ngprop_1 = _require( "tests/build/src/ng-template/ngprop.js" );
-var ngdata_1 = _require( "tests/build/src/ng-template/ngdata.js" );
-var exception_1 = _require( "tests/build/src/ng-template/exception.js" );
-var mediator_1 = _require( "tests/build/src/ng-template/mediator.js" );
-var DIRECTIVES = [ngfor_1.NgFor, ngswitch_1.NgSwitch, ngswitchcase_1.NgSwitchCase, ngswitchcasedefault_1.NgSwitchCaseDefault, ngif_1.NgIf,
-    ngclasslisttoggle_1.NgClassListToggle, ngdata_1.NgData, ngprop_1.NgProp, ngel_1.NgEl, ngtext_1.NgText];
-var NgTemplate = (function () {
-    /**
-     * Initialize template for a given Element
-     * If template passed, load it into the Element
-     */
-    function NgTemplate(el, template) {
-        this.el = el;
-        this.template = template;
-        this.directives = [];
-        if (!this.el) {
-            throw new exception_1.Exception("(NgTemplate) Invalid first parameter: must be an existing DOM node");
-        }
-        this.template || this.init(DIRECTIVES);
-    }
-    NgTemplate.factory = function (el, template) {
-        return new NgTemplate(el, template || null);
-    };
-    /**
-     * Subscribe for NgTemplate events
-     */
-    NgTemplate.prototype.on = function (ev, cb, context) {
-        mediator_1.mediator.on(ev, cb, context);
-        return this;
-    };
-    NgTemplate.prototype.init = function (directives) {
-        var _this = this;
-        directives.forEach(function (Directive) {
-            _this.directives.push(new Directive(_this.el));
-        });
-    };
-    NgTemplate.prototype.sync = function (data) {
-        // Late initialization: renders from a given template on first sync
-        if (this.template) {
-            this.el.innerHTML = this.template;
-            this.init(DIRECTIVES);
-            this.template = null;
-        }
-        this.directives.forEach(function (d) {
-            d.sync(data, NgTemplate);
-        });
-        return this;
-    };
-    NgTemplate.prototype.pipe = function (cb, context) {
-        if (context === void 0) { context = this; }
-        cb.call(context, this.el);
-        return this;
-    };
-    return NgTemplate;
-}());
-exports.NgTemplate = NgTemplate;
 
   module.exports = exports;
 
@@ -661,7 +574,7 @@ _require.def( "tests/build/src/ng-template/abstract-directive.js", function( _re
 var expression_1 = _require( "tests/build/src/ng-template/expression.js" );
 var cache_1 = _require( "tests/build/src/ng-template/cache.js" );
 var AbstractDirective = (function () {
-    function AbstractDirective() {
+    function AbstractDirective(el, reporter) {
     }
     AbstractDirective.prototype.initNodes = function (el, identifier, cb) {
         var datakey = this.getDataKey(identifier), selector = this.getSelector(identifier);
@@ -727,9 +640,9 @@ var counter = 0;
 // <div data-ng:for="let hero of data.heroes" data-ng:text="hero" ></div>
 var NgFor = (function (_super) {
     __extends(NgFor, _super);
-    function NgFor(el) {
+    function NgFor(el, reporter) {
         var _this = this;
-        _super.call(this);
+        _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-for", function (node, expr, evaluate, cache) {
             var parsed = _this.parseExpr(expr), outerHTML, id = "id" + (++counter);
             node.dataset["ngNodeId"] = id;
@@ -840,10 +753,106 @@ exports.NgFor = NgFor;
   return module;
 });
 
+_require.def( "tests/build/src/ngtemplate.js", function( _require, exports, module, global ){
+"use strict";
+/// <reference path="./ngtemplate.d.ts" />
+var ngif_1 = _require( "tests/build/src/ng-template/ngif.js" );
+var ngel_1 = _require( "tests/build/src/ng-template/ngel.js" );
+var ngtext_1 = _require( "tests/build/src/ng-template/ngtext.js" );
+var ngfor_1 = _require( "tests/build/src/ng-template/ngfor.js" );
+var ngswitch_1 = _require( "tests/build/src/ng-template/ngswitch.js" );
+var ngswitchcase_1 = _require( "tests/build/src/ng-template/ngswitchcase.js" );
+var ngswitchcasedefault_1 = _require( "tests/build/src/ng-template/ngswitchcasedefault.js" );
+var ngclasslisttoggle_1 = _require( "tests/build/src/ng-template/ngclasslisttoggle.js" );
+var ngprop_1 = _require( "tests/build/src/ng-template/ngprop.js" );
+var ngdata_1 = _require( "tests/build/src/ng-template/ngdata.js" );
+var exception_1 = _require( "tests/build/src/ng-template/exception.js" );
+var reporter_1 = _require( "tests/build/src/ng-template/reporter.js" );
+var DIRECTIVES = [ngfor_1.NgFor, ngswitch_1.NgSwitch, ngswitchcase_1.NgSwitchCase, ngswitchcasedefault_1.NgSwitchCaseDefault, ngif_1.NgIf,
+    ngclasslisttoggle_1.NgClassListToggle, ngdata_1.NgData, ngprop_1.NgProp, ngel_1.NgEl, ngtext_1.NgText];
+var NgTemplate = (function () {
+    /**
+     * Initialize template for a given Element
+     * If template passed, load it into the Element
+     */
+    function NgTemplate(el, template) {
+        this.el = el;
+        this.template = template;
+        this.directives = [];
+        if (!this.el) {
+            throw new exception_1.Exception("(NgTemplate) Invalid first parameter: must be an existing DOM node");
+        }
+        this.reporter = new reporter_1.Reporter();
+        this.template || this.init(DIRECTIVES);
+    }
+    NgTemplate.factory = function (el, template) {
+        return new NgTemplate(el, template || null);
+    };
+    NgTemplate.prototype.init = function (directives) {
+        var _this = this;
+        directives.forEach(function (Directive) {
+            _this.directives.push(new Directive(_this.el, _this.reporter));
+        });
+    };
+    NgTemplate.prototype.report = function () {
+        return this.reporter.get();
+    };
+    NgTemplate.prototype.sync = function (data) {
+        // Late initialization: renders from a given template on first sync
+        if (this.template) {
+            this.el.innerHTML = this.template;
+            this.init(DIRECTIVES);
+            this.template = null;
+        }
+        this.directives.forEach(function (d) {
+            d.sync(data, NgTemplate);
+        });
+        return this;
+    };
+    NgTemplate.prototype.pipe = function (cb, context) {
+        if (context === void 0) { context = this; }
+        cb.call(context, this.el);
+        return this;
+    };
+    return NgTemplate;
+}());
+exports.NgTemplate = NgTemplate;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/src/ng-template/reporter.js", function( _require, exports, module, global ){
+"use strict";
+var Reporter = (function () {
+    function Reporter() {
+        this.report = {
+            errors: [],
+            tokens: []
+        };
+    }
+    Reporter.prototype.addError = function (msg) {
+        this.report.errors.push(msg);
+    };
+    Reporter.prototype.get = function () {
+        return this.report;
+    };
+    return Reporter;
+}());
+exports.Reporter = Reporter;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
 _require.def( "tests/build/src/ng-template/expression.js", function( _require, exports, module, global ){
 "use strict";
 var exception_1 = _require( "tests/build/src/ng-template/exception.js" );
-var mediator_1 = _require( "tests/build/src/ng-template/mediator.js" );
+var reporter;
 function toArray() {
     return [].slice.call(arguments);
 }
@@ -914,7 +923,7 @@ function strategyReference(expr, wrapper) {
         }
         catch (err) {
             if (err instanceof exception_1.Exception) {
-                mediator_1.mediator.trigger("error", err.message);
+                reporter.addError(err.message);
                 return "";
             }
             throw new SyntaxError("Invalid ng* expression " + expr);
@@ -951,7 +960,7 @@ function propValueReference(propRaw, expr) {
         }
         catch (err) {
             if (err instanceof exception_1.Exception) {
-                mediator_1.mediator.trigger("error", err.message);
+                reporter.addError(err.message);
                 return [prop, ""];
             }
             throw new SyntaxError("Invalid ng* expression " + expr);
@@ -959,13 +968,14 @@ function propValueReference(propRaw, expr) {
     };
 }
 exports.propValueReference = propValueReference;
-function evaluate(exprRaw, wrapper) {
+function evaluate(exprRaw, wrapper, reporterRef) {
     if (wrapper === void 0) { wrapper = ""; }
     var func, expr = exprRaw.trim(), positiveExpr = removeNegotiation(expr), 
     // make available in the closure
     __toArray = toArray, 
     // when e.g. ('propName', value)
     exprArgs;
+    reporter = reporterRef;
     try {
         if (wrapper === "__toArray") {
             exprArgs = expr.split(",");
@@ -1008,13 +1018,13 @@ function evaluate(exprRaw, wrapper) {
                 return cb.apply(this, vals);
             }
             catch (err) {
-                mediator_1.mediator.trigger("Could not evaluate " + code);
+                reporter.addError("Could not evaluate " + code);
             }
         };
     }
     catch (err) {
         if (err instanceof exception_1.Exception) {
-            mediator_1.mediator.trigger("error", err.message);
+            reporter.addError(err.message);
             return strategyNull();
         }
         throw new SyntaxError("Invalid ng* expression " + expr);
@@ -1141,39 +1151,6 @@ exports.default = NgClassListToggleSpec;
   return module;
 });
 
-_require.def( "tests/build/tests/spec/ng-template/ngprop.js", function( _require, exports, module, global ){
-"use strict";
-var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
-function NgPropSpec() {
-    describe("ng-prop directive", function () {
-        beforeEach(function () {
-            this.el = document.createElement("div");
-        });
-        it("evaluates the expression", function () {
-            ngtemplate_1.NgTemplate
-                .factory(this.el, "<button data-ng-prop=\"'disabled', isDisabled\"></button>")
-                .sync({ isDisabled: true })
-                .pipe(function (el) {
-                var btn = el.querySelector("button");
-                expect(btn.disabled).toBe(true);
-            })
-                .sync({ isDisabled: false })
-                .pipe(function (el) {
-                var btn = el.querySelector("button");
-                expect(btn.disabled).toBe(false);
-            });
-        });
-    });
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = NgPropSpec;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
 _require.def( "tests/build/tests/spec/ng-template/ngdata.js", function( _require, exports, module, global ){
 "use strict";
 var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
@@ -1200,6 +1177,39 @@ function NgDataSpec() {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = NgDataSpec;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/tests/spec/ng-template/ngprop.js", function( _require, exports, module, global ){
+"use strict";
+var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
+function NgPropSpec() {
+    describe("ng-prop directive", function () {
+        beforeEach(function () {
+            this.el = document.createElement("div");
+        });
+        it("evaluates the expression", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<button data-ng-prop=\"'disabled', isDisabled\"></button>")
+                .sync({ isDisabled: true })
+                .pipe(function (el) {
+                var btn = el.querySelector("button");
+                expect(btn.disabled).toBe(true);
+            })
+                .sync({ isDisabled: false })
+                .pipe(function (el) {
+                var btn = el.querySelector("button");
+                expect(btn.disabled).toBe(false);
+            });
+        });
+    });
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = NgPropSpec;
 
   module.exports = exports;
 
@@ -1428,6 +1438,89 @@ exports.default = SmartEvalSpec;
   return module;
 });
 
+_require.def( "tests/build/tests/spec/ng-template/report.js", function( _require, exports, module, global ){
+"use strict";
+var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
+function ReportSpec() {
+    describe("#report", function () {
+        beforeEach(function () {
+            this.el = document.createElement("div");
+        });
+        it("evaluates the statement", function () {
+            var report = ngtemplate_1.NgTemplate
+                .factory(this.el, "<span data-ng-text=\"foo.bar.baz\"></span>")
+                .sync({ foo: 10 })
+                .report();
+            expect(report.errors.length).toBe(1);
+        });
+    });
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = ReportSpec;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/src/ng-template/cache.js", function( _require, exports, module, global ){
+"use strict";
+var Cache = (function () {
+    function Cache() {
+    }
+    Cache.prototype.match = function (exVal) {
+        if (exVal === this.cache) {
+            return true;
+        }
+        this.cache = exVal;
+        return false;
+    };
+    Cache.prototype.evaluate = function (exVal, cb) {
+        if (this.match(exVal)) {
+            return;
+        }
+        cb(exVal);
+    };
+    return Cache;
+}());
+exports.Cache = Cache;
+;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/src/ng-template/exception.js", function( _require, exports, module, global ){
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+/**
+ * Custom exception extending Error
+ * @param {string} message
+ */
+var Exception = (function (_super) {
+    __extends(Exception, _super);
+    function Exception(message) {
+        _super.call(this, message);
+        this.name = "NgTemplateError",
+            this.message = message;
+    }
+    return Exception;
+}(Error));
+exports.Exception = Exception;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
 _require.def( "tests/build/src/ng-template/ngif.js", function( _require, exports, module, global ){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
@@ -1441,13 +1534,13 @@ var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-direc
  */
 var NgIf = (function (_super) {
     __extends(NgIf, _super);
-    function NgIf(el) {
-        _super.call(this);
+    function NgIf(el, reporter) {
+        _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-if", function (node, expr, evaluate, cache) {
             return {
                 el: node,
                 anchor: document.createElement("ng"),
-                exp: evaluate(expr, "Boolean"),
+                exp: evaluate(expr, "Boolean", reporter),
                 cache: cache
             };
         });
@@ -1501,12 +1594,12 @@ var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-direc
  */
 var NgEl = (function (_super) {
     __extends(NgEl, _super);
-    function NgEl(el) {
-        _super.call(this);
+    function NgEl(el, reporter) {
+        _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-el", function (node, expr, evaluate) {
             return {
                 el: node,
-                exp: evaluate(expr)
+                exp: evaluate(expr, "", reporter)
             };
         });
     }
@@ -1538,12 +1631,12 @@ var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-direc
  */
 var NgText = (function (_super) {
     __extends(NgText, _super);
-    function NgText(el) {
-        _super.call(this);
+    function NgText(el, reporter) {
+        _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-text", function (node, expr, evaluate, cache) {
             return {
                 el: node,
-                exp: evaluate(expr, "String"),
+                exp: evaluate(expr, "String", reporter),
                 cache: cache
             };
         });
@@ -1579,12 +1672,12 @@ var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-direc
  */
 var NgSwitch = (function (_super) {
     __extends(NgSwitch, _super);
-    function NgSwitch(el) {
-        _super.call(this);
+    function NgSwitch(el, reporter) {
+        _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-switch", function (node, expr, evaluate, cache) {
             return {
                 el: node,
-                exp: evaluate(expr),
+                exp: evaluate(expr, "", reporter),
                 cache: cache
             };
         });
@@ -1621,14 +1714,14 @@ var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-direc
  */
 var NgSwitchCase = (function (_super) {
     __extends(NgSwitchCase, _super);
-    function NgSwitchCase(el) {
-        _super.call(this);
+    function NgSwitchCase(el, reporter) {
+        _super.call(this, el, reporter);
         this.el = el;
         this.nodes = this.initNodes(el, "ng-switch-case", function (node, expr, evaluate) {
             return {
                 el: node,
                 outerHTML: node.outerHTML,
-                exp: evaluate(expr)
+                exp: evaluate(expr, "", reporter)
             };
         });
     }
@@ -1664,14 +1757,14 @@ var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-direc
  */
 var NgSwitchCaseDefault = (function (_super) {
     __extends(NgSwitchCaseDefault, _super);
-    function NgSwitchCaseDefault(el) {
-        _super.call(this);
+    function NgSwitchCaseDefault(el, reporter) {
+        _super.call(this, el, reporter);
         this.el = el;
         this.nodes = this.initNodes(el, "ng-switch-case-default", function (node, expr, evaluate) {
             return {
                 el: node,
                 outerHTML: node.outerHTML,
-                exp: evaluate(expr)
+                exp: evaluate(expr, "", reporter)
             };
         });
     }
@@ -1707,12 +1800,12 @@ var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-direc
  */
 var NgClassListToggle = (function (_super) {
     __extends(NgClassListToggle, _super);
-    function NgClassListToggle(el) {
-        _super.call(this);
+    function NgClassListToggle(el, reporter) {
+        _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-class-list-toggle", function (node, expr, evaluate, cache) {
             return {
                 el: node,
-                exp: evaluate(expr, "__toArray"),
+                exp: evaluate(expr, "__toArray", reporter),
                 cache: cache
             };
         });
@@ -1747,12 +1840,12 @@ var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-direc
  */
 var NgProp = (function (_super) {
     __extends(NgProp, _super);
-    function NgProp(el) {
-        _super.call(this);
+    function NgProp(el, reporter) {
+        _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-prop", function (node, expr, evaluate, cache) {
             return {
                 el: node,
-                exp: evaluate(expr, "__toArray"),
+                exp: evaluate(expr, "__toArray", reporter),
                 cache: cache
             };
         });
@@ -1788,12 +1881,12 @@ var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-direc
  */
 var NgData = (function (_super) {
     __extends(NgData, _super);
-    function NgData(el) {
-        _super.call(this);
+    function NgData(el, reporter) {
+        _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-data", function (node, expr, evaluate, cache) {
             return {
                 el: node,
-                exp: evaluate(expr, "__toArray"),
+                exp: evaluate(expr, "__toArray", reporter),
                 cache: cache
             };
         });
@@ -1809,136 +1902,6 @@ var NgData = (function (_super) {
     return NgData;
 }(abstract_directive_1.AbstractDirective));
 exports.NgData = NgData;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ng-template/exception.js", function( _require, exports, module, global ){
-"use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-/**
- * Custom exception extending Error
- * @param {string} message
- */
-var Exception = (function (_super) {
-    __extends(Exception, _super);
-    function Exception(message) {
-        _super.call(this, message);
-        this.name = "NgTemplateError",
-            this.message = message;
-    }
-    return Exception;
-}(Error));
-exports.Exception = Exception;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ng-template/mediator.js", function( _require, exports, module, global ){
-"use strict";
-var eventemitter_1 = _require( "tests/build/src/ng-template/eventemitter.js" );
-exports.mediator = new eventemitter_1.EventEmitter();
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ng-template/cache.js", function( _require, exports, module, global ){
-"use strict";
-var Cache = (function () {
-    function Cache() {
-    }
-    Cache.prototype.match = function (exVal) {
-        if (exVal === this.cache) {
-            return true;
-        }
-        this.cache = exVal;
-        return false;
-    };
-    Cache.prototype.evaluate = function (exVal, cb) {
-        if (this.match(exVal)) {
-            return;
-        }
-        cb(exVal);
-    };
-    return Cache;
-}());
-exports.Cache = Cache;
-;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ng-template/eventemitter.js", function( _require, exports, module, global ){
-"use strict";
-var EventEmitter = (function () {
-    function EventEmitter() {
-        this.eventQueue = [];
-    }
-    /**
-     * Trigger callbacks for the given event
-     * @example
-     * this.trigger( "myevent", 1, 2, 3 );
-     */
-    EventEmitter.prototype.trigger = function (event) {
-        var args = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            args[_i - 1] = arguments[_i];
-        }
-        this.eventQueue.forEach(function (dto) {
-            if (dto.event !== event) {
-                return;
-            }
-            dto.callback.apply(dto.context, args);
-        }, this);
-    };
-    /**
-     * Just like on, but causes the bound callback to fire only once before being removed.
-     */
-    EventEmitter.prototype.once = function (ev, cb, context) {
-        this.off(ev, cb);
-        this.on(ev, cb, context);
-        return this;
-    };
-    /**
-     * Subscribe a cb hundler for a given event in the object scope
-     */
-    EventEmitter.prototype.on = function (ev, cb, context) {
-        this.eventQueue.push({
-            event: ev,
-            callback: cb,
-            context: context || { event: ev }
-        });
-        return this;
-    };
-    /**
-     * Unsubscribe a cb hundler
-     *
-     */
-    EventEmitter.prototype.off = function (ev, target) {
-        this.eventQueue = this.eventQueue.filter(function (task) {
-            return task.event !== ev || task.callback.toString() !== target.toString();
-        });
-        return this;
-    };
-    return EventEmitter;
-}());
-exports.EventEmitter = EventEmitter;
 
   module.exports = exports;
 

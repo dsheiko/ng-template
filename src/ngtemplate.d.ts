@@ -1,5 +1,10 @@
 declare namespace NgTemplate {
 
+  interface Report {
+    errors: string[];
+    tokens: any[];
+  }
+
   interface DataMap { [s: string]: any; }
 
   interface DirectiveNode {
@@ -44,7 +49,14 @@ declare namespace NgTemplate {
     new( el:Element, template?:string ): NgTemplate;
   }
 
+  interface Reporter {
+    addError( msg: string ): void;
+    get(): NgTemplate.Report;
+  }
+
+
   interface NgTemplate {
+    report(): Report;
     sync( data:Object ):NgTemplate;
     pipe( cb:Function, context:Object ):NgTemplate;
   }

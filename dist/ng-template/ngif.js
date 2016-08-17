@@ -10,13 +10,13 @@ var abstract_directive_1 = require("./abstract-directive");
  */
 var NgIf = (function (_super) {
     __extends(NgIf, _super);
-    function NgIf(el) {
-        _super.call(this);
+    function NgIf(el, reporter) {
+        _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-if", function (node, expr, evaluate, cache) {
             return {
                 el: node,
                 anchor: document.createElement("ng"),
-                exp: evaluate(expr, "Boolean"),
+                exp: evaluate(expr, "Boolean", reporter),
                 cache: cache
             };
         });

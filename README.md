@@ -200,16 +200,19 @@ it can bind to the following scope
 > `data-ng-if="true"`, `data-ng-prop="'disabled', false"`, `data-ng-data="'someCustomKey', bar.baz"`
 > Such expressions are being evaluated without use of `eval()` and therefore the process takes much less time and resources
 
-## NgTemplate Events
+## NgTemplate Report
 
-You can subscribe for NgTemplate events by using `on` method:
+You can get template synchronization details like that:
 
 ```javascript
-NgTemplate.factory( document.createElement( "div" ), "<span data-ng-text=\"foo.bar.baz\"></span>" )
-  .on( "error", function( err ){
-    console.log( err ); // "'foo.bar.baz' is undefined"
-  })
-  .sync({});
+let tpl = new NgTemplate(
+  document.createElement( "div" ),
+  "<span data-ng-text=\"foo.bar.baz\"></span>"
+);
+
+tpl.sync({});
+console.log( tpl.report().errors ); // [ "'foo.bar.baz' is undefined" ]
+
 ```
 
 ## Directives

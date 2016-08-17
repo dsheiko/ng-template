@@ -1,6 +1,6 @@
 "use strict";
 var exception_1 = require("./exception");
-var mediator_1 = require("./mediator");
+var reporter;
 function toArray() {
     return [].slice.call(arguments);
 }
@@ -71,7 +71,7 @@ function strategyReference(expr, wrapper) {
         }
         catch (err) {
             if (err instanceof exception_1.Exception) {
-                mediator_1.mediator.trigger("error", err.message);
+                reporter.addError(err.message);
                 return "";
             }
             throw new SyntaxError("Invalid ng* expression " + expr);
@@ -108,7 +108,7 @@ function propValueReference(propRaw, expr) {
         }
         catch (err) {
             if (err instanceof exception_1.Exception) {
-                mediator_1.mediator.trigger("error", err.message);
+                reporter.addError(err.message);
                 return [prop, ""];
             }
             throw new SyntaxError("Invalid ng* expression " + expr);
@@ -116,13 +116,14 @@ function propValueReference(propRaw, expr) {
     };
 }
 exports.propValueReference = propValueReference;
-function evaluate(exprRaw, wrapper) {
+function evaluate(exprRaw, wrapper, reporterRef) {
     if (wrapper === void 0) { wrapper = ""; }
     var func, expr = exprRaw.trim(), positiveExpr = removeNegotiation(expr), 
     // make available in the closure
     __toArray = toArray, 
     // when e.g. ('propName', value)
     exprArgs;
+    reporter = reporterRef;
     try {
         if (wrapper === "__toArray") {
             exprArgs = expr.split(",");
@@ -165,14 +166,13 @@ function evaluate(exprRaw, wrapper) {
                 return cb.apply(this, vals);
             }
             catch (err) {
-                console.warn("Could not evaluate " + code + " ", err);
-                return false;
+                reporter.addError("Could not evaluate " + code);
             }
         };
     }
     catch (err) {
         if (err instanceof exception_1.Exception) {
-            mediator_1.mediator.trigger("error", err.message);
+            reporter.addError(err.message);
             return strategyNull();
         }
         throw new SyntaxError("Invalid ng* expression " + expr);

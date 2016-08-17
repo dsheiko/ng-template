@@ -2,7 +2,8 @@ import { evaluate } from "./expression";
 import { Cache } from "./cache";
 
 export class AbstractDirective {
-  constructor(){
+
+  constructor( el: HTMLElement, reporter: NgTemplate.Reporter ){
   }
 
   initNodes( el: HTMLElement, identifier: string, cb: Function ): NgTemplate.DirectiveNode[]{

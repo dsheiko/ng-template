@@ -10,9 +10,9 @@ var counter = 0;
 // <div data-ng:for="let hero of data.heroes" data-ng:text="hero" ></div>
 var NgFor = (function (_super) {
     __extends(NgFor, _super);
-    function NgFor(el) {
+    function NgFor(el, reporter) {
         var _this = this;
-        _super.call(this);
+        _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-for", function (node, expr, evaluate, cache) {
             var parsed = _this.parseExpr(expr), outerHTML, id = "id" + (++counter);
             node.dataset["ngNodeId"] = id;

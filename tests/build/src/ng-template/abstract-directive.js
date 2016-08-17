@@ -2,7 +2,7 @@
 var expression_1 = require("./expression");
 var cache_1 = require("./cache");
 var AbstractDirective = (function () {
-    function AbstractDirective() {
+    function AbstractDirective(el, reporter) {
     }
     AbstractDirective.prototype.initNodes = function (el, identifier, cb) {
         var datakey = this.getDataKey(identifier), selector = this.getSelector(identifier);
