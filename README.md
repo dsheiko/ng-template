@@ -180,10 +180,16 @@ We can pass rendering helpers (e.g. transformers) with the scope. For example we
 }
 ```
 
+Expressions are evaluated in the context of the target element, so we can access the element with `this`:
+```
+data-ng-if="foo && this.checked"
+```
+
 > :exclamation: NOTE: In order to gain better performance keep to primitive expressions especially in cyclic directives e.g. `data-ng-text="foo.bar.baz"`,
 > `data-ng-text="!foo.bar.baz"`, `data-ng-text="'string here'"`, `data-ng-if="foo.bar > baz.quiz"`, `data-ng-text="foo + 10`,
 > `data-ng-if="true"`, `data-ng-prop="'disabled', true || false"`, `data-ng-data="foo || bar, baz"`
 > Such expressions are being evaluated without use of `eval()` and therefore the process takes much less time and resources
+> You can check how the parser treats your expressions by studying content of `template.report().tokens` array
 
 ## NgTemplate Report
 
