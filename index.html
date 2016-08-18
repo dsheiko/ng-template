@@ -1,88 +1,42 @@
+<!doctype html>
 <html>
-  <head>
-    <title>NgTemplate Demo: Hero</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <style>
-        body {
-            padding-top: 50px;
-            padding-bottom: 20px;
-        }
-        .jumbotron > .container > p {
-          font-size: 18px;
-        }
-    </style>
-    <!--[if lt IE 9]>
-          <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <!--[if lt IE 8]>
-        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <meta name="viewport" content="width=device-width">
 
+  <title>NgTemplate - a light-weight DOM-based template engine, inspired by AngularJS</title>
+  <base href='..'>
 
+  <!-- Flatdoc -->
+  <script src='flatdoc/support/vendor/jquery.js'></script>
+  <script src='flatdoc/legacy.js'></script>
+  <script src='flatdoc/flatdoc.js'></script>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-          <div class="navbar-header">
-            <span class="navbar-brand">NgTemplate Demo: Hero</span>
-          </div>
-        </div>
-      </nav>
+  <!-- Flatdoc theme -->
+  <link  href='flatdoc/theme-white/style.css' rel='stylesheet'>
+  <script src='flatdoc/theme-white/script.js'></script>
 
-      <!-- Main jumbotron for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <div class="container">
-          <p>This is a simple app showing <a href="https://github.com/dsheiko/ng-template">NgTemplate</a> in action.
-            Every time you type in hero-name and select a hero-power the app runs basic validation,
-            changes template scope and updates the template. So if you provide an empty value
-            the corresponding state in the form changes (e.g. name.valid and form.valid). Then according to template
-            directives the container with error message shows up and submit button gets disabled.
-            Everything restores as soon as you type in any no-empty value.</p>
+  <!-- Initializer -->
+  <script>
+    Flatdoc.run({
+      fetcher: Flatdoc.github('dsheiko/ng-template')
+    });
+  </script>
+  <style>
+  </style>
+</head>
+<body role='flatdoc'>
 
-          <p>Note also that hero-name data list and hero-power options are populated from the specified scope by using
-            `NgFor` directive.</p>
-
-          <div class="row">
-            <div class="col-xs-4">
-              <h4>Example: NgTemplate + SystemJS</h4>
-              <a href="index-systemjs.html">Demo</a>, <a href="https://github.com/dsheiko/ng-template/blob/master/demo/main.ts">Source</a>
-            </div>
-            <div class="col-xs-3">
-
-            <h4>Example: NgTemplate </h4>
-             <a href="https://github.com/dsheiko/ng-template/blob/master/demo/main.ts">Source</a>
-            </div>
-          </div>
-
-        </div>
+  <div role='flatdoc' class='content-root'>
+    <div class='menubar'>
+      <div class='section'>
+        <a class='big button' href='https://github.com/dsheiko/ng-template'>View in GitHub</a>
       </div>
+      <div class='menu section' role='flatdoc-menu'></div>
+    </div>
+    <div role='flatdoc-content' class='content'></div>
+  </div>
 
-      <div class="container">
-        <div class="row">
-           <hero-form class="container"><h3>Loading ...</h3></hero-form>
-        </div>
-
-        <hr>
-
-        <footer class="container">
-          <div class="row">
-            <div class="col-xs-4">
-              <p>The MIT License (MIT)</p>
-              <p>Copyright (c) 2016 Dmitry Sheiko</p>
-            </div>
-            <div class="col-xs-6">If you run into any issues while using the add, please <a href="https://github.com/dsheiko/ng-template/issues">let us know</a>.</div>
-          </div>
-        </footer>
-      </div>
-
-
-     <!-- ES6 shim -->
-    <script type="text/javascript" src="./node_modules/es6-shim/es6-shim.min.js"></script>
-    <script  src="./build/demo/main-vanilla.min.js"></script>
-
-  </body>
+</body>
 </html>
