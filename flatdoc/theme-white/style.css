@@ -115,7 +115,7 @@ textarea,
 input {
   font-family: Helvetica Neue, Open Sans, sans-serif;
   line-height: 1.6;
-  font-size: 13px;
+  font-size: 14px;
   color: #505050;
 }
 @media (max-width: 480px) {
@@ -213,10 +213,14 @@ a:hover {
   padding: 1px 3px;
   font-size: 0.95em;
 }
+
+.content p {
+  font-size: 1.2em;
+}
 .content pre > code {
   display: block;
   background: transparent;
-  font-size: 0.85em;
+  font-size: 1em;
   letter-spacing: -1px;
 }
 .content blockquote :first-child {
@@ -370,7 +374,7 @@ body:not(.big-h3) .content h3 {
   padding-bottom: 10px;
 }
 body:not(.big-h3) .content h3 {
-  font-size: 0.9em;
+  font-size: 1.1em;
 }
 .content h1:first-child {
   padding-top: 0;
@@ -534,20 +538,33 @@ body.no-literate .content pre > code:hover::-webkit-scrollbar-thumb {
     padding-right: 40px;
     padding-left: 40px;
   }
+
+/*  .content > blockquote {
+    clear: right;
+    float: none !important;
+    width: 550px !important;
+    padding-right: 40px !important;
+    padding-left: 40px !important;
+  }*/
+
   body:not(.no-literate) .content > h1,
   body:not(.no-literate) .content > h2,
   body:not(.no-literate) .content > h3 {
     clear: both;
     width: 100%;
   }
-  body:not(.no-literate) .content > pre,
-  body:not(.no-literate) .content > blockquote {
+  body:not(.no-literate) .content > pre {
     width: 380px;
     padding-left: 20px;
     padding-right: 20px;
     float: right;
     clear: right;
   }
+
+  body:not(.no-literate) .content > blockquote {
+    clear: right;
+  }
+
   body:not(.no-literate) .content > pre + p,
   body:not(.no-literate) .content > blockquote + p,
   body:not(.no-literate) .content > pre + ul,
@@ -629,7 +646,7 @@ body.no-literate .content pre > code:hover::-webkit-scrollbar-thumb {
   text-rendering: optimizeLegibility;
   font-weight: bold;
   font-family: montserrat, sans-serif;
-  font-size: 13px;
+  font-size: 16px;
 }
 .header h1,
 .header h1 a,
@@ -684,6 +701,7 @@ body.no-literate .content pre > code:hover::-webkit-scrollbar-thumb {
   text-rendering: optimizeLegibility;
 }
 .menubar .section {
+  font-size: 1.2em;
   padding: 30px 30px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -705,7 +723,7 @@ a.big.button {
   padding: 10px 20px;
   text-align: center;
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: 0.9em;
   background: transparent;
   border: solid 3px #2badad;
   -webkit-border-radius: 30px;
@@ -796,7 +814,7 @@ a.big.button:hover:visited {
 .menu a.level-1 {
   font-family: montserrat, sans-serif;
   text-transform: uppercase;
-  font-size: 0.9em;
+  font-size: 1.1em;
   font-weight: bold;
 }
 .menu a.level-1,
@@ -876,3 +894,4 @@ code .comment {
   position: relative;
   z-index: 1;
 }
+
