@@ -85,7 +85,7 @@ template.sync( scope );
 
 ## Live Demo
 
-[NgTemplate Demo: Hero](https://dsheiko.github.io/ng-template/)
+[NgTemplate Demo: Hero](https://dsheiko.github.io/ng-template/demo.html)
 
 ## Installing
 
