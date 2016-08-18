@@ -58,6 +58,7 @@ function ExpressionSpec() {
             it("evaluates fn({ foo: true }) => true", function () {
                 var fn = expression_1.compile("foo", "Boolean", this.reporter);
                 expect(fn({ foo: true })).toBe(true);
+                console.log(this.reporter.get("tokens"));
             });
             it("evaluates fn({ foo: false }) => false", function () {
                 var fn = expression_1.compile("foo", "Boolean", this.reporter);

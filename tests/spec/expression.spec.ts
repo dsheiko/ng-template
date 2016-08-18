@@ -79,6 +79,7 @@ export default function ExpressionSpec(){
       it( "evaluates fn({ foo: true }) => true", function() {
         var fn = compile( "foo", "Boolean", this.reporter );
         expect( fn({ foo: true }) ).toBe( true );
+        expect( this.reporter.get( "tokens" ).length ).toBe( 1 );
       });
       it( "evaluates fn({ foo: false }) => false", function() {
         var fn = compile( "foo", "Boolean", this.reporter );

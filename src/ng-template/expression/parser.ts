@@ -1,4 +1,4 @@
-import { tokenizer, InvalidToken, Token } from "./tokenizer";
+import { tokenizer, InvalidToken, Token, StringToken } from "./tokenizer";
 
 export class ParserException extends Error {
   constructor( message: string ) {
@@ -20,11 +20,10 @@ export class Parser {
   }
 
   static parse( expr: string ): Token[] {
-    let reQuote: RegExp = /[\'\"]/i;
-    // If it has a string, too risky to parse for composite
-    if ( reQuote.test( expr ) ) {
-      let token: Token = tokenizer( expr );
-      return token instanceof InvalidToken ? [] : [ token ];
+    // if the whole expr is a string
+    if ( StringToken.valid( expr ) ) {
+      let token: Token = tokenizer( expr.trim() );
+      return [ token ];
     }
     let com = Parser.split( expr );
     // case 3: foo + bar
@@ -32,6 +31,11 @@ export class Parser {
     if ( com.length !== 3 && com.length !== 1 ) {
       return [];
     }
-    return com.map( ( i: string ) => tokenizer( i ) );
+    let tokens: Token[] = com.map( ( i: string ) => tokenizer( i ) );
+    // any of tokens is invalid
+    if ( tokens.find(( i: Token ) => i instanceof InvalidToken ) ) {
+      return [];
+    }
+    return tokens;
   }
 }

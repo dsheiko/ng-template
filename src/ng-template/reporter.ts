@@ -13,7 +13,7 @@ export class Reporter {
     let merge: any[] =  tokens.map(( token: NgTemplate.Token ) => token.toJSON() );
     this.data.tokens = this.data.tokens.concat( merge );
   }
-  get(): NgTemplate.Report {
-    return this.data;
+  get( key?: string ): NgTemplate.Report {
+    return key ? this.data[ key ] : this.data;
   }
 }

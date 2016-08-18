@@ -1,6 +1,6 @@
 declare namespace NgTemplate {
 
-  interface Report {
+  interface Report extends DataMap {
     errors: string[];
     tokens: DataMap[];
   }

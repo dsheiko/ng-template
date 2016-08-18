@@ -75,255 +75,14 @@ if ( typeof require === "undefined" ) {
 }
 _require.def( "tests/build/tests/index.spec.js", function( _require, exports, module, global ){
 "use strict";
-var parser_spec_1 = _require( "tests/build/tests/spec/expression/parser.spec.js" );
-var tokenizer_spec_1 = _require( "tests/build/tests/spec/expression/tokenizer.spec.js" );
 var expression_spec_1 = _require( "tests/build/tests/spec/expression.spec.js" );
-parser_spec_1.default();
-tokenizer_spec_1.default();
+//ParserSpec();
+//TokenizerSpec();
 expression_spec_1.default();
 //CacheSpec();
 //AbstractDirectiveSpec();
 //NgForDirectiveSpec();
 //NgTemplateSpec(); 
-
-
-  return module;
-});
-
-_require.def( "tests/build/tests/spec/expression/parser.spec.js", function( _require, exports, module, global ){
-"use strict";
-var parser_1 = _require( "tests/build/src/ng-template/expression/parser.js" );
-var tokenizer_1 = _require( "tests/build/src/ng-template/expression/tokenizer.js" );
-function ParserSpec() {
-    describe("Parser", function () {
-        describe(".split", function () {
-            it("parses by Arithmetic operators (+/-)", function () {
-                var expr = 'foo + bar.baz - 10', res = parser_1.Parser.split(expr);
-                expect(res).toContain("foo");
-                expect(res).toContain("bar.baz");
-                expect(res).toContain("10");
-                expect(res).toContain("+");
-                expect(res).toContain("-");
-            });
-            it("parses by Relational operators (</>)", function () {
-                var expr = 'foo > bar.baz < 10', res = parser_1.Parser.split(expr);
-                expect(res).toContain("foo");
-                expect(res).toContain("bar.baz");
-                expect(res).toContain("10");
-                expect(res).toContain(">");
-                expect(res).toContain("<");
-            });
-            it("parses by Equality operators (===/!==/==/!=)", function () {
-                var expr = 'foo === bar.baz !== 10 == 100 != false', res = parser_1.Parser.split(expr);
-                expect(res).toContain("foo");
-                expect(res).toContain("bar.baz");
-                expect(res).toContain("10");
-                expect(res).toContain("==");
-                expect(res).toContain("!==");
-                expect(res).toContain("==");
-                expect(res).toContain("!=");
-                expect(res).toContain("100");
-                expect(res).toContain("false");
-            });
-            it("parses by Binary logical operators (&&/||)", function () {
-                var expr = 'foo && bar.baz || 10', res = parser_1.Parser.split(expr);
-                expect(res).toContain("foo");
-                expect(res).toContain("bar.baz");
-                expect(res).toContain("10");
-                expect(res).toContain("&&");
-                expect(res).toContain("||");
-            });
-            it("return a single element for not parsable", function () {
-                var expr = 'foo.bar.baz', res = parser_1.Parser.split(expr);
-                expect(res.length).toBe(1);
-            });
-        });
-        describe(".parse", function () {
-            it("tokenizes simple expression", function () {
-                var expr = 'foo + 100', res = parser_1.Parser.parse(expr);
-                expect(res.length).toBe(3);
-                expect(res.shift() instanceof tokenizer_1.ReferenceToken).toBe(true);
-                expect(res.shift() instanceof tokenizer_1.OperatorToken).toBe(true);
-                expect(res.shift() instanceof tokenizer_1.NumberToken).toBe(true);
-            });
-            it("rejects 4+ members", function () {
-                var expr = 'foo + 100 + bar', res = parser_1.Parser.parse(expr);
-                expect(res.length).toBe(0);
-            });
-            it("rejects 2 members", function () {
-                var expr = 'foo +', res = parser_1.Parser.parse(expr);
-                expect(res.length).toBe(0);
-            });
-        });
-    });
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = ParserSpec;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/tests/spec/expression/tokenizer.spec.js", function( _require, exports, module, global ){
-"use strict";
-var tokenizer_1 = _require( "tests/build/src/ng-template/expression/tokenizer.js" );
-function TokenizerSpec() {
-    describe("Tokenizer", function () {
-        describe("factory", function () {
-            it("recognizes a string single-quoted", function () {
-                var expr = "'string'", res = tokenizer_1.tokenizer(expr);
-                expect(res instanceof tokenizer_1.StringToken).toBe(true);
-            });
-        });
-        describe("StringToken", function () {
-            describe(".valid", function () {
-                it("recognizes a string single-quoted", function () {
-                    var expr = "'string'";
-                    expect(tokenizer_1.StringToken.valid(expr)).toBe(true);
-                });
-                it("recognizes a string double-quoted", function () {
-                    var expr = "\"string\"";
-                    expect(tokenizer_1.StringToken.valid(expr)).toBe(true);
-                });
-                it("rejects not-a-string", function () {
-                    var expr = "100";
-                    expect(tokenizer_1.StringToken.valid(expr)).toBe(false);
-                });
-            });
-            describe("#resolveValue", function () {
-                it("resolves pure", function () {
-                    var expr = "'string'", token = new tokenizer_1.StringToken(expr), res = token.resolveValue({});
-                    expect(res).toBe("string");
-                });
-                // string has no effect for negated
-            });
-        });
-        describe("BooleanToken", function () {
-            describe(".valid", function () {
-                it("recognizes true", function () {
-                    var expr = "true";
-                    expect(tokenizer_1.BooleanToken.valid(expr)).toBe(true);
-                });
-                it("recognizes false", function () {
-                    var expr = "false";
-                    expect(tokenizer_1.BooleanToken.valid(expr)).toBe(true);
-                });
-                it("rejects not-a-boolean", function () {
-                    var expr = "100";
-                    expect(tokenizer_1.BooleanToken.valid(expr)).toBe(false);
-                });
-            });
-            describe("#resolveValue", function () {
-                it("resolves pure", function () {
-                    var expr = "true", token = new tokenizer_1.BooleanToken(expr), res = token.resolveValue({});
-                    expect(res).toBe(true);
-                });
-                it("resolves negated", function () {
-                    var expr = "true", token = new tokenizer_1.BooleanToken(expr, true), res = token.resolveValue({});
-                    expect(res).toBe(false);
-                });
-            });
-        });
-        describe("NumberToken", function () {
-            describe(".valid", function () {
-                it("recognizes 100", function () {
-                    var expr = "100";
-                    expect(tokenizer_1.NumberToken.valid(expr)).toBe(true);
-                });
-                it("recognizes 001", function () {
-                    var expr = "001";
-                    expect(tokenizer_1.NumberToken.valid(expr)).toBe(true);
-                });
-                it("rejects NaN", function () {
-                    var expr = "var";
-                    expect(tokenizer_1.NumberToken.valid(expr)).toBe(false);
-                });
-                it("rejects var100", function () {
-                    var expr = "var100";
-                    expect(tokenizer_1.NumberToken.valid(expr)).toBe(false);
-                });
-            });
-            describe("#resolveValue", function () {
-                it("resolves pure", function () {
-                    var expr = "100", token = new tokenizer_1.NumberToken(expr), res = token.resolveValue({});
-                    expect(res).toBe(100);
-                });
-                it("resolves negated", function () {
-                    var expr = "1", token = new tokenizer_1.NumberToken(expr, true), res = token.resolveValue({});
-                    expect(Boolean(res)).toBe(false);
-                });
-            });
-        });
-        describe("OperatorToken", function () {
-            describe(".valid", function () {
-                it("recognizes +", function () {
-                    var valid = ["+", "-", "<", ">", "===", "==", "!==", "!=", "&&", "||"];
-                    valid.forEach(function (expr) {
-                        expect(tokenizer_1.OperatorToken.valid(expr)).toBe(true);
-                    });
-                });
-                it("rejects not-a-boolean", function () {
-                    var expr = "nope";
-                    expect(tokenizer_1.OperatorToken.valid(expr)).toBe(false);
-                });
-            });
-        });
-        describe("ReferenceToken", function () {
-            describe(".valid", function () {
-                it("recognizes foo", function () {
-                    var expr = "foo";
-                    expect(tokenizer_1.ReferenceToken.valid(expr)).toBe(true);
-                });
-                it("recognizes foo.bar.baz", function () {
-                    var expr = "foo.bar.baz";
-                    expect(tokenizer_1.ReferenceToken.valid(expr)).toBe(true);
-                });
-                it("rejects not-a-ref", function () {
-                    var expr = "100";
-                    expect(tokenizer_1.ReferenceToken.valid(expr)).toBe(false);
-                });
-                it("rejects any in context of this", function () {
-                    var expr = "this.foo";
-                    expect(tokenizer_1.ReferenceToken.valid(expr)).toBe(false);
-                });
-            });
-            describe(".findValue", function () {
-                it("finds value in nested object by a specified path e.g. foo.bar.baz.quiz", function () {
-                    var data = {
-                        foo: {
-                            bar: {
-                                baz: {
-                                    quiz: "quiz"
-                                }
-                            }
-                        }
-                    }, val = tokenizer_1.ReferenceToken.findValue("foo.bar.baz.quiz", data);
-                    expect(val).toBe("quiz");
-                });
-            });
-            describe("#resolveValue", function () {
-                it("resolves pure foo", function () {
-                    var expr = "foo", token = new tokenizer_1.ReferenceToken(expr), res = token.resolveValue({ foo: true });
-                    expect(res).toBe(true);
-                });
-                it("resolves pure foo.bar", function () {
-                    var expr = "foo.bar", token = new tokenizer_1.ReferenceToken(expr), res = token.resolveValue({ foo: { bar: true } });
-                    expect(res).toBe(true);
-                });
-                it("resolves negated", function () {
-                    var expr = "foo", token = new tokenizer_1.ReferenceToken(expr, true), res = token.resolveValue({ foo: true });
-                    expect(res).toBe(false);
-                });
-            });
-        });
-    });
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = TokenizerSpec;
-
-  module.exports = exports;
 
 
   return module;
@@ -390,6 +149,7 @@ function ExpressionSpec() {
             it("evaluates fn({ foo: true }) => true", function () {
                 var fn = expression_1.compile("foo", "Boolean", this.reporter);
                 expect(fn({ foo: true })).toBe(true);
+                console.log(this.reporter.get("tokens"));
             });
             it("evaluates fn({ foo: false }) => false", function () {
                 var fn = expression_1.compile("foo", "Boolean", this.reporter);
@@ -408,250 +168,6 @@ function ExpressionSpec() {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ExpressionSpec;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ng-template/expression/parser.js", function( _require, exports, module, global ){
-"use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var tokenizer_1 = _require( "tests/build/src/ng-template/expression/tokenizer.js" );
-var ParserException = (function (_super) {
-    __extends(ParserException, _super);
-    function ParserException(message) {
-        _super.call(this, message);
-        this.name = "NgTemplateParserException",
-            this.message = message;
-    }
-    return ParserException;
-}(Error));
-exports.ParserException = ParserException;
-var Parser = (function () {
-    function Parser() {
-    }
-    Parser.split = function (expr) {
-        var re = /(\+|\-|\<|\>|===|==|\!==|\!=|\&\&|\|\|)/;
-        return expr
-            .split(re)
-            .map(function (i) { return i.trim(); })
-            .filter(function (i) { return Boolean(i); });
-    };
-    Parser.parse = function (expr) {
-        var reQuote = /[\'\"]/i;
-        // If it has a string, too risky to parse for composite
-        if (reQuote.test(expr)) {
-            var token = tokenizer_1.tokenizer(expr);
-            return token instanceof tokenizer_1.InvalidToken ? [] : [token];
-        }
-        var com = Parser.split(expr);
-        // case 3: foo + bar
-        // case 1: foo (no operators found)
-        if (com.length !== 3 && com.length !== 1) {
-            return [];
-        }
-        return com.map(function (i) { return tokenizer_1.tokenizer(i); });
-    };
-    return Parser;
-}());
-exports.Parser = Parser;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ng-template/reporter.js", function( _require, exports, module, global ){
-"use strict";
-var Reporter = (function () {
-    function Reporter() {
-        this.data = {
-            errors: [],
-            tokens: []
-        };
-    }
-    Reporter.prototype.addError = function (msg) {
-        this.data.errors.push(msg);
-    };
-    Reporter.prototype.addTokens = function (tokens) {
-        var merge = tokens.map(function (token) { return token.toJSON(); });
-        this.data.tokens = this.data.tokens.concat(merge);
-    };
-    Reporter.prototype.get = function () {
-        return this.data;
-    };
-    return Reporter;
-}());
-exports.Reporter = Reporter;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ng-template/expression/tokenizer.js", function( _require, exports, module, global ){
-"use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var exception_1 = _require( "tests/build/src/ng-template/exception.js" );
-var Token = (function () {
-    function Token(value, negation) {
-        if (negation === void 0) { negation = false; }
-        this.value = value;
-        this.negation = negation;
-        this.name = "Token";
-    }
-    Token.prototype.resolveValue = function (data) {
-    };
-    Token.prototype.toJSON = function () {
-        return {
-            "type": this.name,
-            "value": this.value,
-            "negation": this.negation
-        };
-    };
-    return Token;
-}());
-exports.Token = Token;
-var InvalidToken = (function (_super) {
-    __extends(InvalidToken, _super);
-    function InvalidToken() {
-        _super.apply(this, arguments);
-        this.name = "InvalidToken";
-    }
-    return InvalidToken;
-}(Token));
-exports.InvalidToken = InvalidToken;
-var OperatorToken = (function (_super) {
-    __extends(OperatorToken, _super);
-    function OperatorToken() {
-        _super.apply(this, arguments);
-        this.name = "OperatorToken";
-    }
-    OperatorToken.valid = function (value) {
-        var re = /^(\+|\-|\<|\>|===|==|\!==|\!=|\&\&|\|\|)$/;
-        return re.test(value);
-    };
-    return OperatorToken;
-}(Token));
-exports.OperatorToken = OperatorToken;
-var StringToken = (function (_super) {
-    __extends(StringToken, _super);
-    function StringToken() {
-        _super.apply(this, arguments);
-        this.name = "StringToken";
-    }
-    StringToken.valid = function (value) {
-        var single = /^\'[^\']+\'$/i, double = /^\"[^\"]+\"$/i;
-        return single.test(value) || double.test(value);
-    };
-    StringToken.prototype.resolveValue = function (data) {
-        var val = this.value;
-        return val.substr(1, val.length - 2);
-    };
-    return StringToken;
-}(Token));
-exports.StringToken = StringToken;
-var NumberToken = (function (_super) {
-    __extends(NumberToken, _super);
-    function NumberToken() {
-        _super.apply(this, arguments);
-        this.name = "NumberToken";
-    }
-    NumberToken.valid = function (value) {
-        var re = /^\d+$/;
-        return re.test(value);
-    };
-    NumberToken.prototype.resolveValue = function (data) {
-        var val = Number(this.value);
-        return this.negation ? !val : val;
-    };
-    return NumberToken;
-}(Token));
-exports.NumberToken = NumberToken;
-var BooleanToken = (function (_super) {
-    __extends(BooleanToken, _super);
-    function BooleanToken() {
-        _super.apply(this, arguments);
-        this.name = "BooleanToken";
-    }
-    BooleanToken.valid = function (value) {
-        var re = /^(true|false)$/i;
-        return re.test(value);
-    };
-    BooleanToken.prototype.resolveValue = function (data) {
-        var val = this.value.toUpperCase() === "TRUE";
-        return this.negation ? !val : val;
-    };
-    return BooleanToken;
-}(Token));
-exports.BooleanToken = BooleanToken;
-var ReferenceToken = (function (_super) {
-    __extends(ReferenceToken, _super);
-    function ReferenceToken() {
-        _super.apply(this, arguments);
-        this.name = "ReferenceToken";
-    }
-    ReferenceToken.valid = function (value) {
-        var re = /^[a-zA-Z_\$][a-zA-Z0-9\._\$]+$/;
-        return value.substr(0, 5) !== "this." && re.test(value);
-    };
-    ReferenceToken.findValue = function (path, data) {
-        var value = data;
-        path.split("\.").forEach(function (key) {
-            if (typeof value !== "object") {
-                throw new exception_1.Exception("'" + path + "' is undefined");
-            }
-            if (!(key in value)) {
-                throw new exception_1.Exception("'" + path + "' is undefined");
-            }
-            value = value[key];
-        });
-        return value;
-    };
-    ReferenceToken.prototype.resolveValue = function (data) {
-        var val = ReferenceToken.findValue(this.value, data);
-        return this.negation ? !val : val;
-    };
-    return ReferenceToken;
-}(Token));
-exports.ReferenceToken = ReferenceToken;
-/**
- * Removes leading negotiation
- */
-function removeNegotiation(value) {
-    var re = /^\!\s*/;
-    return value.replace(re, "");
-}
-function tokenizer(rawValue) {
-    var value = removeNegotiation(rawValue), negation = rawValue !== value;
-    switch (true) {
-        case ReferenceToken.valid(value):
-            return new ReferenceToken(value, negation);
-        case StringToken.valid(value):
-            return new StringToken(value, negation);
-        case OperatorToken.valid(value):
-            return new OperatorToken(value, negation);
-        case NumberToken.valid(value):
-            return new NumberToken(value, negation);
-        case BooleanToken.valid(value):
-            return new BooleanToken(value, negation);
-        default:
-            return new InvalidToken(value, negation);
-    }
-}
-exports.tokenizer = tokenizer;
 
   module.exports = exports;
 
@@ -819,6 +335,35 @@ exports.compile = compile;
   return module;
 });
 
+_require.def( "tests/build/src/ng-template/reporter.js", function( _require, exports, module, global ){
+"use strict";
+var Reporter = (function () {
+    function Reporter() {
+        this.data = {
+            errors: [],
+            tokens: []
+        };
+    }
+    Reporter.prototype.addError = function (msg) {
+        this.data.errors.push(msg);
+    };
+    Reporter.prototype.addTokens = function (tokens) {
+        var merge = tokens.map(function (token) { return token.toJSON(); });
+        this.data.tokens = this.data.tokens.concat(merge);
+    };
+    Reporter.prototype.get = function (key) {
+        return key ? this.data[key] : this.data;
+    };
+    return Reporter;
+}());
+exports.Reporter = Reporter;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
 _require.def( "tests/build/src/ng-template/exception.js", function( _require, exports, module, global ){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
@@ -840,6 +385,225 @@ var Exception = (function (_super) {
     return Exception;
 }(Error));
 exports.Exception = Exception;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/src/ng-template/expression/parser.js", function( _require, exports, module, global ){
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var tokenizer_1 = _require( "tests/build/src/ng-template/expression/tokenizer.js" );
+var ParserException = (function (_super) {
+    __extends(ParserException, _super);
+    function ParserException(message) {
+        _super.call(this, message);
+        this.name = "NgTemplateParserException",
+            this.message = message;
+    }
+    return ParserException;
+}(Error));
+exports.ParserException = ParserException;
+var Parser = (function () {
+    function Parser() {
+    }
+    Parser.split = function (expr) {
+        var re = /(\+|\-|\<|\>|===|==|\!==|\!=|\&\&|\|\|)/;
+        return expr
+            .split(re)
+            .map(function (i) { return i.trim(); })
+            .filter(function (i) { return Boolean(i); });
+    };
+    Parser.parse = function (expr) {
+        // if the whole expr is a string
+        if (tokenizer_1.StringToken.valid(expr)) {
+            var token = tokenizer_1.tokenizer(expr.trim());
+            return [token];
+        }
+        var com = Parser.split(expr);
+        // case 3: foo + bar
+        // case 1: foo (no operators found)
+        if (com.length !== 3 && com.length !== 1) {
+            return [];
+        }
+        var tokens = com.map(function (i) { return tokenizer_1.tokenizer(i); });
+        // any of tokens is invalid
+        if (tokens.find(function (i) { return i instanceof tokenizer_1.InvalidToken; })) {
+            return [];
+        }
+        return tokens;
+    };
+    return Parser;
+}());
+exports.Parser = Parser;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/src/ng-template/expression/tokenizer.js", function( _require, exports, module, global ){
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var exception_1 = _require( "tests/build/src/ng-template/exception.js" );
+var Token = (function () {
+    function Token(value, negation) {
+        if (negation === void 0) { negation = false; }
+        this.value = value;
+        this.negation = negation;
+        this.name = "Token";
+    }
+    Token.prototype.resolveValue = function (data) {
+    };
+    Token.prototype.toJSON = function () {
+        return {
+            "type": this.name,
+            "value": this.value,
+            "negation": this.negation
+        };
+    };
+    return Token;
+}());
+exports.Token = Token;
+var InvalidToken = (function (_super) {
+    __extends(InvalidToken, _super);
+    function InvalidToken() {
+        _super.apply(this, arguments);
+        this.name = "InvalidToken";
+    }
+    return InvalidToken;
+}(Token));
+exports.InvalidToken = InvalidToken;
+var OperatorToken = (function (_super) {
+    __extends(OperatorToken, _super);
+    function OperatorToken() {
+        _super.apply(this, arguments);
+        this.name = "OperatorToken";
+    }
+    OperatorToken.valid = function (value) {
+        var re = /^(\+|\-|\<|\>|===|==|\!==|\!=|\&\&|\|\|)$/;
+        return re.test(value);
+    };
+    return OperatorToken;
+}(Token));
+exports.OperatorToken = OperatorToken;
+var StringToken = (function (_super) {
+    __extends(StringToken, _super);
+    function StringToken() {
+        _super.apply(this, arguments);
+        this.name = "StringToken";
+    }
+    StringToken.valid = function (value) {
+        var single = /^\'[^\']+\'$/i, double = /^\"[^\"]+\"$/i;
+        return single.test(value) || double.test(value);
+    };
+    StringToken.prototype.resolveValue = function (data) {
+        var val = this.value;
+        return val.substr(1, val.length - 2);
+    };
+    return StringToken;
+}(Token));
+exports.StringToken = StringToken;
+var NumberToken = (function (_super) {
+    __extends(NumberToken, _super);
+    function NumberToken() {
+        _super.apply(this, arguments);
+        this.name = "NumberToken";
+    }
+    NumberToken.valid = function (value) {
+        var re = /^\d+$/;
+        return re.test(value);
+    };
+    NumberToken.prototype.resolveValue = function (data) {
+        var val = Number(this.value);
+        return this.negation ? !val : val;
+    };
+    return NumberToken;
+}(Token));
+exports.NumberToken = NumberToken;
+var BooleanToken = (function (_super) {
+    __extends(BooleanToken, _super);
+    function BooleanToken() {
+        _super.apply(this, arguments);
+        this.name = "BooleanToken";
+    }
+    BooleanToken.valid = function (value) {
+        var re = /^(true|false)$/i;
+        return re.test(value);
+    };
+    BooleanToken.prototype.resolveValue = function (data) {
+        var val = this.value.toUpperCase() === "TRUE";
+        return this.negation ? !val : val;
+    };
+    return BooleanToken;
+}(Token));
+exports.BooleanToken = BooleanToken;
+var ReferenceToken = (function (_super) {
+    __extends(ReferenceToken, _super);
+    function ReferenceToken() {
+        _super.apply(this, arguments);
+        this.name = "ReferenceToken";
+    }
+    ReferenceToken.valid = function (value) {
+        var re = /^[a-zA-Z_\$][a-zA-Z0-9\._\$]+$/;
+        return value.substr(0, 5) !== "this." && re.test(value);
+    };
+    ReferenceToken.findValue = function (path, data) {
+        var value = data;
+        path.split("\.").forEach(function (key) {
+            if (typeof value !== "object") {
+                throw new exception_1.Exception("'" + path + "' is undefined");
+            }
+            if (!(key in value)) {
+                throw new exception_1.Exception("'" + path + "' is undefined");
+            }
+            value = value[key];
+        });
+        return value;
+    };
+    ReferenceToken.prototype.resolveValue = function (data) {
+        var val = ReferenceToken.findValue(this.value, data);
+        return this.negation ? !val : val;
+    };
+    return ReferenceToken;
+}(Token));
+exports.ReferenceToken = ReferenceToken;
+/**
+ * Removes leading negotiation
+ */
+function removeNegotiation(value) {
+    var re = /^\!\s*/;
+    return value.replace(re, "");
+}
+function tokenizer(rawValue) {
+    var value = removeNegotiation(rawValue), negation = rawValue !== value;
+    switch (true) {
+        case OperatorToken.valid(value):
+            return new OperatorToken(value, negation);
+        case StringToken.valid(value):
+            return new StringToken(value, negation);
+        case NumberToken.valid(value):
+            return new NumberToken(value, negation);
+        case BooleanToken.valid(value):
+            return new BooleanToken(value, negation);
+        case ReferenceToken.valid(value):
+            return new ReferenceToken(value, negation);
+        default:
+            return new InvalidToken(value, negation);
+    }
+}
+exports.tokenizer = tokenizer;
 
   module.exports = exports;
 

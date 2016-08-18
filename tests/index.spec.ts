@@ -9,8 +9,9 @@ import NgTemplateSpec from "./spec/ngtemplate.spec";
 
 
 
-ParserSpec();
-TokenizerSpec();
+
+//TokenizerSpec();
+//ParserSpec();
 ExpressionSpec();
 //CacheSpec();
 //AbstractDirectiveSpec();

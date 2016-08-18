@@ -1,9 +1,7 @@
 "use strict";
-var parser_spec_1 = require("./spec/expression/parser.spec");
-var tokenizer_spec_1 = require("./spec/expression/tokenizer.spec");
 var expression_spec_1 = require("./spec/expression.spec");
-parser_spec_1.default();
-tokenizer_spec_1.default();
+//ParserSpec();
+//TokenizerSpec();
 expression_spec_1.default();
 //CacheSpec();
 //AbstractDirectiveSpec();

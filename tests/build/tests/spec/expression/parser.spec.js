@@ -53,6 +53,20 @@ function ParserSpec() {
                 expect(res.shift() instanceof tokenizer_1.OperatorToken).toBe(true);
                 expect(res.shift() instanceof tokenizer_1.NumberToken).toBe(true);
             });
+            it("tokenizes simple expression with string", function () {
+                var expr = "foo + \"bar\"", res = parser_1.Parser.parse(expr);
+                expect(res.length).toBe(3);
+                expect(res.shift() instanceof tokenizer_1.ReferenceToken).toBe(true);
+                expect(res.shift() instanceof tokenizer_1.OperatorToken).toBe(true);
+                expect(res.shift() instanceof tokenizer_1.StringToken).toBe(true);
+            });
+            it("tokenizes simple expression with boolean", function () {
+                var expr = "foo && true", res = parser_1.Parser.parse(expr);
+                expect(res.length).toBe(3);
+                expect(res.shift() instanceof tokenizer_1.ReferenceToken).toBe(true);
+                expect(res.shift() instanceof tokenizer_1.OperatorToken).toBe(true);
+                expect(res.shift() instanceof tokenizer_1.BooleanToken).toBe(true);
+            });
             it("rejects 4+ members", function () {
                 var expr = 'foo + 100 + bar', res = parser_1.Parser.parse(expr);
                 expect(res.length).toBe(0);
@@ -60,6 +74,18 @@ function ParserSpec() {
             it("rejects 2 members", function () {
                 var expr = 'foo +', res = parser_1.Parser.parse(expr);
                 expect(res.length).toBe(0);
+            });
+            it("rejects with a string that contains expression", function () {
+                var expr = "foo + \"bar + baz\"", res = parser_1.Parser.parse(expr);
+                expect(res.length).toBe(0);
+            });
+            it("exists early on a string", function () {
+                var expr = "\"string\"", res = parser_1.Parser.parse(expr);
+                expect(res.shift() instanceof tokenizer_1.StringToken).toBe(true);
+            });
+            it("exists early on a spaced string", function () {
+                var expr = " \"string\" ", res = parser_1.Parser.parse(expr);
+                expect(res.shift() instanceof tokenizer_1.StringToken).toBe(true);
             });
         });
     });

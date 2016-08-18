@@ -13,8 +13,8 @@ var Reporter = (function () {
         var merge = tokens.map(function (token) { return token.toJSON(); });
         this.data.tokens = this.data.tokens.concat(merge);
     };
-    Reporter.prototype.get = function () {
-        return this.data;
+    Reporter.prototype.get = function (key) {
+        return key ? this.data[key] : this.data;
     };
     return Reporter;
 }());

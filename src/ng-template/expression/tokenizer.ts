@@ -108,16 +108,16 @@ export function tokenizer( rawValue: string ): Token {
       negation = rawValue !== value;
 
   switch( true ) {
-    case ReferenceToken.valid( value ):
-      return new ReferenceToken( value, negation );
-    case StringToken.valid( value ):
-      return new StringToken( value, negation );
     case OperatorToken.valid( value ):
       return new OperatorToken( value, negation );
+    case StringToken.valid( value ):
+      return new StringToken( value, negation );
     case NumberToken.valid( value ):
       return new NumberToken( value, negation );
     case BooleanToken.valid( value ):
       return new BooleanToken( value, negation );
+    case ReferenceToken.valid( value ):
+      return new ReferenceToken( value, negation );
     default:
       return new InvalidToken( value, negation );
   }
