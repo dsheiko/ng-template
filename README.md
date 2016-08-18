@@ -22,6 +22,7 @@ according to the directives and actual state.
 * Performance: `NgTemplate` modifies DOM nodes by state diff; it touches the DOM only when it's necessary
 * Easy to catch up: Familiar for Angular folks directives such as `data-ng-if`, `data-ng-switch`, `data-ng-for` and a few extra intuitive e.g. `data-ng-text`, `data-ng-class`
 * Really small library: minimized gziped [size is 4K](https://raw.githubusercontent.com/dsheiko/ng-template/master/dist/ngtemplate.glob.min.js)
+* Definitely Typed: IDE checks on the fly if you violate any of declared interfaces (if not the compiler does)
 
 ## How does it work?
 
