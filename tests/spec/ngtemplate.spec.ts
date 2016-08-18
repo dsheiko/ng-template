@@ -16,7 +16,7 @@ export default function NgTemplateSpec(){
   describe("NgTemplate", function(){
 
     NgIfSpec.call( this );
-
+    
     NgElSpec.call( this );
 
     NgClassSpec.call( this );

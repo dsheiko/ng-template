@@ -16,6 +16,9 @@ var Reporter = (function () {
     Reporter.prototype.get = function (key) {
         return key ? this.data[key] : this.data;
     };
+    Reporter.prototype.isParsed = function () {
+        return this.data.tokens.length > 0;
+    };
     return Reporter;
 }());
 exports.Reporter = Reporter;

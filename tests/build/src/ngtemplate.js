@@ -55,7 +55,7 @@ var NgTemplate = (function () {
     };
     NgTemplate.prototype.pipe = function (cb, context) {
         if (context === void 0) { context = this; }
-        cb.call(context, this.el);
+        cb.call(context, this.el, this.reporter);
         return this;
     };
     return NgTemplate;

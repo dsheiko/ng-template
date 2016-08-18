@@ -7,10 +7,10 @@ var tokenizer_1 = require("./expression/tokenizer");
  */
 function reduceComposite(tokens, data) {
     if (tokens.length === 1) {
-        var token = tokens.shift();
+        var token = tokens[0];
         return token.resolveValue(data);
     }
-    var left = tokens.shift(), leftVal = left.resolveValue(data), operator = tokens.shift(), right = tokens.shift(), rightVal = right.resolveValue(data);
+    var left = tokens[0], leftVal = left.resolveValue(data), operator = tokens[1], right = tokens[2], rightVal = right.resolveValue(data);
     if (!(operator instanceof tokenizer_1.OperatorToken)) {
         throw new SyntaxError("Invalid operator " + operator.value + " in ng* expression");
     }
@@ -55,6 +55,7 @@ function wrap(value, wrapper) {
  */
 function treatException(err, expr, reporter) {
     if (!(err instanceof exception_1.Exception)) {
+        console.log(err);
         throw new SyntaxError("Invalid ng* expression " + expr);
     }
     reporter.addError(err.message);
@@ -147,6 +148,6 @@ function compile(expr, wrapper, reporter) {
             throw SyntaxError(err.message);
         }
     }
-    fallbackStrategy(expr, wrapper, reporter);
+    return fallbackStrategy.call(this, expr, wrapper, reporter);
 }
 exports.compile = compile;

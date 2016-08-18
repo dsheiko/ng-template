@@ -21,6 +21,7 @@ according to the directives and actual state.
 * Concern separation: Presentation state logic decoupled from the view
 * Performance: `NgTemplate` modifies DOM nodes by state diff; it touches the DOM only when it's necessary
 * Easy to catch up: Familiar for Angular folks directives such as `data-ng-if`, `data-ng-switch`, `data-ng-for` and a few extra intuitive e.g. `data-ng-text`, `data-ng-class`
+* Really small library: minimized gziped [size is 4K](https://raw.githubusercontent.com/dsheiko/ng-template/master/dist/ngtemplate.glob.min.js)
 
 # How does it work?
 
@@ -124,8 +125,10 @@ var template = new NgTemplate( node );
 
 ```javascript
 import { NgTemplate } from "ng-template";
-let template = new NgTemplate( el, tpl );
-template.sync( scope );
+let template = new NgTemplate( el, tpl ); // compile template
+template.sync( scope ); // render on the first run and after synchronize it with the scope
+// optional
+console.log( template.report() ); // find the synchronization details
 ```
 
 where:
@@ -196,8 +199,8 @@ it can bind to the following scope
 ```
 
 > :exclamation: NOTE: In order to gain better performance keep to primitive expressions especially in cyclic directives e.g. `data-ng-text="foo.bar.baz"`,
-> `data-ng-text="!foo.bar.baz"`, `data-ng-text="'string here'"`, `data-ng-text="foo.bar.baz"`, `data-ng-text="1000"`
-> `data-ng-if="true"`, `data-ng-prop="'disabled', false"`, `data-ng-data="'someCustomKey', bar.baz"`
+> `data-ng-text="!foo.bar.baz"`, `data-ng-text="'string here'"`, `data-ng-if="foo.bar > baz.quiz"`, `data-ng-text="foo + 10`,
+> `data-ng-if="true"`, `data-ng-prop="'disabled', true || false"`, `data-ng-data="foo || bar, baz"`
 > Such expressions are being evaluated without use of `eval()` and therefore the process takes much less time and resources
 
 ## NgTemplate Report

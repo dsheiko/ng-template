@@ -6,9 +6,10 @@ declare namespace NgTemplate {
   }
 
   interface Reporter {
+    get( key?: string ): NgTemplate.Report;
     addError( msg: string ): void;
-    get(): NgTemplate.Report;
     addTokens( tokens: NgTemplate.Token[] ): void;
+    isParsed(): boolean;
   }
 
   interface Token {

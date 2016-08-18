@@ -60,7 +60,7 @@ export class NgTemplate {
   }
 
   pipe( cb: Function, context: Object = this ): NgTemplate {
-    cb.call( context, this.el );
+    cb.call( context, this.el, this.reporter );
     return this;
   }
 }

@@ -10,10 +10,11 @@ export default function NgElSpec(){
       it( "evaluates expression on element (string literal)", function() {
         NgTemplate
           .factory( this.el, "<span data-ng-el=\"this.innerHTML='New value'\">Pristine</span>" )
-          .sync({});
-
-        expect( this.el.innerHTML ).not.toMatch( "Pristine" );
-        expect( this.el.innerHTML ).toMatch( "New value" );
+          .sync({})
+          .pipe(( el: HTMLElement, reporter: NgTemplate.Reporter ) => {
+              expect( el.innerHTML ).not.toMatch( "Pristine" );
+              expect( el.innerHTML ).toMatch( "New value" );
+           });
       });
       it( "evaluates expression on element (tpl variable)", function() {
         NgTemplate

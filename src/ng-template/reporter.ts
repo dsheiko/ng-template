@@ -16,4 +16,7 @@ export class Reporter {
   get( key?: string ): NgTemplate.Report {
     return key ? this.data[ key ] : this.data;
   }
+  isParsed(): boolean {
+    return this.data.tokens.length > 0;
+  }
 }

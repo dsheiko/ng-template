@@ -8,13 +8,13 @@ import { Token, OperatorToken } from "./expression/tokenizer";
  */
 function reduceComposite( tokens: Token[], data: any ){
   if ( tokens.length === 1 ) {
-    let token: Token = tokens.shift();
+    let token: Token = tokens[ 0 ];
     return token.resolveValue( data );
   }
-  let left: Token = tokens.shift(),
+  let left: Token = tokens[ 0 ],
       leftVal = left.resolveValue( data ),
-      operator: Token = tokens.shift(),
-      right: Token = tokens.shift(),
+      operator: Token = tokens[ 1 ],
+      right: Token = tokens[ 2 ],
       rightVal = right.resolveValue( data );
 
       if ( !( operator instanceof OperatorToken ) ) {
@@ -64,6 +64,7 @@ function wrap( value: any, wrapper: string ): any {
  */
 function treatException( err: Error, expr: string, reporter: NgTemplate.Reporter ){
   if ( !( err instanceof Exception ) ) {
+    console.log(err);
     throw new SyntaxError( `Invalid ng* expression ${expr}` );
   }
   reporter.addError( ( <Exception> err ).message );
@@ -159,7 +160,7 @@ export function compile( expr: string, wrapper: string = "", reporter: NgTemplat
       throw SyntaxError( (<Error>err).message );
     }
   }
-  fallbackStrategy( expr, wrapper, reporter );
+  return fallbackStrategy.call( this, expr, wrapper, reporter );
 }
 
 

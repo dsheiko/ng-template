@@ -108,8 +108,8 @@ export function tokenizer( rawValue: string ): Token {
       negation = rawValue !== value;
 
   switch( true ) {
-    case OperatorToken.valid( value ):
-      return new OperatorToken( value, negation );
+    case OperatorToken.valid( rawValue ):
+      return new OperatorToken( rawValue, false );
     case StringToken.valid( value ):
       return new StringToken( value, negation );
     case NumberToken.valid( value ):

@@ -7,13 +7,10 @@ import NgForDirectiveSpec from "./spec/ngfor.spec";
 import ExpressionSpec from "./spec/expression.spec";
 import NgTemplateSpec from "./spec/ngtemplate.spec";
 
-
-
-
-//TokenizerSpec();
-//ParserSpec();
+TokenizerSpec();
+ParserSpec();
 ExpressionSpec();
-//CacheSpec();
-//AbstractDirectiveSpec();
-//NgForDirectiveSpec();
-//NgTemplateSpec();
+CacheSpec();
+AbstractDirectiveSpec();
+NgForDirectiveSpec();
+NgTemplateSpec();
