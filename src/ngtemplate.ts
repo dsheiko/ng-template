@@ -42,7 +42,7 @@ export class NgTemplate {
     });
   }
 
-  report(){
+  report(): any {
     return this.reporter.get();
   }
 
