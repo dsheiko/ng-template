@@ -25,11 +25,12 @@
     }
   ],
   "keywords": [
-    "Template",
-    "Engine",
-    "ES6",
-    "ES2015",
-    "TypeScript"
+    "template",
+    "engine",
+    "TypeScript",
+    "language",
+    "DOM",
+    "JavaScript"
   ],
   "repository": {
     "type": "git",
