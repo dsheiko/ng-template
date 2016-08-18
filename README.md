@@ -52,8 +52,8 @@ Templates are written with HTML that contains `NgTemplate`-specific data attribu
 `NgTemplate` synchronizes the template with the passed state. Let's say we have the template HTML within a DOM element,
 so we initialize the template like `let template = new NgTemplate( el );`. Alternatively we can populate
 the bounding element with the template from the passed string: `let template = new NgTemplate( el, '<i data-ng-if="foo">Hello!</i>' );`
-<p>As soon as we have `template` object we can sync it to a specified scope. E.g. `template.sync({ foo: true });` makes
-variable `foo` available for template expressions, `template.sync({ foo: { bar: true }});` gets accessable as `foo.bar`</p>
+<br /><br />As soon as we have `template` object we can sync it to a specified scope. E.g. `template.sync({ foo: true });` makes
+variable `foo` available for template expressions, `template.sync({ foo: { bar: true }});` gets accessable as `foo.bar`
 
 ```javascript
 import { NgTemplate } from "ng-template";
