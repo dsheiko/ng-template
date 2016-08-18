@@ -34,7 +34,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:dsheiko/ngtemplate.git"
+    "url": "git@github.com:dsheiko/ng-template.git"
   },
   "testling": {
     "html": "tests/index.html",
