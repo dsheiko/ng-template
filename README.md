@@ -23,7 +23,7 @@ according to the directives and actual state.
 * Easy to catch up: Familiar for Angular folks directives such as `data-ng-if`, `data-ng-switch`, `data-ng-for` and a few extra intuitive e.g. `data-ng-text`, `data-ng-class`
 * Really small library: minimized gziped [size is 4K](https://raw.githubusercontent.com/dsheiko/ng-template/master/dist/ngtemplate.glob.min.js)
 
-# How does it work?
+## How does it work?
 
 Templates are written with HTML that contains `NgTemplate`-specific data attributes (`data-ng-*`):
 
@@ -151,51 +151,26 @@ NgTemplate.factory( el, tpl )
 
 ## Template expressions
 
-Template expressions are being evaluated in the given `scope`. So we can reference scope variables:
-```
-data-ng-if="foo"
-```
-it can bind to the following scope
-```
-{ foo: true }
+Template expressions are being evaluated in the given `scope`. So we can reference scope variables within template e.g.
+`data-ng-if="foo"` refers to `foo` variable of the scope and therefore:
+
+```javascript
+template.sync({ foo: true }); // show element
+template.sync({ foo: false }); // hide element
 ```
 
-That includes structures:
-```
-data-ng-if="foo.bar"
-```
-it can bind to the following scope
-```
-{
-  foo: {
-    bar: true
-  }
-}
+We access scope objects the same way we do it in JavaScript e.g. `data-ng-if="foo.bar"` refers to `foo.bar` and can be toggled like this:
+```javascript
+template.sync({ foo: { bar: true } }); // show element
 ```
 
-We can refer multiple scope variables:
+Expressions may have mixed scope variables and primitives:
 ```
-data-ng-if="(foo && bar)"
-```
-it can bind to the following scope
-```
-{ foo: true, bar: true }
+data-ng-if="foo && bar.baz || false"
+data-ng-if="foo + 10  > 20"
 ```
 
-Expressions are also evaluated in the context of the target element, so we can access the element with `this`:
-```
-data-ng-if="(foo && this.checked)"
-```
-it can bind to the following scope
-```
-{ foo: true }
-```
-
-We can pass rendering helpers (e.g. transformers) with the scope:
-```
-data-ng-if="decorator(foo)"
-```
-it can bind to the following scope
+We can pass rendering helpers (e.g. transformers) with the scope. For example we pass `decorator` to the directive `data-ng-if="decorator(foo)"` this way:
 ```
 {
   foo: "foo",
@@ -408,7 +383,7 @@ console.log( document.body.innerHTML ); // <i>BAZ</i>
 
 We use `NgEl` to modify element properties
 
-> NOTE: Using `NgEl` is rather discouraging as it cannot be cached and every model sync will
+> :exclamation: NOTE: Using `NgEl` is rather discouraging as it cannot be cached and every model sync will
 cause the DOM modification even if the expression of `NgEl` wasn't changed
 
 #### Syntax
