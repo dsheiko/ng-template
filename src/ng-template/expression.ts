@@ -33,11 +33,11 @@ function reduceComposite( tokens: Token[], data: any ){
         case "===":
           return leftVal === rightVal;
         case "==":
-          return leftVal == rightVal;
+          return leftVal === rightVal;
         case "!==":
           return leftVal !== rightVal;
         case "!=":
-          return leftVal != rightVal;
+          return leftVal !== rightVal;
         case "&&":
           return leftVal && rightVal;
         case "||":
@@ -49,7 +49,7 @@ function reduceComposite( tokens: Token[], data: any ){
  * Wrap as requested by the consumer object
  */
 function wrap( value: any, wrapper: string ): any {
-  switch( wrapper ) {
+  switch ( wrapper ) {
     case "String":
       return String( value );
     case "Boolean":
@@ -97,7 +97,7 @@ export function tryGroupStrategy( expr: string, reporter: NgTemplate.Reporter ):
       treatException( err, expr, reporter );
       return [ "", "" ];
     }
-  }
+  };
 }
 
 /**
@@ -117,7 +117,7 @@ export function tryOptimalStrategy( expr: string, wrapper: string = "", reporter
       treatException( err, expr, reporter );
       return "";
     }
-  }
+  };
 }
 /**
  * Create evaluation function for any expression by using eval

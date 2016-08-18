@@ -1432,11 +1432,11 @@ function reduceComposite(tokens, data) {
         case "===":
             return leftVal === rightVal;
         case "==":
-            return leftVal == rightVal;
+            return leftVal === rightVal;
         case "!==":
             return leftVal !== rightVal;
         case "!=":
-            return leftVal != rightVal;
+            return leftVal !== rightVal;
         case "&&":
             return leftVal && rightVal;
         case "||":
@@ -1716,6 +1716,39 @@ exports.default = NgPropSpec;
   return module;
 });
 
+_require.def( "tests/build/tests/spec/ng-template/ngdata.js", function( _require, exports, module, global ){
+"use strict";
+var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
+function NgDataSpec() {
+    describe("ng-data directive", function () {
+        beforeEach(function () {
+            this.el = document.createElement("div");
+        });
+        it("evaluates the expression", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<button data-ng-data=\"'someKey', value\"></button>")
+                .sync({ value: "foo" })
+                .pipe(function (el) {
+                var btn = el.querySelector("button");
+                expect(btn.dataset["someKey"]).toBe("foo");
+            })
+                .sync({ value: "bar" })
+                .pipe(function (el) {
+                var btn = el.querySelector("button");
+                expect(btn.dataset["someKey"]).toBe("bar");
+            });
+        });
+    });
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = NgDataSpec;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
 _require.def( "tests/build/tests/spec/ng-template/ngtext.js", function( _require, exports, module, global ){
 "use strict";
 var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
@@ -1741,93 +1774,6 @@ function NgElSpec() {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = NgElSpec;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/tests/spec/ng-template/ngswitch.js", function( _require, exports, module, global ){
-"use strict";
-var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
-function NgSwitchSpec() {
-    describe("ng-switch/data-ng-switch-case directives", function () {
-        beforeEach(function () {
-            this.el = document.createElement("div");
-        });
-        it("evaluates the statement", function () {
-            ngtemplate_1.NgTemplate
-                .factory(this.el, "<div data-ng-switch='theCase'>" +
-                "<i data-ng-switch-case='1'>FOO</i>" +
-                "<i data-ng-switch-case='2'>BAR</i>" +
-                "</div>")
-                .sync({ theCase: 1 })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<i>FOO</i>");
-            })
-                .sync({ theCase: 2 })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<i>BAR</i>");
-            });
-        });
-    });
-    describe("ng-switch-case-default directive", function () {
-        beforeEach(function () {
-            this.el = document.createElement("div");
-        });
-        it("evaluates the statement", function () {
-            ngtemplate_1.NgTemplate
-                .factory(this.el, "<div data-ng-switch='theCase'>" +
-                "<i data-ng-switch-case='1'>FOO</i>" +
-                "<i data-ng-switch-case='2'>BAR</i>" +
-                "<i data-ng-switch-case-default>DEFAULT</i>" +
-                "</div>")
-                .sync({ theCase: 1 })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<i>FOO</i>");
-            })
-                .sync({ theCase: 3 })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<i>DEFAULT</i>");
-            });
-        });
-    });
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = NgSwitchSpec;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/tests/spec/ng-template/transform.js", function( _require, exports, module, global ){
-"use strict";
-var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
-function TransformSpec() {
-    describe("transformers", function () {
-        beforeEach(function () {
-            this.el = document.createElement("div");
-        });
-        it("evaluates the statement", function () {
-            ngtemplate_1.NgTemplate
-                .factory(this.el, "<div data-ng-text='transform(raw)'></div>")
-                .sync({
-                raw: 100,
-                transform: function (num) {
-                    return num + "500";
-                }
-            })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<div>100500</div>");
-            });
-        });
-    });
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = TransformSpec;
 
   module.exports = exports;
 
@@ -1886,32 +1832,31 @@ exports.default = NgForSpec;
   return module;
 });
 
-_require.def( "tests/build/tests/spec/ng-template/ngdata.js", function( _require, exports, module, global ){
+_require.def( "tests/build/tests/spec/ng-template/transform.js", function( _require, exports, module, global ){
 "use strict";
 var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
-function NgDataSpec() {
-    describe("ng-data directive", function () {
+function TransformSpec() {
+    describe("transformers", function () {
         beforeEach(function () {
             this.el = document.createElement("div");
         });
-        it("evaluates the expression", function () {
+        it("evaluates the statement", function () {
             ngtemplate_1.NgTemplate
-                .factory(this.el, "<button data-ng-data=\"'someKey', value\"></button>")
-                .sync({ value: "foo" })
-                .pipe(function (el) {
-                var btn = el.querySelector("button");
-                expect(btn.dataset["someKey"]).toBe("foo");
+                .factory(this.el, "<div data-ng-text='transform(raw)'></div>")
+                .sync({
+                raw: 100,
+                transform: function (num) {
+                    return num + "500";
+                }
             })
-                .sync({ value: "bar" })
                 .pipe(function (el) {
-                var btn = el.querySelector("button");
-                expect(btn.dataset["someKey"]).toBe("bar");
+                expect(el.innerHTML).toBe("<div>100500</div>");
             });
         });
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = NgDataSpec;
+exports.default = TransformSpec;
 
   module.exports = exports;
 
@@ -1963,6 +1908,61 @@ function SmartEvalSpec() {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = SmartEvalSpec;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/tests/spec/ng-template/ngswitch.js", function( _require, exports, module, global ){
+"use strict";
+var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
+function NgSwitchSpec() {
+    describe("ng-switch/data-ng-switch-case directives", function () {
+        beforeEach(function () {
+            this.el = document.createElement("div");
+        });
+        it("evaluates the statement", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<div data-ng-switch='theCase'>" +
+                "<i data-ng-switch-case='1'>FOO</i>" +
+                "<i data-ng-switch-case='2'>BAR</i>" +
+                "</div>")
+                .sync({ theCase: 1 })
+                .pipe(function (el) {
+                expect(el.innerHTML).toBe("<i>FOO</i>");
+            })
+                .sync({ theCase: 2 })
+                .pipe(function (el) {
+                expect(el.innerHTML).toBe("<i>BAR</i>");
+            });
+        });
+    });
+    describe("ng-switch-case-default directive", function () {
+        beforeEach(function () {
+            this.el = document.createElement("div");
+        });
+        it("evaluates the statement", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<div data-ng-switch='theCase'>" +
+                "<i data-ng-switch-case='1'>FOO</i>" +
+                "<i data-ng-switch-case='2'>BAR</i>" +
+                "<i data-ng-switch-case-default>DEFAULT</i>" +
+                "</div>")
+                .sync({ theCase: 1 })
+                .pipe(function (el) {
+                expect(el.innerHTML).toBe("<i>FOO</i>");
+            })
+                .sync({ theCase: 3 })
+                .pipe(function (el) {
+                expect(el.innerHTML).toBe("<i>DEFAULT</i>");
+            });
+        });
+    });
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = NgSwitchSpec;
 
   module.exports = exports;
 
@@ -2134,6 +2134,48 @@ exports.NgText = NgText;
   return module;
 });
 
+_require.def( "tests/build/src/ng-template/ngswitch.js", function( _require, exports, module, global ){
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-directive.js" );
+/**
+ * <span data-ng-switch="exp"></span>
+ */
+var NgSwitch = (function (_super) {
+    __extends(NgSwitch, _super);
+    function NgSwitch(el, reporter) {
+        _super.call(this, el, reporter);
+        this.nodes = this.initNodes(el, "ng-switch", function (node, expr, compile, cache) {
+            return {
+                el: node,
+                exp: compile(expr, "", reporter),
+                cache: cache
+            };
+        });
+    }
+    NgSwitch.prototype.sync = function (data, Ctor) {
+        this.nodes.forEach(function (node) {
+            var tpl = new Ctor(node.el, node.outerHTML);
+            node.cache.evaluate(node.exp.call(node.el, data), function (val) {
+                data["$"] = val;
+                tpl.sync(data);
+            });
+        });
+    };
+    return NgSwitch;
+}(abstract_directive_1.AbstractDirective));
+exports.NgSwitch = NgSwitch;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
 _require.def( "tests/build/src/ng-template/ngswitchcase.js", function( _require, exports, module, global ){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
@@ -2253,48 +2295,6 @@ var NgClass = (function (_super) {
     return NgClass;
 }(abstract_directive_1.AbstractDirective));
 exports.NgClass = NgClass;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ng-template/ngswitch.js", function( _require, exports, module, global ){
-"use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-directive.js" );
-/**
- * <span data-ng-switch="exp"></span>
- */
-var NgSwitch = (function (_super) {
-    __extends(NgSwitch, _super);
-    function NgSwitch(el, reporter) {
-        _super.call(this, el, reporter);
-        this.nodes = this.initNodes(el, "ng-switch", function (node, expr, compile, cache) {
-            return {
-                el: node,
-                exp: compile(expr, "", reporter),
-                cache: cache
-            };
-        });
-    }
-    NgSwitch.prototype.sync = function (data, Ctor) {
-        this.nodes.forEach(function (node) {
-            var tpl = new Ctor(node.el, node.outerHTML);
-            node.cache.evaluate(node.exp.call(node.el, data), function (val) {
-                data["$"] = val;
-                tpl.sync(data);
-            });
-        });
-    };
-    return NgSwitch;
-}(abstract_directive_1.AbstractDirective));
-exports.NgSwitch = NgSwitch;
 
   module.exports = exports;
 

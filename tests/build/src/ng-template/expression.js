@@ -26,11 +26,11 @@ function reduceComposite(tokens, data) {
         case "===":
             return leftVal === rightVal;
         case "==":
-            return leftVal == rightVal;
+            return leftVal === rightVal;
         case "!==":
             return leftVal !== rightVal;
         case "!=":
-            return leftVal != rightVal;
+            return leftVal !== rightVal;
         case "&&":
             return leftVal && rightVal;
         case "||":

@@ -16,7 +16,7 @@ export class Parser {
     return expr
       .split( re )
       .map( ( i: string ) => i.trim() )
-      .filter( ( i: string ) => Boolean( i ))
+      .filter( ( i: string ) => Boolean( i ) );
   }
 
   static parse( expr: string ): Token[] {

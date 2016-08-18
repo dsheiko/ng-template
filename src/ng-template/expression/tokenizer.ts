@@ -12,7 +12,7 @@ export class Token {
       "type": this.name,
       "value": this.value,
       "negation": this.negation
-    }
+    };
   }
 }
 
@@ -107,7 +107,7 @@ export function tokenizer( rawValue: string ): Token {
   let value = removeNegotiation( rawValue ),
       negation = rawValue !== value;
 
-  switch( true ) {
+  switch ( true ) {
     case OperatorToken.valid( rawValue ):
       return new OperatorToken( rawValue, false );
     case StringToken.valid( value ):
