@@ -125,6 +125,10 @@ function ExpressionSpec() {
                     expect(res).toContain("bar");
                     expect(this.reporter.isParsed()).toBe(true);
                 });
+                it("evaluates this.className - reports parser missed", function () {
+                    var el = document.createElement("div"), fn = expression_1.compile("this.className", "", this.reporter), res = fn.call(el, {}), msg = this.reporter.get("errors")[0];
+                    expect(msg.startsWith("NGT0001")).toBe(true);
+                });
             });
             describe("data sync", function () {
                 it("evaluates `foo` { foo: true }", function () {

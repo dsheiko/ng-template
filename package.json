@@ -5,11 +5,11 @@
   "author": "Dmitry Sheiko",
   "main": "./dist/ngtemplate.js",
   "typings": "./index.d.ts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "branchVersion": "^1.0.0-beta.1",
   "branchPattern": "1.0.*",
   "scripts": {
-    "build": "slint --project tsconfig.json && tsc && npm run browserfy:demo && npm run browserfy",
+    "build": "tslint --project tsconfig.json && tsc && npm run browserfy:demo && npm run browserfy",
     "browserfy": "tsc && cjsc dist/ngtemplate.glob.js -o dist/ngtemplate.glob.min.js -M",
     "build:demo": "tsc -p demo",
     "browserfy:demo": "tsc -p demo && cjsc demo/build/demo/main.js -o demo/build/demo/main-vanilla.min.js -M",

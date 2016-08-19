@@ -155,6 +155,15 @@ export default function ExpressionSpec(){
         });
 
 
+         it( "evaluates this.className - reports parser missed", function() {
+          var el = document.createElement( "div" ) ,
+              fn = compile( `this.className`, "", this.reporter ),
+              res = fn.call( el, {} ),
+              msg = this.reporter.get( "errors" )[ 0 ];
+          expect( msg.startsWith( "NGT0001" ) ).toBe( true );
+        });
+
+
       });
 
 

@@ -744,6 +744,10 @@ function ExpressionSpec() {
                     expect(res).toContain("bar");
                     expect(this.reporter.isParsed()).toBe(true);
                 });
+                it("evaluates this.className - reports parser missed", function () {
+                    var el = document.createElement("div"), fn = expression_1.compile("this.className", "", this.reporter), res = fn.call(el, {}), msg = this.reporter.get("errors")[0];
+                    expect(msg.startsWith("NGT0001")).toBe(true);
+                });
             });
             describe("data sync", function () {
                 it("evaluates `foo` { foo: true }", function () {
@@ -970,22 +974,7 @@ exports.observeDOM = (function () {
 
 _require.def( "tests/build/src/ng-template/expression/parser.js", function( _require, exports, module, global ){
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 var tokenizer_1 = _require( "tests/build/src/ng-template/expression/tokenizer.js" );
-var ParserException = (function (_super) {
-    __extends(ParserException, _super);
-    function ParserException(message) {
-        _super.call(this, message);
-        this.name = "NgTemplateParserException",
-            this.message = message;
-    }
-    return ParserException;
-}(Error));
-exports.ParserException = ParserException;
 var Parser = (function () {
     function Parser() {
     }
@@ -1032,7 +1021,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var exception_1 = _require( "tests/build/src/ng-template/exception.js" );
+var exception_1 = _require( "tests/build/src/ng-template/expression/exception.js" );
 var Token = (function () {
     function Token(value, negation) {
         if (negation === void 0) { negation = false; }
@@ -1139,10 +1128,10 @@ var ReferenceToken = (function (_super) {
         var value = data;
         path.split("\.").forEach(function (key) {
             if (typeof value !== "object") {
-                throw new exception_1.Exception("'" + path + "' is undefined");
+                throw new exception_1.ExpressionException("'" + path + "' is undefined");
             }
             if (!(key in value)) {
-                throw new exception_1.Exception("'" + path + "' is undefined");
+                throw new exception_1.ExpressionException("'" + path + "' is undefined");
             }
             value = value[key];
         });
@@ -1405,7 +1394,9 @@ exports.Reporter = Reporter;
 
 _require.def( "tests/build/src/ng-template/expression.js", function( _require, exports, module, global ){
 "use strict";
+var constants_1 = _require( "tests/build/src/ng-template/constants.js" );
 var exception_1 = _require( "tests/build/src/ng-template/exception.js" );
+var exception_2 = _require( "tests/build/src/ng-template/expression/exception.js" );
 var parser_1 = _require( "tests/build/src/ng-template/expression/parser.js" );
 var tokenizer_1 = _require( "tests/build/src/ng-template/expression/tokenizer.js" );
 /**
@@ -1418,7 +1409,7 @@ function reduceComposite(tokens, data) {
     }
     var left = tokens[0], leftVal = left.resolveValue(data), operator = tokens[1], right = tokens[2], rightVal = right.resolveValue(data);
     if (!(operator instanceof tokenizer_1.OperatorToken)) {
-        throw new SyntaxError("Invalid operator " + operator.value + " in ng* expression");
+        throw new exception_1.Exception("Invalid operator " + operator.value + " in ng* expression");
     }
     switch (operator.value) {
         case "+":
@@ -1460,24 +1451,26 @@ function wrap(value, wrapper) {
  * Throw an error or silently report the exception
  */
 function treatException(err, expr, reporter) {
-    if (!(err instanceof exception_1.Exception)) {
-        console.log(err);
-        throw new SyntaxError("Invalid ng* expression " + expr);
+    if (!(err instanceof exception_2.ExpressionException)) {
+        throw new exception_1.Exception("Invalid ng* expression " + expr);
     }
-    reporter.addError(err.message);
+    reporter.addError((constants_1.ERROR_CODES.NGT0003 + ": ") + err.message);
 }
 /**
  * Create evaluation function for expressions like "prop, value"
  */
 function tryGroupStrategy(expr, reporter) {
     var leftExpr, rightExpr;
+    if (expr.indexOf(",") === -1) {
+        throw new exception_1.Exception("Group expression must have syntax: 'foo, bar'");
+    }
     _a = expr.split(","), leftExpr = _a[0], rightExpr = _a[1];
     var leftTokens = parser_1.Parser.parse(leftExpr), rightTokens = parser_1.Parser.parse(rightExpr);
     if (!leftTokens.length) {
-        throw new parser_1.ParserException("Cannot parse expression " + leftExpr);
+        throw new exception_2.ExpressionException("Cannot parse expression " + leftExpr);
     }
     if (!rightTokens.length) {
-        throw new parser_1.ParserException("Cannot parse expression " + rightExpr);
+        throw new exception_2.ExpressionException("Cannot parse expression " + rightExpr);
     }
     reporter.addTokens(leftTokens);
     reporter.addTokens(rightTokens);
@@ -1500,7 +1493,7 @@ function tryOptimalStrategy(expr, wrapper, reporter) {
     if (wrapper === void 0) { wrapper = ""; }
     var tokens = parser_1.Parser.parse(expr);
     if (!tokens.length) {
-        throw new parser_1.ParserException("Cannot parse expression " + expr);
+        throw new exception_2.ExpressionException("Cannot parse expression " + expr);
     }
     reporter.addTokens(tokens);
     return function (data) {
@@ -1535,7 +1528,7 @@ function fallbackStrategy(expr, wrapper, reporter) {
             return cb.apply(this, vals);
         }
         catch (err) {
-            reporter.addError("Could not evaluate " + code);
+            reporter.addError(constants_1.ERROR_CODES.NGT0002 + ": Could not evaluate " + code);
         }
     };
     return func;
@@ -1550,10 +1543,11 @@ function compile(expr, wrapper, reporter) {
         return tryOptimalStrategy(expr, wrapper, reporter);
     }
     catch (err) {
-        if (!(err instanceof parser_1.ParserException)) {
-            throw SyntaxError(err.message);
+        if (!(err instanceof exception_2.ExpressionException)) {
+            throw new exception_1.Exception(err.message);
         }
     }
+    reporter.addError(constants_1.ERROR_CODES.NGT0001 + ": Could not parse the expression, going eval()");
     return fallbackStrategy.call(this, expr, wrapper, reporter);
 }
 exports.compile = compile;
@@ -1832,6 +1826,61 @@ exports.default = NgForSpec;
   return module;
 });
 
+_require.def( "tests/build/tests/spec/ng-template/ngswitch.js", function( _require, exports, module, global ){
+"use strict";
+var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
+function NgSwitchSpec() {
+    describe("ng-switch/data-ng-switch-case directives", function () {
+        beforeEach(function () {
+            this.el = document.createElement("div");
+        });
+        it("evaluates the statement", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<div data-ng-switch='theCase'>" +
+                "<i data-ng-switch-case='1'>FOO</i>" +
+                "<i data-ng-switch-case='2'>BAR</i>" +
+                "</div>")
+                .sync({ theCase: 1 })
+                .pipe(function (el) {
+                expect(el.innerHTML).toBe("<i>FOO</i>");
+            })
+                .sync({ theCase: 2 })
+                .pipe(function (el) {
+                expect(el.innerHTML).toBe("<i>BAR</i>");
+            });
+        });
+    });
+    describe("ng-switch-case-default directive", function () {
+        beforeEach(function () {
+            this.el = document.createElement("div");
+        });
+        it("evaluates the statement", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<div data-ng-switch='theCase'>" +
+                "<i data-ng-switch-case='1'>FOO</i>" +
+                "<i data-ng-switch-case='2'>BAR</i>" +
+                "<i data-ng-switch-case-default>DEFAULT</i>" +
+                "</div>")
+                .sync({ theCase: 1 })
+                .pipe(function (el) {
+                expect(el.innerHTML).toBe("<i>FOO</i>");
+            })
+                .sync({ theCase: 3 })
+                .pipe(function (el) {
+                expect(el.innerHTML).toBe("<i>DEFAULT</i>");
+            });
+        });
+    });
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = NgSwitchSpec;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
 _require.def( "tests/build/tests/spec/ng-template/transform.js", function( _require, exports, module, global ){
 "use strict";
 var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
@@ -1908,61 +1957,6 @@ function SmartEvalSpec() {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = SmartEvalSpec;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/tests/spec/ng-template/ngswitch.js", function( _require, exports, module, global ){
-"use strict";
-var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
-function NgSwitchSpec() {
-    describe("ng-switch/data-ng-switch-case directives", function () {
-        beforeEach(function () {
-            this.el = document.createElement("div");
-        });
-        it("evaluates the statement", function () {
-            ngtemplate_1.NgTemplate
-                .factory(this.el, "<div data-ng-switch='theCase'>" +
-                "<i data-ng-switch-case='1'>FOO</i>" +
-                "<i data-ng-switch-case='2'>BAR</i>" +
-                "</div>")
-                .sync({ theCase: 1 })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<i>FOO</i>");
-            })
-                .sync({ theCase: 2 })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<i>BAR</i>");
-            });
-        });
-    });
-    describe("ng-switch-case-default directive", function () {
-        beforeEach(function () {
-            this.el = document.createElement("div");
-        });
-        it("evaluates the statement", function () {
-            ngtemplate_1.NgTemplate
-                .factory(this.el, "<div data-ng-switch='theCase'>" +
-                "<i data-ng-switch-case='1'>FOO</i>" +
-                "<i data-ng-switch-case='2'>BAR</i>" +
-                "<i data-ng-switch-case-default>DEFAULT</i>" +
-                "</div>")
-                .sync({ theCase: 1 })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<i>FOO</i>");
-            })
-                .sync({ theCase: 3 })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<i>DEFAULT</i>");
-            });
-        });
-    });
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = NgSwitchSpec;
 
   module.exports = exports;
 
@@ -2412,6 +2406,31 @@ exports.Exception = Exception;
   return module;
 });
 
+_require.def( "tests/build/src/ng-template/expression/exception.js", function( _require, exports, module, global ){
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var exception_1 = _require( "tests/build/src/ng-template/exception.js" );
+var ExpressionException = (function (_super) {
+    __extends(ExpressionException, _super);
+    function ExpressionException(message) {
+        _super.call(this, message);
+        this.name = "NgTemplateExpressionException",
+            this.message = message;
+    }
+    return ExpressionException;
+}(exception_1.Exception));
+exports.ExpressionException = ExpressionException;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
 _require.def( "tests/build/src/ng-template/cache.js", function( _require, exports, module, global ){
 "use strict";
 var Cache = (function () {
@@ -2434,6 +2453,21 @@ var Cache = (function () {
 }());
 exports.Cache = Cache;
 ;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/src/ng-template/constants.js", function( _require, exports, module, global ){
+"use strict";
+// Do not dare yet to go with Symbol - TS doesn't transpile them and support isn't good yet
+exports.ERROR_CODES = {
+    NGT0001: "NGT0001",
+    NGT0002: "NGT0002",
+    NGT0003: "NGT0003"
+};
 
   module.exports = exports;
 
