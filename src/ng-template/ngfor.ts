@@ -35,14 +35,13 @@ export class NgFor extends AbstractDirective implements NgTemplate.Directive {
         exp: function( data: NgTemplate.DataMap, cb: Function ): boolean {
           let it: any[] = [];
           try {
-              eval( `it = data.${parsed.iterable}` );
+            it = data[ parsed.iterable ];
           } catch ( err ) {
               throw new Exception( `NgTemplate variable ${parsed.iterable} undefined` );
           }
           if ( !Array.isArray( it ) ) {
-             throw new Exception( `NgTemplate variable ${parsed.iterable} must be an array` );
+             it = [];
           }
-
           if ( cache.match( JSON.stringify( it ) ) ) {
             return false;
           }

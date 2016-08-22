@@ -32,13 +32,13 @@ var NgFor = (function (_super) {
                 exp: function (data, cb) {
                     var it = [];
                     try {
-                        eval("it = data." + parsed.iterable);
+                        it = data[parsed.iterable];
                     }
                     catch (err) {
                         throw new exception_1.Exception("NgTemplate variable " + parsed.iterable + " undefined");
                     }
                     if (!Array.isArray(it)) {
-                        throw new exception_1.Exception("NgTemplate variable " + parsed.iterable + " must be an array");
+                        it = [];
                     }
                     if (cache.match(JSON.stringify(it))) {
                         return false;
