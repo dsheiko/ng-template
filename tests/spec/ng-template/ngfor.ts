@@ -14,6 +14,16 @@ export default function NgForSpec(){
         expect( this.el.querySelectorAll( "i" ).length ).toBe( 3 );
       });
 
+       it( "generates nodes on structure", function() {
+        NgTemplate
+          .factory( this.el, "<i data-ng-for=\"let row of foo.bar.baz\" data-ng-text=\"row\"></i>" )
+          .sync({ foo: { bar: { baz:
+              [ "foo", "bar", "baz" ]
+            }}
+          });
+        expect( this.el.querySelectorAll( "i" ).length ).toBe( 3 );
+      });
+
       it( "generates nodes from a list of objects", function() {
         NgTemplate
           .factory( this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row.name\"></i>" )
