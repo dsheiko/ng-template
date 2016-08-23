@@ -1,12 +1,12 @@
 {
   "name": "ng-template",
-  "title": "NgTemplate",
+  "title": "ngTemplate",
   "description": "Light-weight DOM-based template engine, inspired by AngularJS",
   "author": "Dmitry Sheiko",
   "main": "./dist/ngtemplate.js",
   "typings": "./index.d.ts",
   "version": "0.1.2",
-  "branchVersion": "^1.0.0-beta.1",
+  "branchVersion": "^1.0.0-RC.1",
   "branchPattern": "1.0.*",
   "scripts": {
     "build": "tslint --project tsconfig.json && tsc && npm run browserfy:demo && npm run browserfy",

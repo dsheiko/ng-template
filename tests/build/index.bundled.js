@@ -1014,6 +1014,358 @@ exports.Parser = Parser;
   return module;
 });
 
+_require.def( "tests/build/src/ng-template/expression/tokenizer.js", function( _require, exports, module, global ){
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var exception_1 = _require( "tests/build/src/ng-template/expression/exception.js" );
+var Token = (function () {
+    function Token(value, negation) {
+        if (negation === void 0) { negation = false; }
+        this.value = value;
+        this.negation = negation;
+        this.name = "Token";
+    }
+    Token.prototype.resolveValue = function (data) {
+    };
+    Token.prototype.toJSON = function () {
+        return {
+            "type": this.name,
+            "value": this.value,
+            "negation": this.negation
+        };
+    };
+    return Token;
+}());
+exports.Token = Token;
+var InvalidToken = (function (_super) {
+    __extends(InvalidToken, _super);
+    function InvalidToken() {
+        _super.apply(this, arguments);
+        this.name = "InvalidToken";
+    }
+    return InvalidToken;
+}(Token));
+exports.InvalidToken = InvalidToken;
+var OperatorToken = (function (_super) {
+    __extends(OperatorToken, _super);
+    function OperatorToken() {
+        _super.apply(this, arguments);
+        this.name = "OperatorToken";
+    }
+    OperatorToken.valid = function (value) {
+        var re = /^(\+|\-|\<|\>|===|==|\!==|\!=|\&\&|\|\|)$/;
+        return re.test(value);
+    };
+    return OperatorToken;
+}(Token));
+exports.OperatorToken = OperatorToken;
+var StringToken = (function (_super) {
+    __extends(StringToken, _super);
+    function StringToken() {
+        _super.apply(this, arguments);
+        this.name = "StringToken";
+    }
+    StringToken.valid = function (value) {
+        var single = /^\'[^\']+\'$/i, double = /^\"[^\"]+\"$/i;
+        return single.test(value) || double.test(value);
+    };
+    StringToken.prototype.resolveValue = function (data) {
+        var val = this.value;
+        return val.substr(1, val.length - 2);
+    };
+    return StringToken;
+}(Token));
+exports.StringToken = StringToken;
+var NumberToken = (function (_super) {
+    __extends(NumberToken, _super);
+    function NumberToken() {
+        _super.apply(this, arguments);
+        this.name = "NumberToken";
+    }
+    NumberToken.valid = function (value) {
+        var re = /^\d+$/;
+        return re.test(value);
+    };
+    NumberToken.prototype.resolveValue = function (data) {
+        var val = Number(this.value);
+        return this.negation ? !val : val;
+    };
+    return NumberToken;
+}(Token));
+exports.NumberToken = NumberToken;
+var BooleanToken = (function (_super) {
+    __extends(BooleanToken, _super);
+    function BooleanToken() {
+        _super.apply(this, arguments);
+        this.name = "BooleanToken";
+    }
+    BooleanToken.valid = function (value) {
+        var re = /^(true|false)$/i;
+        return re.test(value);
+    };
+    BooleanToken.prototype.resolveValue = function (data) {
+        var val = this.value.toUpperCase() === "TRUE";
+        return this.negation ? !val : val;
+    };
+    return BooleanToken;
+}(Token));
+exports.BooleanToken = BooleanToken;
+var ReferenceToken = (function (_super) {
+    __extends(ReferenceToken, _super);
+    function ReferenceToken() {
+        _super.apply(this, arguments);
+        this.name = "ReferenceToken";
+    }
+    ReferenceToken.valid = function (value) {
+        var re = /^[a-zA-Z_\$][a-zA-Z0-9\._\$]+$/;
+        return value.substr(0, 5) !== "this." && re.test(value);
+    };
+    ReferenceToken.findValue = function (path, data) {
+        var value = data;
+        path.split("\.").forEach(function (key) {
+            if (typeof value !== "object") {
+                throw new exception_1.ExpressionException("'" + path + "' is undefined");
+            }
+            if (!(key in value)) {
+                throw new exception_1.ExpressionException("'" + path + "' is undefined");
+            }
+            value = value[key];
+        });
+        return value;
+    };
+    ReferenceToken.prototype.resolveValue = function (data) {
+        var val = ReferenceToken.findValue(this.value, data);
+        return this.negation ? !val : val;
+    };
+    return ReferenceToken;
+}(Token));
+exports.ReferenceToken = ReferenceToken;
+/**
+ * Removes leading negotiation
+ */
+function removeNegotiation(value) {
+    var re = /^\!\s*/;
+    return value.replace(re, "");
+}
+function tokenizer(rawValue) {
+    var value = removeNegotiation(rawValue), negation = rawValue !== value;
+    switch (true) {
+        case OperatorToken.valid(rawValue):
+            return new OperatorToken(rawValue, false);
+        case StringToken.valid(value):
+            return new StringToken(value, negation);
+        case NumberToken.valid(value):
+            return new NumberToken(value, negation);
+        case BooleanToken.valid(value):
+            return new BooleanToken(value, negation);
+        case ReferenceToken.valid(value):
+            return new ReferenceToken(value, negation);
+        default:
+            return new InvalidToken(value, negation);
+    }
+}
+exports.tokenizer = tokenizer;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/src/ng-template/abstract-directive.js", function( _require, exports, module, global ){
+"use strict";
+var expression_1 = _require( "tests/build/src/ng-template/expression.js" );
+var cache_1 = _require( "tests/build/src/ng-template/cache.js" );
+var AbstractDirective = (function () {
+    function AbstractDirective(el, reporter) {
+    }
+    AbstractDirective.prototype.initNodes = function (el, identifier, cb) {
+        var datakey = this.getDataKey(identifier), selector = this.getSelector(identifier);
+        return Array.from(el.querySelectorAll(selector)).map(function (el) {
+            var expr = el.dataset[datakey];
+            delete el.dataset[datakey];
+            return cb(el, expr, expression_1.compile, new cache_1.Cache());
+        });
+    };
+    /**
+     * Converts foo-bar-baz to `[data-foo-bar-baz]`
+     */
+    AbstractDirective.prototype.getSelector = function (raw) {
+        return "[data-" + raw + "]";
+    };
+    /**
+     * Converts foo-bar-baz to fooBarBaz
+     */
+    AbstractDirective.prototype.getDataKey = function (raw) {
+        return raw
+            .split("-").map(function (part, inx) {
+            if (!inx) {
+                return part;
+            }
+            return part.substr(0, 1).toUpperCase() + part.substr(1);
+        })
+            .join("");
+    };
+    /**
+     * researched strategies
+     * el.innerText = str; - no standard
+     * el.textContent = str; - fast
+     * el.appendChild( document.createTextNode( str ) ) - slower
+     */
+    AbstractDirective.prototype.setText = function (el, str) {
+        el.textContent = str;
+    };
+    AbstractDirective.prototype.escape = function (str) {
+        var div = document.createElement("div");
+        this.setText(div, str);
+        return div.innerHTML;
+    };
+    return AbstractDirective;
+}());
+exports.AbstractDirective = AbstractDirective;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/src/ng-template/ngfor.js", function( _require, exports, module, global ){
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-directive.js" );
+var exception_1 = _require( "tests/build/src/ng-template/exception.js" );
+var constants_1 = _require( "tests/build/src/ng-template/constants.js" );
+var tokenizer_1 = _require( "tests/build/src/ng-template/expression/tokenizer.js" );
+var exception_2 = _require( "tests/build/src/ng-template/expression/exception.js" );
+var counter = 0;
+// <div data-ng:for="let hero of data.heroes" data-ng:text="hero" ></div>
+var NgFor = (function (_super) {
+    __extends(NgFor, _super);
+    function NgFor(el, reporter) {
+        var _this = this;
+        _super.call(this, el, reporter);
+        this.nodes = this.initNodes(el, "ng-for", function (node, expr, compile, cache) {
+            var parsed = _this.parseExpr(expr), outerHTML, id = "id" + (++counter);
+            node.dataset["ngNodeId"] = id;
+            outerHTML = node.outerHTML;
+            // Do not process directives on the first level as all of them about elements generated by ngFor
+            ["ngSwitch", "ngSwitchCase", "ngSwitchCaseDefault", "ngIf",
+                "ngClassListToggle", "ngData", "ngProp", "ngEl", "ngText"].forEach(function (key) {
+                if (node.dataset[key]) {
+                    delete node.dataset[key];
+                }
+            });
+            return {
+                el: node,
+                parentNode: node.parentNode,
+                outerHTML: outerHTML,
+                id: id,
+                exp: function (data, cb) {
+                    var it = [];
+                    try {
+                        it = tokenizer_1.ReferenceToken.findValue(parsed.iterable, data);
+                    }
+                    catch (err) {
+                        if (!(err instanceof exception_2.ExpressionException)) {
+                            throw new exception_1.Exception("Invalid ng* expression " + expr);
+                        }
+                        reporter.addLog((constants_1.ERROR_CODES.NGT0003 + ": ") + err.message);
+                    }
+                    if (!Array.isArray(it)) {
+                        it = [];
+                    }
+                    if (cache.match(JSON.stringify(it))) {
+                        return false;
+                    }
+                    it.forEach(function (val) {
+                        cb(val, parsed.variable || null);
+                    });
+                    return true;
+                }
+            };
+        });
+    }
+    NgFor.prototype.parseExpr = function (strRaw) {
+        var re = /(let|var)\s+([a-zA-Z0-9\_]+)\s+of\s+/, str = strRaw.trim(), varMatches = str.match(re);
+        if (!varMatches || varMatches.length !== 3) {
+            throw new exception_1.Exception("Cannot parse ng-for expression: " + strRaw);
+        }
+        return {
+            variable: varMatches[2],
+            iterable: str.replace(re, "")
+        };
+    };
+    /**
+     * Create for generated list elements a permitted parent elements
+     */
+    NgFor.createParentEl = function (el) {
+        var map = {
+            "TR": "tbody",
+            "THEAD": "table",
+            "TFOOT": "table",
+            "TBODY": "table",
+            "COLGROUP": "table",
+            "CAPTION": "table",
+            "TD": "tr",
+            "TH": "tr",
+            "COL": "colgroup",
+            "FIGCAPTION": "figure",
+            "LEGEND": "fieldset",
+            "LI": "ul",
+            "DT": "dl",
+            "DD": "dl",
+        };
+        var child = el.tagName.toUpperCase(), parent = child in map ? map[child] : "div";
+        return document.createElement(parent);
+    };
+    NgFor.prototype.sync = function (data, Ctor) {
+        var _this = this;
+        this.nodes.forEach(function (node) {
+            var el = NgFor.createParentEl(node.el), container = NgFor.createParentEl(node.el), tpl = new Ctor(el, node.outerHTML);
+            var isChanged = node.exp(data, function (val, variable) {
+                data[variable] = val;
+                tpl.sync(data);
+                container.innerHTML += el.innerHTML;
+            });
+            isChanged && _this.buildDOM(node, _this.nodesToDocFragment(container));
+        });
+    };
+    /**
+     * Create headless DOM subtree
+     */
+    NgFor.prototype.nodesToDocFragment = function (div) {
+        var doc = document.createDocumentFragment();
+        Array.from(div.children).forEach(function (child) { return doc.appendChild(child); });
+        return doc;
+    };
+    NgFor.prototype.buildDOM = function (node, doc) {
+        var items = Array.from(node.parentNode.querySelectorAll("[data-ng-node-id=\"" + node.id + "\"]")), anchor = document.createElement("ng");
+        node.parentNode.insertBefore(anchor, items[0]);
+        anchor.dataset["ngNodeId"] = node.id;
+        items.forEach(function (child) {
+            node.parentNode.removeChild(child);
+        });
+        node.parentNode.replaceChild(doc, anchor);
+    };
+    return NgFor;
+}(abstract_directive_1.AbstractDirective));
+exports.NgFor = NgFor;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
 _require.def( "tests/build/src/ng-template/reporter.js", function( _require, exports, module, global ){
 "use strict";
 var Reporter = (function () {
@@ -1492,64 +1844,6 @@ exports.default = NgForSpec;
   return module;
 });
 
-_require.def( "tests/build/src/ng-template/abstract-directive.js", function( _require, exports, module, global ){
-"use strict";
-var expression_1 = _require( "tests/build/src/ng-template/expression.js" );
-var cache_1 = _require( "tests/build/src/ng-template/cache.js" );
-var AbstractDirective = (function () {
-    function AbstractDirective(el, reporter) {
-    }
-    AbstractDirective.prototype.initNodes = function (el, identifier, cb) {
-        var datakey = this.getDataKey(identifier), selector = this.getSelector(identifier);
-        return Array.from(el.querySelectorAll(selector)).map(function (el) {
-            var expr = el.dataset[datakey];
-            delete el.dataset[datakey];
-            return cb(el, expr, expression_1.compile, new cache_1.Cache());
-        });
-    };
-    /**
-     * Converts foo-bar-baz to `[data-foo-bar-baz]`
-     */
-    AbstractDirective.prototype.getSelector = function (raw) {
-        return "[data-" + raw + "]";
-    };
-    /**
-     * Converts foo-bar-baz to fooBarBaz
-     */
-    AbstractDirective.prototype.getDataKey = function (raw) {
-        return raw
-            .split("-").map(function (part, inx) {
-            if (!inx) {
-                return part;
-            }
-            return part.substr(0, 1).toUpperCase() + part.substr(1);
-        })
-            .join("");
-    };
-    /**
-     * researched strategies
-     * el.innerText = str; - no standard
-     * el.textContent = str; - fast
-     * el.appendChild( document.createTextNode( str ) ) - slower
-     */
-    AbstractDirective.prototype.setText = function (el, str) {
-        el.textContent = str;
-    };
-    AbstractDirective.prototype.escape = function (str) {
-        var div = document.createElement("div");
-        this.setText(div, str);
-        return div.innerHTML;
-    };
-    return AbstractDirective;
-}());
-exports.AbstractDirective = AbstractDirective;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
 _require.def( "tests/build/tests/spec/ng-template/ngswitch.js", function( _require, exports, module, global ){
 "use strict";
 var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
@@ -1598,6 +1892,38 @@ function NgSwitchSpec() {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = NgSwitchSpec;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/tests/spec/ng-template/transform.js", function( _require, exports, module, global ){
+"use strict";
+var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
+function TransformSpec() {
+    describe("transformers", function () {
+        beforeEach(function () {
+            this.el = document.createElement("div");
+        });
+        it("evaluates the statement", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<div data-ng-text='transform(raw)'></div>")
+                .sync({
+                raw: 100,
+                transform: function (num) {
+                    return num + "500";
+                }
+            })
+                .pipe(function (el) {
+                expect(el.innerHTML).toBe("<div>100500</div>");
+            });
+        });
+    });
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = TransformSpec;
 
   module.exports = exports;
 
@@ -1656,38 +1982,6 @@ exports.default = SmartEvalSpec;
   return module;
 });
 
-_require.def( "tests/build/tests/spec/ng-template/transform.js", function( _require, exports, module, global ){
-"use strict";
-var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
-function TransformSpec() {
-    describe("transformers", function () {
-        beforeEach(function () {
-            this.el = document.createElement("div");
-        });
-        it("evaluates the statement", function () {
-            ngtemplate_1.NgTemplate
-                .factory(this.el, "<div data-ng-text='transform(raw)'></div>")
-                .sync({
-                raw: 100,
-                transform: function (num) {
-                    return num + "500";
-                }
-            })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<div>100500</div>");
-            });
-        });
-    });
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = TransformSpec;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
 _require.def( "tests/build/tests/spec/ng-template/report.js", function( _require, exports, module, global ){
 "use strict";
 var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
@@ -1714,300 +2008,6 @@ function ReportSpec() {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ReportSpec;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ng-template/expression/tokenizer.js", function( _require, exports, module, global ){
-"use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var exception_1 = _require( "tests/build/src/ng-template/expression/exception.js" );
-var Token = (function () {
-    function Token(value, negation) {
-        if (negation === void 0) { negation = false; }
-        this.value = value;
-        this.negation = negation;
-        this.name = "Token";
-    }
-    Token.prototype.resolveValue = function (data) {
-    };
-    Token.prototype.toJSON = function () {
-        return {
-            "type": this.name,
-            "value": this.value,
-            "negation": this.negation
-        };
-    };
-    return Token;
-}());
-exports.Token = Token;
-var InvalidToken = (function (_super) {
-    __extends(InvalidToken, _super);
-    function InvalidToken() {
-        _super.apply(this, arguments);
-        this.name = "InvalidToken";
-    }
-    return InvalidToken;
-}(Token));
-exports.InvalidToken = InvalidToken;
-var OperatorToken = (function (_super) {
-    __extends(OperatorToken, _super);
-    function OperatorToken() {
-        _super.apply(this, arguments);
-        this.name = "OperatorToken";
-    }
-    OperatorToken.valid = function (value) {
-        var re = /^(\+|\-|\<|\>|===|==|\!==|\!=|\&\&|\|\|)$/;
-        return re.test(value);
-    };
-    return OperatorToken;
-}(Token));
-exports.OperatorToken = OperatorToken;
-var StringToken = (function (_super) {
-    __extends(StringToken, _super);
-    function StringToken() {
-        _super.apply(this, arguments);
-        this.name = "StringToken";
-    }
-    StringToken.valid = function (value) {
-        var single = /^\'[^\']+\'$/i, double = /^\"[^\"]+\"$/i;
-        return single.test(value) || double.test(value);
-    };
-    StringToken.prototype.resolveValue = function (data) {
-        var val = this.value;
-        return val.substr(1, val.length - 2);
-    };
-    return StringToken;
-}(Token));
-exports.StringToken = StringToken;
-var NumberToken = (function (_super) {
-    __extends(NumberToken, _super);
-    function NumberToken() {
-        _super.apply(this, arguments);
-        this.name = "NumberToken";
-    }
-    NumberToken.valid = function (value) {
-        var re = /^\d+$/;
-        return re.test(value);
-    };
-    NumberToken.prototype.resolveValue = function (data) {
-        var val = Number(this.value);
-        return this.negation ? !val : val;
-    };
-    return NumberToken;
-}(Token));
-exports.NumberToken = NumberToken;
-var BooleanToken = (function (_super) {
-    __extends(BooleanToken, _super);
-    function BooleanToken() {
-        _super.apply(this, arguments);
-        this.name = "BooleanToken";
-    }
-    BooleanToken.valid = function (value) {
-        var re = /^(true|false)$/i;
-        return re.test(value);
-    };
-    BooleanToken.prototype.resolveValue = function (data) {
-        var val = this.value.toUpperCase() === "TRUE";
-        return this.negation ? !val : val;
-    };
-    return BooleanToken;
-}(Token));
-exports.BooleanToken = BooleanToken;
-var ReferenceToken = (function (_super) {
-    __extends(ReferenceToken, _super);
-    function ReferenceToken() {
-        _super.apply(this, arguments);
-        this.name = "ReferenceToken";
-    }
-    ReferenceToken.valid = function (value) {
-        var re = /^[a-zA-Z_\$][a-zA-Z0-9\._\$]+$/;
-        return value.substr(0, 5) !== "this." && re.test(value);
-    };
-    ReferenceToken.findValue = function (path, data) {
-        var value = data;
-        path.split("\.").forEach(function (key) {
-            if (typeof value !== "object") {
-                throw new exception_1.ExpressionException("'" + path + "' is undefined");
-            }
-            if (!(key in value)) {
-                throw new exception_1.ExpressionException("'" + path + "' is undefined");
-            }
-            value = value[key];
-        });
-        return value;
-    };
-    ReferenceToken.prototype.resolveValue = function (data) {
-        var val = ReferenceToken.findValue(this.value, data);
-        return this.negation ? !val : val;
-    };
-    return ReferenceToken;
-}(Token));
-exports.ReferenceToken = ReferenceToken;
-/**
- * Removes leading negotiation
- */
-function removeNegotiation(value) {
-    var re = /^\!\s*/;
-    return value.replace(re, "");
-}
-function tokenizer(rawValue) {
-    var value = removeNegotiation(rawValue), negation = rawValue !== value;
-    switch (true) {
-        case OperatorToken.valid(rawValue):
-            return new OperatorToken(rawValue, false);
-        case StringToken.valid(value):
-            return new StringToken(value, negation);
-        case NumberToken.valid(value):
-            return new NumberToken(value, negation);
-        case BooleanToken.valid(value):
-            return new BooleanToken(value, negation);
-        case ReferenceToken.valid(value):
-            return new ReferenceToken(value, negation);
-        default:
-            return new InvalidToken(value, negation);
-    }
-}
-exports.tokenizer = tokenizer;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ng-template/ngfor.js", function( _require, exports, module, global ){
-"use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-directive.js" );
-var exception_1 = _require( "tests/build/src/ng-template/exception.js" );
-var constants_1 = _require( "tests/build/src/ng-template/constants.js" );
-var tokenizer_1 = _require( "tests/build/src/ng-template/expression/tokenizer.js" );
-var exception_2 = _require( "tests/build/src/ng-template/expression/exception.js" );
-var counter = 0;
-// <div data-ng:for="let hero of data.heroes" data-ng:text="hero" ></div>
-var NgFor = (function (_super) {
-    __extends(NgFor, _super);
-    function NgFor(el, reporter) {
-        var _this = this;
-        _super.call(this, el, reporter);
-        this.nodes = this.initNodes(el, "ng-for", function (node, expr, compile, cache) {
-            var parsed = _this.parseExpr(expr), outerHTML, id = "id" + (++counter);
-            node.dataset["ngNodeId"] = id;
-            outerHTML = node.outerHTML;
-            // Do not process directives on the first level as all of them about elements generated by ngFor
-            ["ngSwitch", "ngSwitchCase", "ngSwitchCaseDefault", "ngIf",
-                "ngClassListToggle", "ngData", "ngProp", "ngEl", "ngText"].forEach(function (key) {
-                if (node.dataset[key]) {
-                    delete node.dataset[key];
-                }
-            });
-            return {
-                el: node,
-                parentNode: node.parentNode,
-                outerHTML: outerHTML,
-                id: id,
-                exp: function (data, cb) {
-                    var it = [];
-                    try {
-                        it = tokenizer_1.ReferenceToken.findValue(parsed.iterable, data);
-                    }
-                    catch (err) {
-                        if (!(err instanceof exception_2.ExpressionException)) {
-                            throw new exception_1.Exception("Invalid ng* expression " + expr);
-                        }
-                        reporter.addLog((constants_1.ERROR_CODES.NGT0003 + ": ") + err.message);
-                    }
-                    if (!Array.isArray(it)) {
-                        it = [];
-                    }
-                    if (cache.match(JSON.stringify(it))) {
-                        return false;
-                    }
-                    it.forEach(function (val) {
-                        cb(val, parsed.variable || null);
-                    });
-                    return true;
-                }
-            };
-        });
-    }
-    NgFor.prototype.parseExpr = function (strRaw) {
-        var re = /(let|var)\s+([a-zA-Z0-9\_]+)\s+of\s+/, str = strRaw.trim(), varMatches = str.match(re);
-        if (!varMatches || varMatches.length !== 3) {
-            throw new exception_1.Exception("Cannot parse ng-for expression: " + strRaw);
-        }
-        return {
-            variable: varMatches[2],
-            iterable: str.replace(re, "")
-        };
-    };
-    /**
-     * Create for generated list elements a permitted parent elements
-     */
-    NgFor.createParentEl = function (el) {
-        var map = {
-            "TR": "tbody",
-            "THEAD": "table",
-            "TFOOT": "table",
-            "TBODY": "table",
-            "COLGROUP": "table",
-            "CAPTION": "table",
-            "TD": "tr",
-            "TH": "tr",
-            "COL": "colgroup",
-            "FIGCAPTION": "figure",
-            "LEGEND": "fieldset",
-            "LI": "ul",
-            "DT": "dl",
-            "DD": "dl",
-        };
-        var child = el.tagName.toUpperCase(), parent = child in map ? map[child] : "div";
-        return document.createElement(parent);
-    };
-    NgFor.prototype.sync = function (data, Ctor) {
-        var _this = this;
-        this.nodes.forEach(function (node) {
-            var el = NgFor.createParentEl(node.el), container = NgFor.createParentEl(node.el), tpl = new Ctor(el, node.outerHTML);
-            var isChanged = node.exp(data, function (val, variable) {
-                data[variable] = val;
-                tpl.sync(data);
-                container.innerHTML += el.innerHTML;
-            });
-            isChanged && _this.buildDOM(node, _this.nodesToDocFragment(container));
-        });
-    };
-    /**
-     * Create headless DOM subtree
-     */
-    NgFor.prototype.nodesToDocFragment = function (div) {
-        var doc = document.createDocumentFragment();
-        Array.from(div.children).forEach(function (child) { return doc.appendChild(child); });
-        return doc;
-    };
-    NgFor.prototype.buildDOM = function (node, doc) {
-        var items = Array.from(node.parentNode.querySelectorAll("[data-ng-node-id=\"" + node.id + "\"]")), anchor = document.createElement("ng");
-        node.parentNode.insertBefore(anchor, items[0]);
-        anchor.dataset["ngNodeId"] = node.id;
-        items.forEach(function (child) {
-            node.parentNode.removeChild(child);
-        });
-        node.parentNode.replaceChild(doc, anchor);
-    };
-    return NgFor;
-}(abstract_directive_1.AbstractDirective));
-exports.NgFor = NgFor;
 
   module.exports = exports;
 
@@ -2075,43 +2075,6 @@ exports.NgIf = NgIf;
   return module;
 });
 
-_require.def( "tests/build/src/ng-template/ngel.js", function( _require, exports, module, global ){
-"use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-directive.js" );
-/**
- * <span data-ng-el="this.setAttribute('ss', 11)">Error</span>
- */
-var NgEl = (function (_super) {
-    __extends(NgEl, _super);
-    function NgEl(el, reporter) {
-        _super.call(this, el, reporter);
-        this.nodes = this.initNodes(el, "ng-el", function (node, expr, compile) {
-            return {
-                el: node,
-                exp: compile(expr, "", reporter)
-            };
-        });
-    }
-    NgEl.prototype.sync = function (data) {
-        this.nodes.forEach(function (node) {
-            node.exp.call(node.el, data);
-        });
-    };
-    return NgEl;
-}(abstract_directive_1.AbstractDirective));
-exports.NgEl = NgEl;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
 _require.def( "tests/build/src/ng-template/ngtext.js", function( _require, exports, module, global ){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
@@ -2146,6 +2109,43 @@ var NgText = (function (_super) {
     return NgText;
 }(abstract_directive_1.AbstractDirective));
 exports.NgText = NgText;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/src/ng-template/ngel.js", function( _require, exports, module, global ){
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-directive.js" );
+/**
+ * <span data-ng-el="this.setAttribute('ss', 11)">Error</span>
+ */
+var NgEl = (function (_super) {
+    __extends(NgEl, _super);
+    function NgEl(el, reporter) {
+        _super.call(this, el, reporter);
+        this.nodes = this.initNodes(el, "ng-el", function (node, expr, compile) {
+            return {
+                el: node,
+                exp: compile(expr, "", reporter)
+            };
+        });
+    }
+    NgEl.prototype.sync = function (data) {
+        this.nodes.forEach(function (node) {
+            node.exp.call(node.el, data);
+        });
+    };
+    return NgEl;
+}(abstract_directive_1.AbstractDirective));
+exports.NgEl = NgEl;
 
   module.exports = exports;
 
@@ -2431,21 +2431,6 @@ exports.Exception = Exception;
   return module;
 });
 
-_require.def( "tests/build/src/ng-template/constants.js", function( _require, exports, module, global ){
-"use strict";
-// Do not dare yet to go with Symbol - TS doesn't transpile them and support isn't good yet
-exports.ERROR_CODES = {
-    NGT0001: "NGT0001",
-    NGT0002: "NGT0002",
-    NGT0003: "NGT0003"
-};
-
-  module.exports = exports;
-
-
-  return module;
-});
-
 _require.def( "tests/build/src/ng-template/expression/exception.js", function( _require, exports, module, global ){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
@@ -2493,6 +2478,21 @@ var Cache = (function () {
 }());
 exports.Cache = Cache;
 ;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/src/ng-template/constants.js", function( _require, exports, module, global ){
+"use strict";
+// Do not dare yet to go with Symbol - TS doesn't transpile them and support isn't good yet
+exports.ERROR_CODES = {
+    NGT0001: "NGT0001",
+    NGT0002: "NGT0002",
+    NGT0003: "NGT0003"
+};
 
   module.exports = exports;
 

@@ -1,5 +1,5 @@
 
-# NgTemplate Demo
+# ngTemplate Demo
 
 ## How to build
 

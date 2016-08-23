@@ -5,7 +5,7 @@
 * directive `data-ng-class-list-toggle` shortened till `data-ng-class`
 
 ## 0.1.1
-* consistency for error reporting: NgTemplate throws outside Exception and internally ExpressionException, error codes in the reporter
+* consistency for error reporting: ngTemplate throws outside Exception and internally ExpressionException, error codes in the reporter
 
 ## 0.1.2
 * ngFor optimized - relies now a direct link

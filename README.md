@@ -1,32 +1,32 @@
 
-# NgTemplate 1.0 BETA
+# ngTemplate 1.0 RC1
 
 [![NPM](https://nodei.co/npm/ng-template.png)](https://nodei.co/npm/ng-template/)
 
 [![Build Status](https://travis-ci.org/dsheiko/ng-template.png)](https://travis-ci.org/dsheiko/ng-template)
 
-`NgTemplate` is a light-weight DOM-based template engine, inspired by AngularJS.
+`ngTemplate` is a light-weight DOM-based template engine, inspired by AngularJS.
 
 `mustache.js`, `Handlebars` or `_.template` are all nice and shiny, until it comes to a form.
 With every rending these template engines replace the bound DOM subtree
 and the state of inputs gets lost.
 
-`NgTemplate` treats the DOM carefully. It modifies the exact target nodes gracefully
+`ngTemplate` treats the DOM carefully. It modifies the exact target nodes gracefully
 according to the directives and actual state.
 
 ## Motivation
 
-* Progressive enhancement friendly: Server-side generated HTML can be fully ready for presentation. During `NgTemplate` synchronization it will be updated according to element directives and a provided state
+* Progressive enhancement friendly: Server-side generated HTML can be fully ready for presentation. During `ngTemplate` synchronization it will be updated according to element directives and a provided state
 * HTML compliant: `data-*` - directives instead of foreign concepts such as `{{foo}}`, `[hidden]`, `*ngFor`, `[(ngModel)]`
 * Concern separation: Presentation state logic decoupled from the view
-* Performance: `NgTemplate` modifies DOM nodes by state diff; it touches the DOM only when it's necessary
+* Performance: `ngTemplate` modifies DOM nodes by state diff; it touches the DOM only when it's necessary
 * Easy to catch up: Familiar for Angular folks directives such as `data-ng-if`, `data-ng-switch`, `data-ng-for` and a few extra intuitive e.g. `data-ng-text`, `data-ng-class`
 * Really small library: minimized gziped [size is 4K](https://raw.githubusercontent.com/dsheiko/ng-template/master/dist/ngtemplate.glob.min.js)
 * Definitely Typed: IDE checks on the fly if you violate any of declared interfaces (if not the compiler does)
 
 ## How does it work?
 
-Templates are written with HTML that contains `NgTemplate`-specific data attributes (`data-ng-*`):
+Templates are written with HTML that contains `ngTemplate`-specific data attributes (`data-ng-*`):
 
 ```html
 <form id="heroForm" novalidate>
@@ -50,7 +50,7 @@ Templates are written with HTML that contains `NgTemplate`-specific data attribu
 </form>
 ```
 
-`NgTemplate` synchronizes the template with the passed state. Let's say we have the template HTML within a DOM element,
+`ngTemplate` synchronizes the template with the passed state. Let's say we have the template HTML within a DOM element,
 so we initialize the template like `let template = new NgTemplate( el );`. Alternatively we can populate
 the bounding element with the template from the passed string: `let template = new NgTemplate( el, '<i data-ng-if="foo">Hello!</i>' );`
 <br /><br />As soon as we have `template` object we can sync it to a specified scope. E.g. `template.sync({ foo: true });` makes
@@ -86,11 +86,11 @@ template.sync( scope );
 
 ## Live Demo
 
-[NgTemplate Demo: Hero](https://dsheiko.github.io/ng-template/demo.html)
+[ngTemplate Demo: Hero](https://dsheiko.github.io/ng-template/demo.html)
 
 ## Installing
 
-You can get `NgTemplate` via npm.
+You can get `ngTemplate` via npm.
 ```
 npm i --save ng-template
 ```
@@ -192,7 +192,7 @@ data-ng-if="foo && this.checked"
 > Such expressions are being evaluated without use of `eval()` and therefore the process takes much less time and resources.
 > You can check how the parser treats your expressions by studying content of `template.report().tokens` array
 
-## NgTemplate Report
+## ngTemplate Report
 
 You can get template synchronization details like that:
 
@@ -418,7 +418,7 @@ console.log( document.body.innerHTML ); // <i class="is-hidden"></i>
 
 ## Contributing
 
-`NgTemplate` welcomes maintainers. There is plenty of work to do. No big commitment required,
+`ngTemplate` welcomes maintainers. There is plenty of work to do. No big commitment required,
 if all you do is review a single Pull Request, you are a maintainer.
 
 
