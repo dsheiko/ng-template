@@ -9,6 +9,7 @@
   "branchVersion": "^1.0.0-RC.1",
   "branchPattern": "1.0.*",
   "scripts": {
+    "start": "http-server . -o",
     "build": "tslint --project tsconfig.json && tsc && npm run browserfy:demo && npm run browserfy",
     "browserfy": "tsc && cjsc dist/ngtemplate.glob.js -o dist/ngtemplate.glob.min.js -M",
     "build:demo": "tsc -p demo",
@@ -58,6 +59,7 @@
   "devDependencies": {
     "cjsc": "^1.0.7",
     "es6-shim": "^0.35.1",
+    "http-server": "^0.9.0",
     "jasmine-core": "^2.4.1",
     "karma": "^1.2.0",
     "karma-chrome-launcher": "^0.1.4",
