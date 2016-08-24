@@ -209,9 +209,9 @@ console.log( tpl.report().errors ); // [ "'foo.bar.baz' is undefined" ]
 
 ## Directives
 
-### NgText
+### ngText
 
-We use `NgText` to modify element's `textNode`
+We use `ngText` to modify element's `textNode`
 
 #### Syntax
 
@@ -237,9 +237,9 @@ HTML gets automatically escaped:
 console.log( document.body.innerHTML ); // <i>&lt;button&gt;</i>
 ```
 
-### NgProp
+### ngProp
 
-We use `NgProp` to modify element's properties
+We use `ngProp` to modify element's properties
 
 #### Syntax
 
@@ -257,9 +257,9 @@ console.log( document.body.innerHTML ); // <button disabled=""></button>
 ```
 
 
-### NgData
+### ngData
 
-We use `NgData` to modify element's dataset
+We use `ngData` to modify element's dataset
 
 #### Syntax
 
@@ -277,9 +277,9 @@ console.log( document.body.innerHTML ); // <div data-date-of-birth="1960-10-03">
 ```
 
 
-### NgClass
+### ngClass
 
-We use `NgClass` to modify element's `classList`
+We use `ngClass` to modify element's `classList`
 
 #### Syntax
 
@@ -305,9 +305,9 @@ console.log( document.body.innerHTML ); // <i class="is-hidden"></i>
 
 
 
-### NgIf
+### ngIf
 
-We use `NgFor` to toggle visibility of an element (subtree) within the DOM
+We use `ngFor` to toggle visibility of an element (subtree) within the DOM
 
 #### Syntax
 
@@ -328,9 +328,9 @@ console.log( document.body.innerHTML ); // <i>Hello!</i>
 ```
 
 
-### NgFor
+### ngFor
 
-We use `NgFor` when we need to generate a list of elements (subtrees)
+We use `ngFor` when we need to generate a list of elements (subtrees)
 
 #### Syntax
 
@@ -348,9 +348,9 @@ console.log( document.body.innerHTML ); // <i>foo</i><i>bar</i>
 ```
 
 
-### NgSwitch
+### ngSwitch
 
-We use `NgSwitch` when we need to display on element (subtree) of a set of available options.
+We use `ngSwitch` when we need to display on element (subtree) of a set of available options.
 
 #### Syntax
 
@@ -386,12 +386,12 @@ console.log( document.body.innerHTML ); // <i>FOO</i>
 console.log( document.body.innerHTML ); // <i>BAZ</i>
 ```
 
-### NgEl
+### ngEl
 
-We use `NgEl` to modify element properties
+We use `ngEl` to modify element properties
 
-> :exclamation: NOTE: Using `NgEl` is rather discouraging as it cannot be cached and every model sync will
-cause the DOM modification even if the expression of `NgEl` wasn't changed
+> :exclamation: NOTE: Using `ngEl` is rather discouraging as it cannot be cached and every model sync will
+cause the DOM modification even if the expression of `ngEl` wasn't changed
 
 #### Syntax
 
