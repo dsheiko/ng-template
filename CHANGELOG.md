@@ -10,3 +10,6 @@
 ## 0.1.2
 * ngFor optimized - relies now a direct link
 * scope variable undefined warnings moved out of reporter.errors to reporter.log. These are not errors really - template may have variables that will be fullfilled asynchronously. But still we have a possibility to check in the log how the template parsed.
+
+## 0.1.3
+* Going RC1
