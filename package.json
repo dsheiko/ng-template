@@ -9,13 +9,8 @@
   "branchVersion": "^1.0.0-beta.1",
   "branchPattern": "1.0.*",
   "scripts": {
-    "start": "grunt",
-    "browserfy": "tsc && cjsc dist/ngtemplate.glob.js -o dist/ngtemplate.glob.min.js -M",
-    "build": "tsc",
-    "build:demo": "tsc -p demo",
-    "browserfy:demo": "tsc -p demo && cjsc demo/build/demo/main.js -o demo/build/demo/main-vanilla.min.js -M",
-    "test": "tslint --project tsconfig.json && tsc && mocha-phantomjs tests/index.html",
-    "test:ts": "tsc && mocha-phantomjs tests/index.html"
+    "start": "gitbook serve",
+    "build": "gitbook build"
   },
   "licenses": [
     {
