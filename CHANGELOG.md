@@ -13,3 +13,6 @@
 
 ## 0.1.3
 * Going RC1
+
+## 0.1.4
+* introducing constructor options with optional callbacks `willMount` and `didMount` (like React's `componentWillMount` and `componentDidMount`)

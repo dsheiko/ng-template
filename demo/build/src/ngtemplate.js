@@ -19,9 +19,11 @@ var NgTemplate = (function () {
      * Initialize template for a given Element
      * If template passed, load it into the Element
      */
-    function NgTemplate(el, template) {
+    function NgTemplate(el, template, options) {
+        if (options === void 0) { options = {}; }
         this.el = el;
         this.template = template;
+        this.options = options;
         this.directives = [];
         if (!this.el) {
             throw new exception_1.Exception("(NgTemplate) Invalid first parameter: must be an existing DOM node");
@@ -29,8 +31,8 @@ var NgTemplate = (function () {
         this.reporter = new reporter_1.Reporter();
         this.template || this.init(DIRECTIVES);
     }
-    NgTemplate.factory = function (el, template) {
-        return new NgTemplate(el, template || null);
+    NgTemplate.factory = function (el, template, options) {
+        return new NgTemplate(el, template || null, options);
     };
     NgTemplate.prototype.init = function (directives) {
         var _this = this;
@@ -44,9 +46,11 @@ var NgTemplate = (function () {
     NgTemplate.prototype.sync = function (data) {
         // Late initialization: renders from a given template on first sync
         if (this.template) {
+            typeof this.options.willMount === "function" && this.options.willMount();
             this.el.innerHTML = this.template;
             this.init(DIRECTIVES);
             this.template = null;
+            typeof this.options.didMount === "function" && this.options.didMount();
         }
         this.directives.forEach(function (d) {
             d.sync(data, NgTemplate);

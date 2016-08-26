@@ -150,6 +150,22 @@ NgTemplate.factory( el, tpl )
   .sync( scope );
 ```
 
+### Options
+You can define though the constructor options the callbacks `willMount` and `didMount`. The first one gets invoked straight before the `ngTemplate` populates
+bounding element's inner HTML from the template string. `ngTemplate`  calls the second callback after that:
+
+```javascript
+import { NgTemplate } from "ng-template";
+let template = new NgTemplate( el, tpl, {
+ willMount: function(){
+    console.log( "Template is up to initial rendering" );
+  },
+  didMount: function(){
+    console.log( "Template just finished initial rendering" );
+  }
+});
+```
+
 ## Template expressions
 
 Template expressions are being evaluated in the given `scope`. So we can reference scope variables within template e.g.

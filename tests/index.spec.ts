@@ -6,6 +6,7 @@ import AbstractDirectiveSpec from "./spec/abstract-directive.spec";
 import NgForDirectiveSpec from "./spec/ngfor.spec";
 import ExpressionSpec from "./spec/expression.spec";
 import NgTemplateSpec from "./spec/ngtemplate.spec";
+import ConstructorSpec from "./spec/constructor.spec";
 
 TokenizerSpec();
 ParserSpec();
@@ -14,3 +15,4 @@ CacheSpec();
 AbstractDirectiveSpec();
 NgForDirectiveSpec();
 NgTemplateSpec();
+ConstructorSpec();
