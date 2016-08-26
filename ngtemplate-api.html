@@ -330,6 +330,16 @@ template.sync( scope ); <span class="hljs-comment">// render on the first run an
 );
 tpl.sync({});
 <span class="hljs-built_in">console</span>.log( tpl.report().errors ); <span class="hljs-comment">// [ &quot;&apos;foo.bar.baz&apos; is undefined&quot; ]</span></code></pre>
+<h2 id="options">Options</h2><p>You can define though the constructor options the callbacks <code>willMount</code> and <code>didMount</code>. The first one gets invoked straight before the <code>ngTemplate</code> populates
+bounding element&apos;s inner HTML from the template string. <code>ngTemplate</code>  calls the second callback after that:</p><pre><code class="lang-javascript"><span class="hljs-keyword">import</span> { NgTemplate } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;ng-template&quot;</span>;
+<span class="hljs-keyword">let</span> template = <span class="hljs-keyword">new</span> NgTemplate( el, tpl, {
+ willMount: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+    <span class="hljs-built_in">console</span>.log( <span class="hljs-string">&quot;Template is up to initial rendering&quot;</span> );
+  },
+  didMount: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+    <span class="hljs-built_in">console</span>.log( <span class="hljs-string">&quot;Template just finished initial rendering&quot;</span> );
+  }
+});</code></pre>
 
                                 
                                 </section>
@@ -373,7 +383,7 @@ tpl.sync({});
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"ngTemplate API","level":"1.3","depth":1,"next":{"title":"Template Expressions","level":"1.4","depth":1,"path":"template-expressions.md","ref":"template-expressions.md","articles":[]},"previous":{"title":"Getting Started","level":"1.2","depth":1,"path":"getting-started.md","ref":"getting-started.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"ngtemplate-api.md","mtime":"2016-08-24T12:22:47.477Z","type":"markdown"},"gitbook":{"version":"3.2.0","time":"2016-08-24T12:23:35.057Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"ngTemplate API","level":"1.3","depth":1,"next":{"title":"Template Expressions","level":"1.4","depth":1,"path":"template-expressions.md","ref":"template-expressions.md","articles":[]},"previous":{"title":"Getting Started","level":"1.2","depth":1,"path":"getting-started.md","ref":"getting-started.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"ngtemplate-api.md","mtime":"2016-08-26T10:49:18.866Z","type":"markdown"},"gitbook":{"version":"3.2.0","time":"2016-08-26T10:49:34.526Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
