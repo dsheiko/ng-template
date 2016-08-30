@@ -5,9 +5,7 @@
   "author": "Dmitry Sheiko",
   "main": "./dist/ngtemplate.js",
   "typings": "./index.d.ts",
-  "version": "0.1.4",
-  "branchVersion": "^1.0.0-RC.1",
-  "branchPattern": "1.0.*",
+  "version": "0.1.5",
   "scripts": {
     "start": "http-server . -o",
     "build": "tslint --project tsconfig.json && tsc && npm run browserfy:demo && npm run browserfy",
@@ -36,25 +34,6 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:dsheiko/ng-template.git"
-  },
-  "testling": {
-    "html": "tests/index.html",
-    "browsers": [
-      "iexplore/6.0..latest",
-      "firefox/3.0..6.0",
-      "firefox/10.0",
-      "firefox/15.0..latest",
-      "firefox/nightly",
-      "chrome/4.0..10.0",
-      "chrome/20.0..latest",
-      "chrome/canary",
-      "opera/10.0..latest",
-      "opera/next",
-      "safari/4.0..latest",
-      "ipad/6.0..latest",
-      "iphone/6.0..latest",
-      "android-browser/4.2..latest"
-    ]
   },
   "devDependencies": {
     "cjsc": "^1.0.7",
