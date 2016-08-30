@@ -1,0 +1,8 @@
+{
+  "name": "ng-template",
+  "main": "ng-template.d.ts",
+  "homepage": "https://github.com/dsheiko/ng-template",
+  "dependencies": {
+  },
+  "version": "0.0.1"
+}

@@ -1,5 +1,4 @@
 "use strict";
-/// <reference path="./ngtemplate.d.ts" />
 var ngif_1 = require("./ng-template/ngif");
 var ngel_1 = require("./ng-template/ngel");
 var ngtext_1 = require("./ng-template/ngtext");

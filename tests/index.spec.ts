@@ -1,4 +1,3 @@
-/// <reference path="../src/ngtemplate.d.ts" />
 import CacheSpec from "./spec/cache.spec";
 import ParserSpec from "./spec/expression/parser.spec";
 import TokenizerSpec from "./spec/expression/tokenizer.spec";

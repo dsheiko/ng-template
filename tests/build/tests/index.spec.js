@@ -1,5 +1,4 @@
 "use strict";
-/// <reference path="../src/ngtemplate.d.ts" />
 var cache_spec_1 = require("./spec/cache.spec");
 var parser_spec_1 = require("./spec/expression/parser.spec");
 var tokenizer_spec_1 = require("./spec/expression/tokenizer.spec");
