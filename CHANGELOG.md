@@ -16,3 +16,6 @@
 
 ## 0.1.4
 * introducing constructor options with optional callbacks `willMount` and `didMount` (like React's `componentWillMount` and `componentDidMount`)
+
+# 0.1.7
+* introducing `data-ng-attr` directive
