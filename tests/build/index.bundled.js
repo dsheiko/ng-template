@@ -832,6 +832,7 @@ var ngif_1 = _require( "tests/build/tests/spec/ng-template/ngif.js" );
 var ngel_1 = _require( "tests/build/tests/spec/ng-template/ngel.js" );
 var ngclass_1 = _require( "tests/build/tests/spec/ng-template/ngclass.js" );
 var ngprop_1 = _require( "tests/build/tests/spec/ng-template/ngprop.js" );
+var ngattr_1 = _require( "tests/build/tests/spec/ng-template/ngattr.js" );
 var ngdata_1 = _require( "tests/build/tests/spec/ng-template/ngdata.js" );
 var ngtext_1 = _require( "tests/build/tests/spec/ng-template/ngtext.js" );
 var ngfor_1 = _require( "tests/build/tests/spec/ng-template/ngfor.js" );
@@ -845,6 +846,7 @@ function NgTemplateSpec() {
         ngel_1.default.call(this);
         ngclass_1.default.call(this);
         ngprop_1.default.call(this);
+        ngattr_1.default.call(this);
         ngdata_1.default.call(this);
         ngtext_1.default.call(this);
         ngfor_1.default.call(this);
@@ -910,11 +912,12 @@ var ngswitchcase_1 = _require( "tests/build/src/ng-template/ngswitchcase.js" );
 var ngswitchcasedefault_1 = _require( "tests/build/src/ng-template/ngswitchcasedefault.js" );
 var ngclass_1 = _require( "tests/build/src/ng-template/ngclass.js" );
 var ngprop_1 = _require( "tests/build/src/ng-template/ngprop.js" );
+var ngattr_1 = _require( "tests/build/src/ng-template/ngattr.js" );
 var ngdata_1 = _require( "tests/build/src/ng-template/ngdata.js" );
 var exception_1 = _require( "tests/build/src/ng-template/exception.js" );
 var reporter_1 = _require( "tests/build/src/ng-template/reporter.js" );
 var DIRECTIVES = [ngfor_1.NgFor, ngswitch_1.NgSwitch, ngswitchcase_1.NgSwitchCase, ngswitchcasedefault_1.NgSwitchCaseDefault, ngif_1.NgIf,
-    ngclass_1.NgClass, ngdata_1.NgData, ngprop_1.NgProp, ngel_1.NgEl, ngtext_1.NgText];
+    ngclass_1.NgClass, ngdata_1.NgData, ngprop_1.NgProp, ngattr_1.NgAttr, ngel_1.NgEl, ngtext_1.NgText];
 var NgTemplate = (function () {
     /**
      * Initialize template for a given Element
@@ -1047,64 +1050,6 @@ var Parser = (function () {
     return Parser;
 }());
 exports.Parser = Parser;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ng-template/abstract-directive.js", function( _require, exports, module, global ){
-"use strict";
-var expression_1 = _require( "tests/build/src/ng-template/expression.js" );
-var cache_1 = _require( "tests/build/src/ng-template/cache.js" );
-var AbstractDirective = (function () {
-    function AbstractDirective(el, reporter) {
-    }
-    AbstractDirective.prototype.initNodes = function (el, identifier, cb) {
-        var datakey = this.getDataKey(identifier), selector = this.getSelector(identifier);
-        return Array.from(el.querySelectorAll(selector)).map(function (el) {
-            var expr = el.dataset[datakey];
-            delete el.dataset[datakey];
-            return cb(el, expr, expression_1.compile, new cache_1.Cache());
-        });
-    };
-    /**
-     * Converts foo-bar-baz to `[data-foo-bar-baz]`
-     */
-    AbstractDirective.prototype.getSelector = function (raw) {
-        return "[data-" + raw + "]";
-    };
-    /**
-     * Converts foo-bar-baz to fooBarBaz
-     */
-    AbstractDirective.prototype.getDataKey = function (raw) {
-        return raw
-            .split("-").map(function (part, inx) {
-            if (!inx) {
-                return part;
-            }
-            return part.substr(0, 1).toUpperCase() + part.substr(1);
-        })
-            .join("");
-    };
-    /**
-     * researched strategies
-     * el.innerText = str; - no standard
-     * el.textContent = str; - fast
-     * el.appendChild( document.createTextNode( str ) ) - slower
-     */
-    AbstractDirective.prototype.setText = function (el, str) {
-        el.textContent = str;
-    };
-    AbstractDirective.prototype.escape = function (str) {
-        var div = document.createElement("div");
-        this.setText(div, str);
-        return div.innerHTML;
-    };
-    return AbstractDirective;
-}());
-exports.AbstractDirective = AbstractDirective;
 
   module.exports = exports;
 
@@ -1267,6 +1212,64 @@ function tokenizer(rawValue) {
     }
 }
 exports.tokenizer = tokenizer;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/src/ng-template/abstract-directive.js", function( _require, exports, module, global ){
+"use strict";
+var expression_1 = _require( "tests/build/src/ng-template/expression.js" );
+var cache_1 = _require( "tests/build/src/ng-template/cache.js" );
+var AbstractDirective = (function () {
+    function AbstractDirective(el, reporter) {
+    }
+    AbstractDirective.prototype.initNodes = function (el, identifier, cb) {
+        var datakey = this.getDataKey(identifier), selector = this.getSelector(identifier);
+        return Array.from(el.querySelectorAll(selector)).map(function (el) {
+            var expr = el.dataset[datakey];
+            delete el.dataset[datakey];
+            return cb(el, expr, expression_1.compile, new cache_1.Cache());
+        });
+    };
+    /**
+     * Converts foo-bar-baz to `[data-foo-bar-baz]`
+     */
+    AbstractDirective.prototype.getSelector = function (raw) {
+        return "[data-" + raw + "]";
+    };
+    /**
+     * Converts foo-bar-baz to fooBarBaz
+     */
+    AbstractDirective.prototype.getDataKey = function (raw) {
+        return raw
+            .split("-").map(function (part, inx) {
+            if (!inx) {
+                return part;
+            }
+            return part.substr(0, 1).toUpperCase() + part.substr(1);
+        })
+            .join("");
+    };
+    /**
+     * researched strategies
+     * el.innerText = str; - no standard
+     * el.textContent = str; - fast
+     * el.appendChild( document.createTextNode( str ) ) - slower
+     */
+    AbstractDirective.prototype.setText = function (el, str) {
+        el.textContent = str;
+    };
+    AbstractDirective.prototype.escape = function (str) {
+        var div = document.createElement("div");
+        this.setText(div, str);
+        return div.innerHTML;
+    };
+    return AbstractDirective;
+}());
+exports.AbstractDirective = AbstractDirective;
 
   module.exports = exports;
 
@@ -1760,6 +1763,39 @@ exports.default = NgPropSpec;
   return module;
 });
 
+_require.def( "tests/build/tests/spec/ng-template/ngattr.js", function( _require, exports, module, global ){
+"use strict";
+var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
+function NgAttrSpec() {
+    describe("ng-attr directive", function () {
+        beforeEach(function () {
+            this.el = document.createElement("div");
+        });
+        it("evaluates the expression", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<input data-ng-attr=\"'required', required\">")
+                .sync({ required: true })
+                .pipe(function (el) {
+                var input = el.querySelector("input");
+                expect(input.hasAttribute("required")).toBe(true);
+            })
+                .sync({ required: false })
+                .pipe(function (el) {
+                var input = el.querySelector("input");
+                expect(input.hasAttribute("required")).toBe(false);
+            });
+        });
+    });
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = NgAttrSpec;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
 _require.def( "tests/build/tests/spec/ng-template/ngdata.js", function( _require, exports, module, global ){
 "use strict";
 var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
@@ -1825,61 +1861,6 @@ exports.default = NgElSpec;
   return module;
 });
 
-_require.def( "tests/build/tests/spec/ng-template/ngswitch.js", function( _require, exports, module, global ){
-"use strict";
-var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
-function NgSwitchSpec() {
-    describe("ng-switch/data-ng-switch-case directives", function () {
-        beforeEach(function () {
-            this.el = document.createElement("div");
-        });
-        it("evaluates the statement", function () {
-            ngtemplate_1.NgTemplate
-                .factory(this.el, "<div data-ng-switch='theCase'>" +
-                "<i data-ng-switch-case='1'>FOO</i>" +
-                "<i data-ng-switch-case='2'>BAR</i>" +
-                "</div>")
-                .sync({ theCase: 1 })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<i>FOO</i>");
-            })
-                .sync({ theCase: 2 })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<i>BAR</i>");
-            });
-        });
-    });
-    describe("ng-switch-case-default directive", function () {
-        beforeEach(function () {
-            this.el = document.createElement("div");
-        });
-        it("evaluates the statement", function () {
-            ngtemplate_1.NgTemplate
-                .factory(this.el, "<div data-ng-switch='theCase'>" +
-                "<i data-ng-switch-case='1'>FOO</i>" +
-                "<i data-ng-switch-case='2'>BAR</i>" +
-                "<i data-ng-switch-case-default>DEFAULT</i>" +
-                "</div>")
-                .sync({ theCase: 1 })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<i>FOO</i>");
-            })
-                .sync({ theCase: 3 })
-                .pipe(function (el) {
-                expect(el.innerHTML).toBe("<i>DEFAULT</i>");
-            });
-        });
-    });
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = NgSwitchSpec;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
 _require.def( "tests/build/tests/spec/ng-template/ngfor.js", function( _require, exports, module, global ){
 "use strict";
 var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
@@ -1932,6 +1913,61 @@ function NgForSpec() {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = NgForSpec;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/tests/spec/ng-template/ngswitch.js", function( _require, exports, module, global ){
+"use strict";
+var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
+function NgSwitchSpec() {
+    describe("ng-switch/data-ng-switch-case directives", function () {
+        beforeEach(function () {
+            this.el = document.createElement("div");
+        });
+        it("evaluates the statement", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<div data-ng-switch='theCase'>" +
+                "<i data-ng-switch-case='1'>FOO</i>" +
+                "<i data-ng-switch-case='2'>BAR</i>" +
+                "</div>")
+                .sync({ theCase: 1 })
+                .pipe(function (el) {
+                expect(el.innerHTML).toBe("<i>FOO</i>");
+            })
+                .sync({ theCase: 2 })
+                .pipe(function (el) {
+                expect(el.innerHTML).toBe("<i>BAR</i>");
+            });
+        });
+    });
+    describe("ng-switch-case-default directive", function () {
+        beforeEach(function () {
+            this.el = document.createElement("div");
+        });
+        it("evaluates the statement", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<div data-ng-switch='theCase'>" +
+                "<i data-ng-switch-case='1'>FOO</i>" +
+                "<i data-ng-switch-case='2'>BAR</i>" +
+                "<i data-ng-switch-case-default>DEFAULT</i>" +
+                "</div>")
+                .sync({ theCase: 1 })
+                .pipe(function (el) {
+                expect(el.innerHTML).toBe("<i>FOO</i>");
+            })
+                .sync({ theCase: 3 })
+                .pipe(function (el) {
+                expect(el.innerHTML).toBe("<i>DEFAULT</i>");
+            });
+        });
+    });
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = NgSwitchSpec;
 
   module.exports = exports;
 
@@ -2402,56 +2438,43 @@ exports.NgProp = NgProp;
   return module;
 });
 
-_require.def( "tests/build/src/ng-template/exception.js", function( _require, exports, module, global ){
+_require.def( "tests/build/src/ng-template/ngattr.js", function( _require, exports, module, global ){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-directive.js" );
 /**
- * Custom exception extending Error
- * @param {string} message
+ * <i data-ng-attr="'checked', true"></i>
  */
-var Exception = (function (_super) {
-    __extends(Exception, _super);
-    function Exception(message) {
-        _super.call(this, message);
-        this.name = "NgTemplateError",
-            this.message = message;
+var NgAttr = (function (_super) {
+    __extends(NgAttr, _super);
+    function NgAttr(el, reporter) {
+        _super.call(this, el, reporter);
+        this.nodes = this.initNodes(el, "ng-attr", function (node, expr, compile, cache) {
+            return {
+                el: node,
+                exp: compile(expr, "__toArray", reporter),
+                cache: cache
+            };
+        });
     }
-    return Exception;
-}(Error));
-exports.Exception = Exception;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ng-template/cache.js", function( _require, exports, module, global ){
-"use strict";
-var Cache = (function () {
-    function Cache() {
-    }
-    Cache.prototype.match = function (exVal) {
-        if (exVal === this.cache) {
-            return true;
-        }
-        this.cache = exVal;
-        return false;
+    NgAttr.prototype.sync = function (data) {
+        this.nodes.forEach(function (node) {
+            node.cache.evaluate(node.exp.call(node.el, data), function (args) {
+                var el = node.el;
+                if (!args[1]) {
+                    return el.removeAttribute(args[0]);
+                }
+                el.setAttribute(args[0], args[1]);
+            });
+        });
     };
-    Cache.prototype.evaluate = function (exVal, cb) {
-        if (this.match(exVal)) {
-            return;
-        }
-        cb(exVal);
-    };
-    return Cache;
-}());
-exports.Cache = Cache;
-;
+    return NgAttr;
+}(abstract_directive_1.AbstractDirective));
+exports.NgAttr = NgAttr;
 
   module.exports = exports;
 
@@ -2500,6 +2523,34 @@ exports.NgData = NgData;
   return module;
 });
 
+_require.def( "tests/build/src/ng-template/exception.js", function( _require, exports, module, global ){
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+/**
+ * Custom exception extending Error
+ * @param {string} message
+ */
+var Exception = (function (_super) {
+    __extends(Exception, _super);
+    function Exception(message) {
+        _super.call(this, message);
+        this.name = "NgTemplateError",
+            this.message = message;
+    }
+    return Exception;
+}(Error));
+exports.Exception = Exception;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
 _require.def( "tests/build/src/ng-template/expression/exception.js", function( _require, exports, module, global ){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
@@ -2518,6 +2569,35 @@ var ExpressionException = (function (_super) {
     return ExpressionException;
 }(exception_1.Exception));
 exports.ExpressionException = ExpressionException;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/src/ng-template/cache.js", function( _require, exports, module, global ){
+"use strict";
+var Cache = (function () {
+    function Cache() {
+    }
+    Cache.prototype.match = function (exVal) {
+        if (exVal === this.cache) {
+            return true;
+        }
+        this.cache = exVal;
+        return false;
+    };
+    Cache.prototype.evaluate = function (exVal, cb) {
+        if (this.match(exVal)) {
+            return;
+        }
+        cb(exVal);
+    };
+    return Cache;
+}());
+exports.Cache = Cache;
+;
 
   module.exports = exports;
 

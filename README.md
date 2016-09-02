@@ -272,6 +272,25 @@ We use `ngProp` to modify element's properties
 console.log( document.body.innerHTML ); // <button disabled=""></button>
 ```
 
+### ngAttr
+
+We use `ngAttr` to modify element's attributes
+
+#### Syntax
+
+```
+<el data-ng-attr="expression => attrName:string, expression => value:boolean|string" />
+```
+
+#### Examples
+
+```javascript
+(new NgTemplate( document.body , `<input data-ng-prop="'required', required">` ))
+  .sync({ required: true });
+
+console.log( document.body.innerHTML ); // <input required="true">
+```
+
 
 ### ngData
 
