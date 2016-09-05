@@ -6,6 +6,29 @@ let reporter = new Reporter();
 
 export default function NgForDirectiveSpec(){
   describe("NgTemplate.ngFor", function(){
+    
+    describe(".createEl", function(){
+      it( "creates detached node", function() {
+        let el = NgFor.createEl( "li", "<li class='test'><i></i></li>" );
+        expect( el.tagName ).toBe( "LI" );
+        expect( el.classList.contains( "test" ) ).toBeTruthy();
+        expect( (<HTMLElement>el.firstChild).tagName ).toBe( "I" );
+      });
+      it( "detaches/attaches to DOM", function() {
+        let cont = document.createElement( "form" ),
+            foo = NgFor.createEl( "input", "<input />" ) as HTMLInputElement,
+            bar = NgFor.createEl( "input", "<input />" ) as HTMLInputElement;
+        cont.appendChild( foo );
+        cont.appendChild( bar );
+        ( cont.querySelectorAll( "input" ).item( 0 ) as HTMLInputElement ).value = "foo";
+        ( cont.querySelectorAll( "input" ).item( 1 ) as HTMLInputElement ).value = "bar";
+        cont.innerHTML = "";
+        cont.appendChild( foo );
+        cont.appendChild( bar );
+        expect( ( cont.querySelectorAll( "input" ).item( 0 ) as HTMLInputElement ).value ).toBe( "foo" );
+        expect( ( cont.querySelectorAll( "input" ).item( 1 ) as HTMLInputElement ).value ).toBe( "bar" );
+      });
+    });
       describe("#parseExpr", function(){
         it( "parses `let row of rows`", function() {
           var res = NgFor.prototype.parseExpr( "let row of rows" );
@@ -16,21 +39,6 @@ export default function NgForDirectiveSpec(){
           var res = NgFor.prototype.parseExpr( "let row of rows" );
           expect( res.variable ).toBe( "row" );
           expect( res.iterable ).toBe( "rows" );
-        });
-      });
-
-      describe("#nodesToDocFragment", function(){
-
-        it( "creates headless DOM subtree", function() {
-          var el = document.createElement( "div" ),
-              doc: HTMLElement,
-              div = document.createElement( "div" );
-
-          div.innerHTML = "<i>1</i><i>2</i>";
-          doc = (<any>NgFor.prototype).nodesToDocFragment( div );
-
-          el.appendChild( doc );
-          expect( el.innerHTML ).toBe( "<i>1</i><i>2</i>" );
         });
       });
 
@@ -47,13 +55,8 @@ export default function NgForDirectiveSpec(){
         it( "creates node.exp", function() {
           var ngfor = new NgFor( this.el, reporter ),
               node = ngfor.nodes.shift(),
-              res = "";
-
-          node.exp({ rows: [1,2,3] }, function( val: string ){
-              res += "_" + val;
-          });
-
-          expect( res ).toBe( "_1_2_3" );
+              res = node.exp({ rows: [1,2,3] }).join( "," );
+          expect( res ).toBe( "1,2,3" );
         });
       });
 

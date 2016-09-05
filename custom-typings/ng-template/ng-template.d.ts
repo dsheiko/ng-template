@@ -20,6 +20,10 @@ declare namespace NgTemplate {
     toJSON(): NgTemplate.DataMap;
   }
 
+  interface ForItem {
+    el: Node;
+    tpl: NgTemplate.NgTemplate;
+  }
   interface DataMap { [s: string]: any; }
 
   interface DirectiveNode {
@@ -30,6 +34,8 @@ declare namespace NgTemplate {
     cache?: Cache;
     exp: Function;
     id?: string;
+    variable?: any;
+    items?: ForItem[];
   }
 
   interface SyncCallback {
