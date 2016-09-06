@@ -65,6 +65,8 @@ var NgTemplate = (function () {
     return NgTemplate;
 }());
 exports.NgTemplate = NgTemplate;
+// element.matches polyfill
+// @link https://developer.mozilla.org/en/docs/Web/API/Element/matches
 if (!Element.prototype.matches) {
     var eProto = Element.prototype;
     Element.prototype.matches =
