@@ -1,11 +1,10 @@
 {
   "resolution": "main",
   "tree": {
-    "src": "/home/dsheiko/Sites/ng-template/custom-typings/ng-template/typings.json",
+    "src": "/home/sheiko/Sites/os/ng-template/custom-typings/ng-template/typings.json",
     "raw": "file:custom-typings/ng-template/typings.json",
     "main": "ng-template.d.ts",
     "version": "0.0.1",
-    "global": false,
     "name": "ng-template",
     "type": "typings"
   }

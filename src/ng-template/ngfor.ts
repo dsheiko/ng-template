@@ -35,7 +35,7 @@ export class NgFor extends AbstractDirective implements NgTemplate.Directive {
         outerHTML: outerHTML,
         id: id,
         variable: parsed.variable,
-        items: [] as NgTemplate.ForItem[],
+        items: <Array<NgTemplate.NgTemplate>>[],
         cache: cache,
         exp: function( data: NgTemplate.DataMap, cb: Function ): any[] {
           let it: any[] = [];
@@ -99,33 +99,30 @@ export class NgFor extends AbstractDirective implements NgTemplate.Directive {
 
   sync( data: NgTemplate.DataMap, Ctor: NgTemplate.NgTemplateCtor ){
     this.nodes.forEach(( node: NgTemplate.DirectiveNode ) => {
-      
+
       let it: any[] = node.exp( data );
       if ( node.cache.match( JSON.stringify( it ) ) ) {
         return false;
       }
       // reduce
       if ( node.items.length > it.length ) {
-        node.items.slice( 0, it.length );
+        node.items = node.items.slice( 0, it.length );
       }
       // expand
       if ( node.items.length < it.length ) {
         let num = it.length - node.items.length;
         while ( num-- ){
           let el = NgFor.createEl( node.el.tagName, node.outerHTML );
-          node.items.push({
-            el: el,
-            tpl: new Ctor( el )
-          });
+          node.items.push(new Ctor( el ));
         }
       }
       // sync
       it.forEach(( val, inx ) => {
-        let item: NgTemplate.ForItem = node.items[ inx ];
+        let item: NgTemplate.NgTemplate = node.items[ inx ];
         data[ node.variable ] = val;
-        item.tpl.sync( data );
+        item.sync( data );
       });
-      
+
       this.buildDOM( node );
     });
   }
@@ -145,7 +142,7 @@ export class NgFor extends AbstractDirective implements NgTemplate.Directive {
     items.forEach(( child ) => {
       node.parentNode.removeChild( child );
     });
-    node.items.reverse().forEach(( item: NgTemplate.ForItem ) => {
+    node.items.forEach(( item: NgTemplate.NgTemplate ) => {
       node.parentNode.insertBefore( item.el, anchor );
     });
     node.parentNode.removeChild( anchor );

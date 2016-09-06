@@ -30,6 +30,63 @@ function NgForSpec() {
             expect(this.el.querySelectorAll("i").length).toBe(3);
             expect(this.el.querySelector("i").innerHTML).toBe("foo");
         });
+        it("does not break on reducing", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row.name\"></i>")
+                .sync({ rows: [
+                    { name: "foo" },
+                    { name: "bar" },
+                    { name: "baz" }
+                ] })
+                .sync({ rows: [
+                    { name: "foo1" },
+                    { name: "bar1" }
+                ] })
+                .pipe(function (el) {
+                var els = el.querySelectorAll("i");
+                expect(els.length).toBe(2);
+                expect(els.item(0).innerHTML).toBe("foo1");
+                expect(els.item(1).innerHTML).toBe("bar1");
+            });
+        });
+        it("does not break on expanding", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row.name\"></i>")
+                .sync({ rows: [
+                    { name: "foo" },
+                    { name: "bar" }
+                ] })
+                .sync({ rows: [
+                    { name: "foo1" },
+                    { name: "bar1" },
+                    { name: "baz1" }
+                ] })
+                .pipe(function (el) {
+                var els = el.querySelectorAll("i");
+                expect(els.length).toBe(3);
+                expect(els.item(0).innerHTML).toBe("foo1");
+                expect(els.item(1).innerHTML).toBe("bar1");
+                expect(els.item(2).innerHTML).toBe("baz1");
+            });
+        });
+        it("does not kill the state of generated items", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<i data-ng-for=\"let row of rows\"><input data-ng-data=\"'name', row.name\" /></i>")
+                .sync({ rows: [
+                    { name: "foo" }
+                ] })
+                .pipe(function (el) {
+                el.querySelector("input").value = "foo";
+            })
+                .sync({ rows: [
+                    { name: "bar" }
+                ] })
+                .pipe(function (el) {
+                var input = el.querySelector("input");
+                expect(input.dataset["name"]).toBe("bar");
+                expect(input.value).toBe("foo");
+            });
+        });
         it("does not fall on multiple syncs", function () {
             ngtemplate_1.NgTemplate
                 .factory(this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row\"></i>")

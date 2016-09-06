@@ -977,6 +977,22 @@ var NgTemplate = (function () {
     return NgTemplate;
 }());
 exports.NgTemplate = NgTemplate;
+// element.matches polyfill
+// @link https://developer.mozilla.org/en/docs/Web/API/Element/matches
+if (!Element.prototype.matches) {
+    var eProto = Element.prototype;
+    Element.prototype.matches =
+        eProto.matchesSelector ||
+            eProto.mozMatchesSelector ||
+            eProto.msMatchesSelector ||
+            eProto.oMatchesSelector ||
+            eProto.webkitMatchesSelector ||
+            function (s) {
+                var matches = (this.document || this.ownerDocument).querySelectorAll(s), i = matches.length;
+                while (--i >= 0 && matches.item(i) !== this) { }
+                return i > -1;
+            };
+}
 
   module.exports = exports;
 
@@ -1235,8 +1251,9 @@ var AbstractDirective = (function () {
     function AbstractDirective(el, reporter) {
     }
     AbstractDirective.prototype.initNodes = function (el, identifier, cb) {
-        var datakey = this.getDataKey(identifier), selector = this.getSelector(identifier);
-        return Array.from(el.querySelectorAll(selector)).map(function (el) {
+        var datakey = this.getDataKey(identifier), selector = this.getSelector(identifier), targets = (el.matches(selector)
+            ? [el] : Array.from(el.querySelectorAll(selector)));
+        return targets.map(function (el) {
             var expr = el.dataset[datakey];
             delete el.dataset[datakey];
             return cb(el, expr, expression_1.compile, new cache_1.Cache());
@@ -1384,24 +1401,21 @@ var NgFor = (function (_super) {
             }
             // reduce
             if (node.items.length > it.length) {
-                node.items.slice(0, it.length);
+                node.items = node.items.slice(0, it.length);
             }
             // expand
             if (node.items.length < it.length) {
                 var num = it.length - node.items.length;
                 while (num--) {
                     var el = NgFor.createEl(node.el.tagName, node.outerHTML);
-                    node.items.push({
-                        el: el,
-                        tpl: new Ctor(el)
-                    });
+                    node.items.push(new Ctor(el));
                 }
             }
             // sync
             it.forEach(function (val, inx) {
                 var item = node.items[inx];
                 data[node.variable] = val;
-                item.tpl.sync(data);
+                item.sync(data);
             });
             _this.buildDOM(node);
         });
@@ -1418,7 +1432,7 @@ var NgFor = (function (_super) {
         items.forEach(function (child) {
             node.parentNode.removeChild(child);
         });
-        node.items.reverse().forEach(function (item) {
+        node.items.forEach(function (item) {
             node.parentNode.insertBefore(item.el, anchor);
         });
         node.parentNode.removeChild(anchor);
@@ -1820,38 +1834,6 @@ exports.default = NgAttrSpec;
   return module;
 });
 
-_require.def( "tests/build/tests/spec/ng-template/ngtext.js", function( _require, exports, module, global ){
-"use strict";
-var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
-function NgElSpec() {
-    describe("ng-text directive", function () {
-        beforeEach(function () {
-            this.el = document.createElement("div");
-        });
-        it("evaluates the statement", function () {
-            ngtemplate_1.NgTemplate
-                .factory(this.el, "<span data-ng-text=\"foo\">Pristine</span>")
-                .sync({ foo: "New value" });
-            expect(this.el.innerHTML).not.toMatch("Pristine");
-            expect(this.el.innerHTML).toMatch("New value");
-        });
-        it("escapes output", function () {
-            ngtemplate_1.NgTemplate
-                .factory(this.el, "<span data-ng-text=\"foo\">Pristine</span>")
-                .sync({ foo: "<button>" });
-            expect(this.el.innerHTML).not.toMatch("<button>");
-        });
-    });
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = NgElSpec;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
 _require.def( "tests/build/tests/spec/ng-template/ngdata.js", function( _require, exports, module, global ){
 "use strict";
 var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
@@ -1878,6 +1860,38 @@ function NgDataSpec() {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = NgDataSpec;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/tests/spec/ng-template/ngtext.js", function( _require, exports, module, global ){
+"use strict";
+var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
+function NgElSpec() {
+    describe("ng-text directive", function () {
+        beforeEach(function () {
+            this.el = document.createElement("div");
+        });
+        it("evaluates the statement", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<span data-ng-text=\"foo\">Pristine</span>")
+                .sync({ foo: "New value" });
+            expect(this.el.innerHTML).not.toMatch("Pristine");
+            expect(this.el.innerHTML).toMatch("New value");
+        });
+        it("escapes output", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<span data-ng-text=\"foo\">Pristine</span>")
+                .sync({ foo: "<button>" });
+            expect(this.el.innerHTML).not.toMatch("<button>");
+        });
+    });
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = NgElSpec;
 
   module.exports = exports;
 
@@ -1917,6 +1931,63 @@ function NgForSpec() {
                 ] });
             expect(this.el.querySelectorAll("i").length).toBe(3);
             expect(this.el.querySelector("i").innerHTML).toBe("foo");
+        });
+        it("does not break on reducing", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row.name\"></i>")
+                .sync({ rows: [
+                    { name: "foo" },
+                    { name: "bar" },
+                    { name: "baz" }
+                ] })
+                .sync({ rows: [
+                    { name: "foo1" },
+                    { name: "bar1" }
+                ] })
+                .pipe(function (el) {
+                var els = el.querySelectorAll("i");
+                expect(els.length).toBe(2);
+                expect(els.item(0).innerHTML).toBe("foo1");
+                expect(els.item(1).innerHTML).toBe("bar1");
+            });
+        });
+        it("does not break on expanding", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<i data-ng-for=\"let row of rows\" data-ng-text=\"row.name\"></i>")
+                .sync({ rows: [
+                    { name: "foo" },
+                    { name: "bar" }
+                ] })
+                .sync({ rows: [
+                    { name: "foo1" },
+                    { name: "bar1" },
+                    { name: "baz1" }
+                ] })
+                .pipe(function (el) {
+                var els = el.querySelectorAll("i");
+                expect(els.length).toBe(3);
+                expect(els.item(0).innerHTML).toBe("foo1");
+                expect(els.item(1).innerHTML).toBe("bar1");
+                expect(els.item(2).innerHTML).toBe("baz1");
+            });
+        });
+        it("does not kill the state of generated items", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<i data-ng-for=\"let row of rows\"><input data-ng-data=\"'name', row.name\" /></i>")
+                .sync({ rows: [
+                    { name: "foo" }
+                ] })
+                .pipe(function (el) {
+                el.querySelector("input").value = "foo";
+            })
+                .sync({ rows: [
+                    { name: "bar" }
+                ] })
+                .pipe(function (el) {
+                var input = el.querySelector("input");
+                expect(input.dataset["name"]).toBe("bar");
+                expect(input.value).toBe("foo");
+            });
         });
         it("does not fall on multiple syncs", function () {
             ngtemplate_1.NgTemplate

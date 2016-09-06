@@ -13,6 +13,7 @@ var NgText = (function (_super) {
     function NgText(el, reporter) {
         _super.call(this, el, reporter);
         this.nodes = this.initNodes(el, "ng-text", function (node, expr, compile, cache) {
+            console.log("N", node);
             return {
                 el: node,
                 exp: compile(expr, "String", reporter),

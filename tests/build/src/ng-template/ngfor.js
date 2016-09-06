@@ -96,24 +96,21 @@ var NgFor = (function (_super) {
             }
             // reduce
             if (node.items.length > it.length) {
-                node.items.slice(0, it.length);
+                node.items = node.items.slice(0, it.length);
             }
             // expand
             if (node.items.length < it.length) {
                 var num = it.length - node.items.length;
                 while (num--) {
                     var el = NgFor.createEl(node.el.tagName, node.outerHTML);
-                    node.items.push({
-                        el: el,
-                        tpl: new Ctor(el)
-                    });
+                    node.items.push(new Ctor(el));
                 }
             }
             // sync
             it.forEach(function (val, inx) {
                 var item = node.items[inx];
                 data[node.variable] = val;
-                item.tpl.sync(data);
+                item.sync(data);
             });
             _this.buildDOM(node);
         });
@@ -130,7 +127,7 @@ var NgFor = (function (_super) {
         items.forEach(function (child) {
             node.parentNode.removeChild(child);
         });
-        node.items.reverse().forEach(function (item) {
+        node.items.forEach(function (item) {
             node.parentNode.insertBefore(item.el, anchor);
         });
         node.parentNode.removeChild(anchor);
