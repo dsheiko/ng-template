@@ -1,5 +1,5 @@
 
-# ngTemplate 1.0 RC1
+# ngTemplate 1.0 RC2
 
 [![NPM](https://nodei.co/npm/ng-template.png)](https://nodei.co/npm/ng-template/)
 
@@ -261,6 +261,9 @@ We use `ngProp` to modify element's properties
 
 ```
 <el data-ng-prop="expression => propertyName:string, expression => value:boolean|string" />
+
+// Can be applied multiple times on element
+<el data-ng-prop-0="..." data-ng-prop-9="..." />
 ```
 
 #### Examples
@@ -280,6 +283,9 @@ We use `ngAttr` to modify element's attributes
 
 ```
 <el data-ng-attr="expression => attrName:string, expression => value:boolean|string" />
+
+// Can be applied multiple times on element
+<el data-ng-attr-0="..." data-ng-attr-9="..." />
 ```
 
 #### Examples
@@ -300,6 +306,9 @@ We use `ngData` to modify element's dataset
 
 ```
 <el data-ng-data="expression => datasetKey:string, expression => datasetValue:string" />
+
+// Can be applied multiple times on element
+<el data-ng-data-0="..." data-ng-data-9="..." />
 ```
 
 #### Examples
@@ -320,6 +329,9 @@ We use `ngClass` to modify element's `classList`
 
 ```
 <el data-ng-class="expression => className:string, expression => toggle:boolean" />
+
+// Can be applied multiple times on element
+<el data-ng-class-0="..." data-ng-class-9="..." />
 ```
 
 #### Examples

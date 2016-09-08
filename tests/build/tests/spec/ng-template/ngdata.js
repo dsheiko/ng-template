@@ -19,6 +19,17 @@ function NgDataSpec() {
                 expect(btn.dataset["someKey"]).toBe("bar");
             });
         });
+        it("processes repeating directives", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<span\n            data-ng-data=\"'lang', 'en'\"\n            data-ng-data-0=\"'title', 'title'\"\n            data-ng-data-8=\"'dir', 'auto'\"></span>")
+                .sync({})
+                .pipe(function (el) {
+                var target = el.firstChild;
+                expect(target.dataset["lang"]).toBe("en");
+                expect(target.dataset["title"]).toBe("title");
+                expect(target.dataset["dir"]).toBe("auto");
+            });
+        });
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });

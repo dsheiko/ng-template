@@ -23,5 +23,20 @@ export default function NgPropSpec(){
 
       });
 
+      it( "processes repeating directives", function() {
+        NgTemplate
+          .factory( this.el, `<span
+            data-ng-prop="'lang', 'en'"
+            data-ng-prop-0="'title', 'title'"
+            data-ng-prop-8="'dir', 'auto'"></span>` )
+          .sync({  })
+          .pipe(( el: HTMLElement ) => {
+            let target =  el.firstChild as HTMLElement;
+            expect( target.lang ).toBe( "en" );
+            expect( target.title ).toBe( "title" );
+            expect( target.dir ).toBe( "auto" );
+          });
+      });
+
     });
 }

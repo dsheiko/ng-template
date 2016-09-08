@@ -19,6 +19,17 @@ function NgAttrSpec() {
                 expect(input.hasAttribute("required")).toBe(false);
             });
         });
+        it("processes repeating directives", function () {
+            ngtemplate_1.NgTemplate
+                .factory(this.el, "<span\n            data-ng-attr=\"'lang', 'en'\"\n            data-ng-attr-0=\"'title', 'title'\"\n            data-ng-attr-8=\"'dir', 'auto'\"></span>")
+                .sync({})
+                .pipe(function (el) {
+                var target = el.firstChild;
+                expect(target.lang).toBe("en");
+                expect(target.title).toBe("title");
+                expect(target.dir).toBe("auto");
+            });
+        });
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 0.2.0
+* `data-ng-class`, `data-ng-prop`, `data-ng-attr`, `data-ng-data` can be applied multiple times on an element like `data-ng-class-0`, `data-ng-class-9`
+
 # 0.1.8
 * `data-ng-for` directive now treats generated nodes gracefully. It doesn't remove them from DOM (when possible). So you don't lose link to nodes on sync and do not lose state on generated forms
 

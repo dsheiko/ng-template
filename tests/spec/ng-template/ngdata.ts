@@ -23,5 +23,20 @@ export default function NgDataSpec(){
 
       });
 
+       it( "processes repeating directives", function() {
+        NgTemplate
+          .factory( this.el, `<span
+            data-ng-data="'lang', 'en'"
+            data-ng-data-0="'title', 'title'"
+            data-ng-data-8="'dir', 'auto'"></span>` )
+          .sync({  })
+          .pipe(( el: HTMLElement ) => {
+            let target =  el.firstChild as HTMLElement;
+            expect( target.dataset[ "lang" ] ).toBe( "en" );
+            expect( target.dataset[ "title" ] ).toBe( "title" );
+            expect( target.dataset[ "dir" ] ).toBe( "auto" );
+          });
+      });
+
     });
 }

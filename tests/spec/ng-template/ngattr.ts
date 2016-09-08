@@ -23,5 +23,20 @@ export default function NgAttrSpec(){
 
       });
 
+      it( "processes repeating directives", function() {
+        NgTemplate
+          .factory( this.el, `<span
+            data-ng-attr="'lang', 'en'"
+            data-ng-attr-0="'title', 'title'"
+            data-ng-attr-8="'dir', 'auto'"></span>` )
+          .sync({})
+          .pipe(( el: HTMLElement ) => {
+            let target =  el.firstChild as HTMLElement;
+            expect( target.lang ).toBe( "en" );
+            expect( target.title ).toBe( "title" );
+            expect( target.dir ).toBe( "auto" );
+          });
+      });
+
     });
 }
