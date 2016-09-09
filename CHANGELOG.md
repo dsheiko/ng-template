@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# 1.0.0
+* first stable release
+
 # 0.2.0
 * `data-ng-class`, `data-ng-prop`, `data-ng-attr`, `data-ng-data` can be applied multiple times on an element like `data-ng-class-0`, `data-ng-class-9`
 

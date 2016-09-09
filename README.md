@@ -1,5 +1,5 @@
 
-# ngTemplate 1.0 RC2
+# ngTemplate 1.0
 
 [![NPM](https://nodei.co/npm/ng-template.png)](https://nodei.co/npm/ng-template/)
 
@@ -378,6 +378,8 @@ console.log( document.body.innerHTML ); // <i>Hello!</i>
 ### ngFor
 
 We use `ngFor` when we need to generate a list of elements (subtrees)
+
+> `ngFor` treats the generated list gracefully. It tries to maintain the nodes once appended to the DOM on list data change. However of removing rows from the list during synchronization `ngFor` can do it only if a unique row `id` property provided. Otherwise it updates the list
 
 #### Syntax
 

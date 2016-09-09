@@ -103,7 +103,9 @@ var NgFor = (function (_super) {
             if (node.cache.match(JSON.stringify(it))) {
                 return false;
             }
-            // reduce: collection changed, repopulate it
+            // reduce: collection changed, it's a special case
+            // if we have indexes (id) then we go still gacefully, we remove  particular nodes from the list
+            // if not, we updateth list
             if (node.items.length > it.length) {
                 node.items = node.indexable ? _this.removeIndexable(node, it) : [];
             }

@@ -358,110 +358,6 @@ exports.default = ParserSpec;
   return module;
 });
 
-_require.def( "tests/build/tests/spec/abstract-directive.spec.js", function( _require, exports, module, global ){
-"use strict";
-var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-directive.js" );
-function AbstractDirectiveSpec() {
-    describe("NgTemplate.abstract-directive", function () {
-        describe("#getDataKey", function () {
-            it("parses `foo-bar-baz`", function () {
-                var res = abstract_directive_1.AbstractDirective.prototype.getDataKey("foo-bar-baz");
-                expect(res).toBe("fooBarBaz");
-            });
-        });
-        describe("#getSelector", function () {
-            it("parses `foo-bar-baz`", function () {
-                var res = abstract_directive_1.AbstractDirective.prototype.getSelector("foo-bar-baz");
-                expect(res).toBe("[data-foo-bar-baz]");
-            });
-        });
-    });
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = AbstractDirectiveSpec;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/tests/spec/ngfor.spec.js", function( _require, exports, module, global ){
-"use strict";
-var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
-var ngfor_1 = _require( "tests/build/src/ng-template/ngfor.js" );
-var reporter_1 = _require( "tests/build/src/ng-template/reporter.js" );
-var reporter = new reporter_1.Reporter();
-function NgForDirectiveSpec() {
-    describe("NgTemplate.ngFor", function () {
-        describe(".createEl", function () {
-            it("creates detached node", function () {
-                var el = ngfor_1.NgFor.createEl("li", "<li class='test'><i></i></li>");
-                expect(el.tagName).toBe("LI");
-                expect(el.classList.contains("test")).toBeTruthy();
-                expect(el.firstChild.tagName).toBe("I");
-            });
-            it("detaches/attaches to DOM", function () {
-                var cont = document.createElement("form"), foo = ngfor_1.NgFor.createEl("input", "<input />"), bar = ngfor_1.NgFor.createEl("input", "<input />");
-                cont.appendChild(foo);
-                cont.appendChild(bar);
-                cont.querySelectorAll("input").item(0).value = "foo";
-                cont.querySelectorAll("input").item(1).value = "bar";
-                cont.innerHTML = "";
-                cont.appendChild(foo);
-                cont.appendChild(bar);
-                expect(cont.querySelectorAll("input").item(0).value).toBe("foo");
-                expect(cont.querySelectorAll("input").item(1).value).toBe("bar");
-            });
-        });
-        describe("#parseExpr", function () {
-            it("parses `let row of rows`", function () {
-                var res = ngfor_1.NgFor.prototype.parseExpr("let row of rows");
-                expect(res.variable).toBe("row");
-                expect(res.iterable).toBe("rows");
-            });
-            it("parses extra-spacing `let  row   of   rows`", function () {
-                var res = ngfor_1.NgFor.prototype.parseExpr("let row of rows");
-                expect(res.variable).toBe("row");
-                expect(res.iterable).toBe("rows");
-            });
-        });
-        describe("#constructor", function () {
-            beforeEach(function () {
-                this.el = document.createElement("div");
-                this.el.innerHTML = "<i data-ng-for='let row of rows'></i>";
-            });
-            it("populatea node DTOs", function () {
-                var ngfor = new ngfor_1.NgFor(this.el, reporter);
-                expect(ngfor.nodes.length).toBe(1);
-            });
-            it("creates node.exp", function () {
-                var ngfor = new ngfor_1.NgFor(this.el, reporter), node = ngfor.nodes.shift(), res = node.exp({ rows: [1, 2, 3] }).join(",");
-                expect(res).toBe("1,2,3");
-            });
-        });
-        describe("#sync", function () {
-            beforeEach(function () {
-                this.el = document.createElement("div");
-            });
-            it("span the target element", function () {
-                this.el.innerHTML = "<i data-ng-for='let row of rows'></i>";
-                var ngfor = new ngfor_1.NgFor(this.el, reporter);
-                ngfor.sync({ rows: ["foo", "bar"] }, ngtemplate_1.NgTemplate);
-                expect(this.el.querySelectorAll("i").length).toBe(2);
-            });
-        });
-    });
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = NgForDirectiveSpec;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
 _require.def( "tests/build/tests/spec/expression/tokenizer.spec.js", function( _require, exports, module, global ){
 "use strict";
 var tokenizer_1 = _require( "tests/build/src/ng-template/expression/tokenizer.js" );
@@ -618,6 +514,110 @@ function TokenizerSpec() {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = TokenizerSpec;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/tests/spec/abstract-directive.spec.js", function( _require, exports, module, global ){
+"use strict";
+var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-directive.js" );
+function AbstractDirectiveSpec() {
+    describe("NgTemplate.abstract-directive", function () {
+        describe("#getDataKey", function () {
+            it("parses `foo-bar-baz`", function () {
+                var res = abstract_directive_1.AbstractDirective.prototype.getDataKey("foo-bar-baz");
+                expect(res).toBe("fooBarBaz");
+            });
+        });
+        describe("#getSelector", function () {
+            it("parses `foo-bar-baz`", function () {
+                var res = abstract_directive_1.AbstractDirective.prototype.getSelector("foo-bar-baz");
+                expect(res).toBe("[data-foo-bar-baz]");
+            });
+        });
+    });
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = AbstractDirectiveSpec;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/tests/spec/ngfor.spec.js", function( _require, exports, module, global ){
+"use strict";
+var ngtemplate_1 = _require( "tests/build/src/ngtemplate.js" );
+var ngfor_1 = _require( "tests/build/src/ng-template/ngfor.js" );
+var reporter_1 = _require( "tests/build/src/ng-template/reporter.js" );
+var reporter = new reporter_1.Reporter();
+function NgForDirectiveSpec() {
+    describe("NgTemplate.ngFor", function () {
+        describe(".createEl", function () {
+            it("creates detached node", function () {
+                var el = ngfor_1.NgFor.createEl("li", "<li class='test'><i></i></li>");
+                expect(el.tagName).toBe("LI");
+                expect(el.classList.contains("test")).toBeTruthy();
+                expect(el.firstChild.tagName).toBe("I");
+            });
+            it("detaches/attaches to DOM", function () {
+                var cont = document.createElement("form"), foo = ngfor_1.NgFor.createEl("input", "<input />"), bar = ngfor_1.NgFor.createEl("input", "<input />");
+                cont.appendChild(foo);
+                cont.appendChild(bar);
+                cont.querySelectorAll("input").item(0).value = "foo";
+                cont.querySelectorAll("input").item(1).value = "bar";
+                cont.innerHTML = "";
+                cont.appendChild(foo);
+                cont.appendChild(bar);
+                expect(cont.querySelectorAll("input").item(0).value).toBe("foo");
+                expect(cont.querySelectorAll("input").item(1).value).toBe("bar");
+            });
+        });
+        describe("#parseExpr", function () {
+            it("parses `let row of rows`", function () {
+                var res = ngfor_1.NgFor.prototype.parseExpr("let row of rows");
+                expect(res.variable).toBe("row");
+                expect(res.iterable).toBe("rows");
+            });
+            it("parses extra-spacing `let  row   of   rows`", function () {
+                var res = ngfor_1.NgFor.prototype.parseExpr("let row of rows");
+                expect(res.variable).toBe("row");
+                expect(res.iterable).toBe("rows");
+            });
+        });
+        describe("#constructor", function () {
+            beforeEach(function () {
+                this.el = document.createElement("div");
+                this.el.innerHTML = "<i data-ng-for='let row of rows'></i>";
+            });
+            it("populatea node DTOs", function () {
+                var ngfor = new ngfor_1.NgFor(this.el, reporter);
+                expect(ngfor.nodes.length).toBe(1);
+            });
+            it("creates node.exp", function () {
+                var ngfor = new ngfor_1.NgFor(this.el, reporter), node = ngfor.nodes.shift(), res = node.exp({ rows: [1, 2, 3] }).join(",");
+                expect(res).toBe("1,2,3");
+            });
+        });
+        describe("#sync", function () {
+            beforeEach(function () {
+                this.el = document.createElement("div");
+            });
+            it("span the target element", function () {
+                this.el.innerHTML = "<i data-ng-for='let row of rows'></i>";
+                var ngfor = new ngfor_1.NgFor(this.el, reporter);
+                ngfor.sync({ rows: ["foo", "bar"] }, ngtemplate_1.NgTemplate);
+                expect(this.el.querySelectorAll("i").length).toBe(2);
+            });
+        });
+    });
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = NgForDirectiveSpec;
 
   module.exports = exports;
 
@@ -1031,45 +1031,6 @@ if (!Element.prototype.matches) {
   return module;
 });
 
-_require.def( "tests/build/tests/test.util.js", function( _require, exports, module, global ){
-"use strict";
-exports.observeDOM = (function () {
-    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-    return function (el, callback) {
-        if (MutationObserver) {
-            // define a new observer
-            var observer = new MutationObserver(function (mutations) {
-                var matches = mutations.filter(function (mutation) {
-                    return mutation.addedNodes.length ||
-                        mutation.removedNodes.length || mutation.type === "attributes";
-                });
-                if (matches.length) {
-                    callback();
-                }
-            });
-            // have the observer observe foo for changes in children
-            observer.observe(el, { childList: true, subtree: true, attributes: true, characterData: true });
-            return;
-        }
-        [
-            "DOMNodeInserted",
-            "DOMNodeRemoved",
-            "DOMSubtreeModified",
-            "DOMAttrModified",
-            "DOMAttributeNameChanged",
-            "DOMCharacterDataModified"
-        ].forEach(function (ev) {
-            el.addEventListener(ev, callback, false);
-        });
-    };
-})();
-
-  module.exports = exports;
-
-
-  return module;
-});
-
 _require.def( "tests/build/src/ng-template/expression/parser.js", function( _require, exports, module, global ){
 "use strict";
 var tokenizer_1 = _require( "tests/build/src/ng-template/expression/tokenizer.js" );
@@ -1105,6 +1066,45 @@ var Parser = (function () {
     return Parser;
 }());
 exports.Parser = Parser;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
+_require.def( "tests/build/tests/test.util.js", function( _require, exports, module, global ){
+"use strict";
+exports.observeDOM = (function () {
+    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+    return function (el, callback) {
+        if (MutationObserver) {
+            // define a new observer
+            var observer = new MutationObserver(function (mutations) {
+                var matches = mutations.filter(function (mutation) {
+                    return mutation.addedNodes.length ||
+                        mutation.removedNodes.length || mutation.type === "attributes";
+                });
+                if (matches.length) {
+                    callback();
+                }
+            });
+            // have the observer observe foo for changes in children
+            observer.observe(el, { childList: true, subtree: true, attributes: true, characterData: true });
+            return;
+        }
+        [
+            "DOMNodeInserted",
+            "DOMNodeRemoved",
+            "DOMSubtreeModified",
+            "DOMAttrModified",
+            "DOMAttributeNameChanged",
+            "DOMCharacterDataModified"
+        ].forEach(function (ev) {
+            el.addEventListener(ev, callback, false);
+        });
+    };
+})();
 
   module.exports = exports;
 
@@ -1439,7 +1439,9 @@ var NgFor = (function (_super) {
             if (node.cache.match(JSON.stringify(it))) {
                 return false;
             }
-            // reduce: collection changed, repopulate it
+            // reduce: collection changed, it's a special case
+            // if we have indexes (id) then we go still gacefully, we remove  particular nodes from the list
+            // if not, we updateth list
             if (node.items.length > it.length) {
                 node.items = node.indexable ? _this.removeIndexable(node, it) : [];
             }
@@ -2307,6 +2309,43 @@ exports.default = ReportSpec;
   return module;
 });
 
+_require.def( "tests/build/src/ng-template/ngel.js", function( _require, exports, module, global ){
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-directive.js" );
+/**
+ * <span data-ng-el="this.setAttribute('ss', 11)">Error</span>
+ */
+var NgEl = (function (_super) {
+    __extends(NgEl, _super);
+    function NgEl(el, reporter) {
+        _super.call(this, el, reporter);
+        this.nodes = this.initNodes(el, "ng-el", function (node, expr, compile) {
+            return {
+                el: node,
+                exp: compile(expr, "", reporter)
+            };
+        });
+    }
+    NgEl.prototype.sync = function (data) {
+        this.nodes.forEach(function (node) {
+            node.exp.call(node.el, data);
+        });
+    };
+    return NgEl;
+}(abstract_directive_1.AbstractDirective));
+exports.NgEl = NgEl;
+
+  module.exports = exports;
+
+
+  return module;
+});
+
 _require.def( "tests/build/src/ng-template/ngif.js", function( _require, exports, module, global ){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
@@ -2360,43 +2399,6 @@ var NgIf = (function (_super) {
     return NgIf;
 }(abstract_directive_1.AbstractDirective));
 exports.NgIf = NgIf;
-
-  module.exports = exports;
-
-
-  return module;
-});
-
-_require.def( "tests/build/src/ng-template/ngel.js", function( _require, exports, module, global ){
-"use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var abstract_directive_1 = _require( "tests/build/src/ng-template/abstract-directive.js" );
-/**
- * <span data-ng-el="this.setAttribute('ss', 11)">Error</span>
- */
-var NgEl = (function (_super) {
-    __extends(NgEl, _super);
-    function NgEl(el, reporter) {
-        _super.call(this, el, reporter);
-        this.nodes = this.initNodes(el, "ng-el", function (node, expr, compile) {
-            return {
-                el: node,
-                exp: compile(expr, "", reporter)
-            };
-        });
-    }
-    NgEl.prototype.sync = function (data) {
-        this.nodes.forEach(function (node) {
-            node.exp.call(node.el, data);
-        });
-    };
-    return NgEl;
-}(abstract_directive_1.AbstractDirective));
-exports.NgEl = NgEl;
 
   module.exports = exports;
 
