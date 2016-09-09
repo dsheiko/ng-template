@@ -30,6 +30,7 @@ declare namespace NgTemplate {
     outerHTML?: string;
     cache?: Cache;
     exp: Function;
+    indexable?: boolean;
     id?: string;
     variable?: any;
     items?: Array<NgTemplate.NgTemplate>;
@@ -79,6 +80,7 @@ declare namespace NgTemplate {
 
   interface NgTemplate {
     el: Node;
+    id: string;
     report(): Report;
     sync( data:Object ):NgTemplate;
     pipe( cb:Function, context:Object ):NgTemplate;

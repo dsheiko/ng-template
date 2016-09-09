@@ -119,5 +119,24 @@ export default function NgForSpec(){
       });
 
 
+      it( "reduces an indexable list gracefully", function() {
+        let firstPasssNodes: Node[],
+            secondPasssNodes: Node[];
+        NgTemplate
+          .factory( this.el, "<i data-ng-for=\"let row of rows\"></i>" )
+          .sync({ rows: [ { id: 1 }, { id: 2 }, { id: 3 } ]})
+          .pipe(( el: HTMLElement ) => {
+            firstPasssNodes = Array.from( el.children );
+            expect( firstPasssNodes.length ).toBe( 3 );
+          })
+          .sync({ rows: [ { id: 1 }, { id: 3 } ]})
+          .pipe(( el: HTMLElement ) => {
+            secondPasssNodes = Array.from( el.children );
+            expect( secondPasssNodes.length ).toBe( 2 );
+            expect( firstPasssNodes[ 0 ] ).toBe( secondPasssNodes[ 0 ] );
+            expect( firstPasssNodes[ 2 ] ).toBe( secondPasssNodes[ 1 ] );
+          });
+      });
+
     });
 }
