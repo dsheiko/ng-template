@@ -58,7 +58,7 @@
 
     
     
-    <link rel="prev" href="ngswitch.html" />
+    <link rel="prev" href="ngfor.html" />
     
 
     </head>
@@ -166,7 +166,20 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.2" data-path="ngprop.html">
+        <li class="chapter " data-level="1.5.2" data-path="ngattr.html">
+            
+                <a href="ngattr.html">
+            
+                    
+                    ngAttr
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="ngprop.html">
             
                 <a href="ngprop.html">
             
@@ -179,7 +192,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.3" data-path="ngdata.html">
+        <li class="chapter " data-level="1.5.4" data-path="ngdata.html">
             
                 <a href="ngdata.html">
             
@@ -192,7 +205,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.4" data-path="ngclass.html">
+        <li class="chapter " data-level="1.5.5" data-path="ngclass.html">
             
                 <a href="ngclass.html">
             
@@ -205,25 +218,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.5" data-path="ngif.html">
+        <li class="chapter " data-level="1.5.6" data-path="ngif.html">
             
                 <a href="ngif.html">
             
                     
                     ngIf
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.5.6" data-path="ngfor.html">
-            
-                <a href="ngfor.html">
-            
-                    
-                    ngFor
             
                 </a>
             
@@ -244,7 +244,20 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.5.8" data-path="ngel.html">
+        <li class="chapter " data-level="1.5.8" data-path="ngfor.html">
+            
+                <a href="ngfor.html">
+            
+                    
+                    ngFor
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5.9" data-path="ngel.html">
             
                 <a href="ngel.html">
             
@@ -308,7 +321,7 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="ngel">ngEl</h1><p>We use <code>ngEl</code> to modify element properties</p><blockquote><p>:exclamation: NOTE: Using <code>ngEl</code> is rather discouraging as it cannot be cached and every model sync will
-cause the DOM modification even if the expression of <code>ngEl</code> wasn&apos;t changed</p></blockquote><h4 id="syntax">Syntax</h4><pre><code>&lt;el data-ng-el=&quot;expression =&gt; eval:void&quot; /&gt;</code></pre>
+cause the DOM modification even if the expression of <code>ngEl</code> wasn&apos;t changed</p></blockquote><h4 id="syntax">Syntax</h4><pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">el</span> <span class="hljs-attr">data-ng-el</span>=<span class="hljs-string">&quot;expression =&gt; eval:void&quot;</span> /&gt;</span></code></pre>
 <h4 id="examples">Examples</h4><pre><code class="lang-javascript">(new NgTemplate( document.body , `&lt;i data-ng-el=&quot;this.className = class&quot;&gt;&lt;/i&gt;` ))
   .sync({ class: &quot;is-hidden&quot; });
 
@@ -344,7 +357,7 @@ console.log( document.body.innerHTML ); // &lt;i class=&quot;is-hidden&quot;&gt;
 
             
                 
-                <a href="ngswitch.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: ngSwitch">
+                <a href="ngfor.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: ngFor">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
@@ -356,7 +369,7 @@ console.log( document.body.innerHTML ); // &lt;i class=&quot;is-hidden&quot;&gt;
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"ngEl","level":"1.5.8","depth":2,"previous":{"title":"ngSwitch","level":"1.5.7","depth":2,"path":"ngswitch.md","ref":"ngswitch.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"ngel.md","mtime":"2016-08-24T12:22:47.473Z","type":"markdown"},"gitbook":{"version":"3.2.0","time":"2016-08-24T12:23:35.057Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"ngEl","level":"1.5.9","depth":2,"previous":{"title":"ngFor","level":"1.5.8","depth":2,"path":"ngfor.md","ref":"ngfor.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"ngel.md","mtime":"2016-09-09T13:21:45.710Z","type":"markdown"},"gitbook":{"version":"3.2.0","time":"2016-09-09T13:22:18.762Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

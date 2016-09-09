@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="ngswitch.html" />
+    <link rel="next" href="ngel.html" />
     
     
-    <link rel="prev" href="ngif.html" />
+    <link rel="prev" href="ngswitch.html" />
     
 
     </head>
@@ -168,7 +168,20 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.2" data-path="ngprop.html">
+        <li class="chapter " data-level="1.5.2" data-path="ngattr.html">
+            
+                <a href="ngattr.html">
+            
+                    
+                    ngAttr
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="ngprop.html">
             
                 <a href="ngprop.html">
             
@@ -181,7 +194,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.3" data-path="ngdata.html">
+        <li class="chapter " data-level="1.5.4" data-path="ngdata.html">
             
                 <a href="ngdata.html">
             
@@ -194,7 +207,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.4" data-path="ngclass.html">
+        <li class="chapter " data-level="1.5.5" data-path="ngclass.html">
             
                 <a href="ngclass.html">
             
@@ -207,25 +220,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.5" data-path="ngif.html">
+        <li class="chapter " data-level="1.5.6" data-path="ngif.html">
             
                 <a href="ngif.html">
             
                     
                     ngIf
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter active" data-level="1.5.6" data-path="ngfor.html">
-            
-                <a href="ngfor.html">
-            
-                    
-                    ngFor
             
                 </a>
             
@@ -246,7 +246,20 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5.8" data-path="ngel.html">
+        <li class="chapter active" data-level="1.5.8" data-path="ngfor.html">
+            
+                <a href="ngfor.html">
+            
+                    
+                    ngFor
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.9" data-path="ngel.html">
             
                 <a href="ngel.html">
             
@@ -309,8 +322,8 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="ngfor">ngFor</h1><p>We use <code>ngFor</code> when we need to generate a list of elements (subtrees)</p><h4 id="syntax">Syntax</h4><pre><code>&lt;el data-ng-for=&quot;let variable of expression =&gt; list:any[]&quot; /&gt;</code></pre>
-<h4 id="examples">Examples</h4><pre><code class="lang-javascript">(<span class="hljs-keyword">new</span> NgTemplate( <span class="hljs-built_in">document</span>.body , <span class="hljs-string">`&lt;i data-ng-for=&quot;let row of rows&quot; data-ng-text=&quot;row&quot;&gt;&lt;/i&gt;`</span> ))
+                                <h1 id="ngfor">ngFor</h1><p>We use <code>ngFor</code> when we need to generate a list of elements (subtrees)</p><h4 id="syntax">Syntax</h4><pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">el</span> <span class="hljs-attr">data-ng-for</span>=<span class="hljs-string">&quot;let variable of expression =&gt; list:any[]&quot;</span> /&gt;</span></code></pre>
+<blockquote><p><code>ngFor</code> treats the generated list gracefully. It tries to maintain the nodes once appended to the DOM on list data change. However of removing rows from the list during synchronization <code>ngFor</code> can do it only if a unique row <code>id</code> property provided. Otherwise it updates the list</p></blockquote><h4 id="examples">Examples</h4><pre><code class="lang-javascript">(<span class="hljs-keyword">new</span> NgTemplate( <span class="hljs-built_in">document</span>.body , <span class="hljs-string">`&lt;i data-ng-for=&quot;let row of rows&quot; data-ng-text=&quot;row&quot;&gt;&lt;/i&gt;`</span> ))
   .sync({ rows: [ <span class="hljs-string">&quot;foo&quot;</span>, <span class="hljs-string">&quot;bar&quot;</span> ] });
 
 <span class="hljs-built_in">console</span>.log( <span class="hljs-built_in">document</span>.body.innerHTML ); <span class="hljs-comment">// &lt;i&gt;foo&lt;/i&gt;&lt;i&gt;bar&lt;/i&gt;</span></code></pre>
@@ -341,12 +354,12 @@
 
             
                 
-                <a href="ngif.html" class="navigation navigation-prev " aria-label="Previous page: ngIf">
+                <a href="ngswitch.html" class="navigation navigation-prev " aria-label="Previous page: ngSwitch">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="ngswitch.html" class="navigation navigation-next " aria-label="Next page: ngSwitch">
+                <a href="ngel.html" class="navigation navigation-next " aria-label="Next page: ngEl">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -357,7 +370,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"ngFor","level":"1.5.6","depth":2,"next":{"title":"ngSwitch","level":"1.5.7","depth":2,"path":"ngswitch.md","ref":"ngswitch.md","articles":[]},"previous":{"title":"ngIf","level":"1.5.5","depth":2,"path":"ngif.md","ref":"ngif.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"ngfor.md","mtime":"2016-08-24T12:22:47.473Z","type":"markdown"},"gitbook":{"version":"3.2.0","time":"2016-08-24T12:23:35.057Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"ngFor","level":"1.5.8","depth":2,"next":{"title":"ngEl","level":"1.5.9","depth":2,"path":"ngel.md","ref":"ngel.md","articles":[]},"previous":{"title":"ngSwitch","level":"1.5.7","depth":2,"path":"ngswitch.md","ref":"ngswitch.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"ngfor.md","mtime":"2016-09-09T13:21:45.714Z","type":"markdown"},"gitbook":{"version":"3.2.0","time":"2016-09-09T13:22:18.762Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
