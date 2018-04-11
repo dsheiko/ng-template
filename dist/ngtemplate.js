@@ -8,13 +8,15 @@ var ngswitchcase_1 = require("./ng-template/ngswitchcase");
 var ngswitchcasedefault_1 = require("./ng-template/ngswitchcasedefault");
 var ngclass_1 = require("./ng-template/ngclass");
 var ngprop_1 = require("./ng-template/ngprop");
+var ngid_1 = require("./ng-template/ngid");
+var ngvalue_1 = require("./ng-template/ngvalue");
 var ngattr_1 = require("./ng-template/ngattr");
 var ngdata_1 = require("./ng-template/ngdata");
 var exception_1 = require("./ng-template/exception");
 var reporter_1 = require("./ng-template/reporter");
 var REPEATING_DIR_LIMIT = 9; // 0-9
 var DIRECTIVES = [ngfor_1.NgFor, ngswitch_1.NgSwitch, ngswitchcase_1.NgSwitchCase, ngswitchcasedefault_1.NgSwitchCaseDefault, ngif_1.NgIf,
-    ngclass_1.NgClass, ngdata_1.NgData, ngprop_1.NgProp, ngattr_1.NgAttr, ngel_1.NgEl, ngtext_1.NgText], counter = 0;
+    ngclass_1.NgClass, ngdata_1.NgData, ngprop_1.NgProp, ngid_1.NgId, ngvalue_1.NgValue, ngattr_1.NgAttr, ngel_1.NgEl, ngtext_1.NgText], counter = 0;
 var NgTemplate = (function () {
     /**
      * Initialize template for a given Element

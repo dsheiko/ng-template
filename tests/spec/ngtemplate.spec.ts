@@ -3,6 +3,8 @@ import NgIfSpec from "./ng-template/ngif";
 import NgElSpec from "./ng-template/ngel";
 import NgClassSpec from "./ng-template/ngclass";
 import NgPropSpec from "./ng-template/ngprop";
+import NgIdSpec from "./ng-template/ngid";
+import NgValueSpec from "./ng-template/ngvalue";
 import NgAttrSpec from "./ng-template/ngattr";
 import NgDataSpec from "./ng-template/ngdata";
 import NgTextSpec from "./ng-template/ngtext";
@@ -23,6 +25,10 @@ export default function NgTemplateSpec(){
     NgClassSpec.call( this );
 
     NgPropSpec.call( this );
+
+    NgIdSpec.call( this );
+    
+    NgValueSpec.call( this );
 
     NgAttrSpec.call( this );
 
