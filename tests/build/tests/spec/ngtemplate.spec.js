@@ -3,8 +3,6 @@ var ngif_1 = require("./ng-template/ngif");
 var ngel_1 = require("./ng-template/ngel");
 var ngclass_1 = require("./ng-template/ngclass");
 var ngprop_1 = require("./ng-template/ngprop");
-var ngid_1 = require("./ng-template/ngid");
-var ngvalue_1 = require("./ng-template/ngvalue");
 var ngattr_1 = require("./ng-template/ngattr");
 var ngdata_1 = require("./ng-template/ngdata");
 var ngtext_1 = require("./ng-template/ngtext");
@@ -19,8 +17,6 @@ function NgTemplateSpec() {
         ngel_1.default.call(this);
         ngclass_1.default.call(this);
         ngprop_1.default.call(this);
-        ngid_1.default.call(this);
-        ngvalue_1.default.call(this);
         ngattr_1.default.call(this);
         ngdata_1.default.call(this);
         ngtext_1.default.call(this);
