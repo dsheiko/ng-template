@@ -7,6 +7,8 @@ import { NgSwitchCase } from "./ng-template/ngswitchcase";
 import { NgSwitchCaseDefault } from "./ng-template/ngswitchcasedefault";
 import { NgClass } from "./ng-template/ngclass";
 import { NgProp } from "./ng-template/ngprop";
+import { NgId } from "./ng-template/ngid";
+import { NgValue } from "./ng-template/ngvalue";
 import { NgAttr } from "./ng-template/ngattr";
 import { NgData } from "./ng-template/ngdata";
 import { Exception } from "./ng-template/exception";
@@ -15,7 +17,7 @@ import { Reporter } from "./ng-template/reporter";
 const REPEATING_DIR_LIMIT = 9; // 0-9
 
 let DIRECTIVES = [ NgFor, NgSwitch, NgSwitchCase, NgSwitchCaseDefault, NgIf,
-      NgClass, NgData, NgProp, NgAttr, NgEl, NgText ],
+      NgClass, NgData, NgProp, NgId, NgValue, NgAttr, NgEl, NgText ],
     counter = 0;
 
 export class NgTemplate {
