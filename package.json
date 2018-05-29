@@ -17,7 +17,7 @@
     "test:ts": "npm run test:browserfy && karma start",
     "test:firefox": "npm run test:browserfy && karma start --reporters kjhtml --browsers Firefox --singleRun=false"
   },
-  { "license": "MIT" },
+  "license": "MIT",
   "keywords": [
     "template",
     "engine",
