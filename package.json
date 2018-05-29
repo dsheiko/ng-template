@@ -17,12 +17,7 @@
     "test:ts": "npm run test:browserfy && karma start",
     "test:firefox": "npm run test:browserfy && karma start --reporters kjhtml --browsers Firefox --singleRun=false"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/fawek/codepainter/raw/master/LICENSE"
-    }
-  ],
+  { "license": "MIT" },
   "keywords": [
     "template",
     "engine",
